@@ -94,7 +94,7 @@ class scbForms
 	{
 		$output = '';
 		foreach ( $rows as $row )
-			$output .= self::form_row($row, $options);
+			$output .= self::table_row($row, $options);
 
 		$output = self::form_table_wrap($output);
 
