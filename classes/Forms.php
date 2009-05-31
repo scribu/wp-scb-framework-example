@@ -137,7 +137,7 @@ class scbForms
 
 	function row_wrap($title, $content)
 	{
-		return "\n<tr>\n\t<th scope='row'>" . $title . "</th>\n\t<td>\n\t\t" . $content . "\n\t</td>\n\n</tr>";
+		return "\n<tr>\n\t<th scope='row'>" . $title . "</th>\n\t<td>\n\t\t" . $content . "\t</td>\n\n</tr>";
 	}
 
 
@@ -257,12 +257,12 @@ class scbForms
 			'name' => '',
 			'value' => array(),
 			'text' => '',
-			'default' => array('foo'),	// hack to make default transparent
+			'selected' => array('foo'),	// hack to make default transparent
 			'extra' => NULL,
 			'numeric' => false	// use numeric array instead of associative
 		)), EXTR_SKIP);
 
-		$cur_val = $default;
+		$cur_val = $selected;
 		if ( isset($options[$name]) )
 			$cur_val = $options[$name];
 

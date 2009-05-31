@@ -119,9 +119,9 @@ abstract class scbOptionsPage extends scbForms
 		if ( $options === NULL )
 			$options = $this->formdata;
 
-		$output = parent::form_table($rows, $options);
+		$output = $this->table($rows, $options);
 
-		return parent::form_wrap($output, $this->nonce, $submit_button);
+		return $this->form_wrap($output, $this->nonce, $submit_button);
 	}
 
 	// Generates a submit form button
