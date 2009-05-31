@@ -1,6 +1,15 @@
 <?php
+/*
+You can use this code to autoload the most recent version of scbFramework available.
+This has the advantage that the user is not required to install scbFramework as a separate plugin,
+but it has the disadvantage that you have to include the classes in each plugin.
 
-// Autoload the most recent version of scbFramework available
+You just need to require the file, like so:
+
+	require_once dirname(__FILE__) . '/scb/load.php';
+
+This file needs to be in the same directory as the class files.
+*/
 
 if ( !class_exists('scbLoad') ) :
 class scbLoad {
