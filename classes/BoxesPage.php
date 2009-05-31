@@ -1,14 +1,17 @@
 <?php
 
-abstract class scbBoxesPage extends scbOptionsPage {
+abstract class scbBoxesPage extends scbOptionsPage
+{
 	public $boxes;
 
-	function page_init() {
+	function page_init()
+	{
 		parent::page_init();
 		add_action('load-' . $this->pagehook, array($this, 'boxes_init'));
 	}
 
-	function page_content() {
+	function page_content()
+	{
 		echo "<div id='cf-main' class='metabox-holder'>\n";
 		echo "\t<div class='postbox-container'>\n";
 		do_meta_boxes($this->pagehook, 'normal', '');
@@ -20,12 +23,14 @@ abstract class scbBoxesPage extends scbOptionsPage {
 		echo "\t</div>\n</div>\n";
 	}
 
-	function page_footer() {
+	function page_footer()
+	{
 		$this->_boxes_js_init();
 		parent::page_footer();
 	}
 
-	function form_handler() {
+	function form_handler()
+	{
 		if ( empty($_POST) )
 			return;
 
@@ -34,7 +39,8 @@ abstract class scbBoxesPage extends scbOptionsPage {
 		do_action('form-handler-' . $this->pagehook);
 	}
 
-	function boxes_init() {
+	function boxes_init()
+	{
 		wp_enqueue_script('common');
 		wp_enqueue_script('wp-lists');
 		wp_enqueue_script('postbox');
@@ -42,8 +48,10 @@ abstract class scbBoxesPage extends scbOptionsPage {
 		$this->_add_boxes();
 	}
 
-	function _add_boxes() {
-		foreach($this->boxes as $i) {
+	function _add_boxes()
+	{
+		foreach($this->boxes as $i)
+		{
 			// Add boxes
 			add_meta_box($i[0], $i[1], array($this, "{$i[0]}_box"), $this->pagehook, $i[2]);
 			// Add handlers
@@ -52,11 +60,12 @@ abstract class scbBoxesPage extends scbOptionsPage {
 	}
 
 	// Adds necesary code for JS to work
-	function _boxes_js_init() {
+	function _boxes_js_init()
+	{
 ?>
 <script type="text/javascript">
 	//<![CDATA[
-	jQuery(document).ready( function($) {
+	jQuery(document).ready( function($){
 		// close postboxes that should be closed
 		$('.if-js-closed').removeClass('if-js-closed').addClass('closed');
 		// postboxes setup

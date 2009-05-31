@@ -1,6 +1,7 @@
 <?php
 
-abstract class scbOptionsPage extends scbForms {
+abstract class scbOptionsPage extends scbForms
+{
 	/** Page args
 	 * string $parent (default: options-general.php)
 	 * string $page_title
@@ -22,6 +23,7 @@ abstract class scbOptionsPage extends scbForms {
 
 	// scbOptions object
 	protected $options;
+	protected $formdata;
 
 	// Form actions
 	protected $actions = array();
@@ -31,7 +33,8 @@ abstract class scbOptionsPage extends scbForms {
 
 
 	// Constructor
-	function __construct($file, $options = NULL) {
+	function __construct($file, $options = NULL)
+	{
 		$this->setup();
 
 		$this->_check_args();
@@ -47,16 +50,17 @@ abstract class scbOptionsPage extends scbForms {
 	}
 
 	// This is where all the page args go (DEPRECATED)
-	function setup() {}
+	function setup(){}
 
 	// This is where the css and js go
-	function page_head() {}
+	function page_head(){}
 
 	// This is where the page content goes
 	abstract function page_content();
 
 	// Validate new options
-	function validate($new_options) {
+	function validate($new_options)
+	{
 		return $new_options;
 	}
 
@@ -64,37 +68,68 @@ abstract class scbOptionsPage extends scbForms {
 //_____HELPER METHODS_____
 
 
-	// To be used in ::page_head()
-	function admin_msg($msg, $class = "updated") {
-		echo "<div class='$class fade'><p>$msg</p></div>\n";
+	function input($args, $options = NULL)
+	{
+		if ( $options === NULL )
+			$options = $this->formdata;
+
+		return parent::input($args, $options);
 	}
 
-	// Wraps a string in a <script> tag
-	function js_wrap($string) {
-		return "\n<script language='text/javascript'>\n" . $string . "\n</script>\n";
+	function form($rows, $options = NULL)
+	{
+		if ( $options === NULL )
+			$options = $this->formdata;
+
+		return parent::form($rows, $options);
 	}
 
-	// Wraps a string in a <style> tag
-	function css_wrap($string) {
-		return "\n<style type='text/css'>\n" . $string . "\n</style>\n";
+	function table($rows, $options = NULL)
+	{
+		if ( $options === NULL )
+			$options = $this->formdata;
+
+		return parent::table($rows, $options);
 	}
 
-	function form_wrap($content) {
-		return parent::form_wrap($content, $this->nonce);
+	function table_row($row, $options = NULL)
+	{
+		if ( $options === NULL )
+			$options = $this->formdata;
+
+		return parent::table_row($row, $options);
 	}
 
-	function form_table($rows, $action = 'action', $value = 'Save Changes') {
-		$output = parent::form_table_section($rows);
+	function form_wrap($content, $nonce = NULL, $submit_button = true)
+	{
+		if ( $nonce === NULL )
+			$nonce = $this->nonce;
 
-		$output .= $this->submit_button($action);
+		if ( $submit_button === true )
+			$submit_button = $this->submit_button();
 
-		return parent::form_wrap($output, $this->nonce);
+		$content .= $submit_button;
+
+		return parent::form_wrap($content, $nonce);
+	}
+
+	// Generates a form table with a submit button
+	function form_table($rows, $options = NULL, $submit_button = true)
+	{
+		if ( $options === NULL )
+			$options = $this->formdata;
+
+		$output = parent::form_table($rows, $options);
+
+		return parent::form_wrap($output, $this->nonce, $submit_button);
 	}
 
 	// Generates a submit form button
-	function submit_button($action = 'action', $value = 'Save Changes', $class = "button") {
+	function submit_button($action = 'action', $value = 'Save Changes', $class = "button")
+	{
 		if ( in_array($action, $this->actions) )
 			trigger_error("Duplicate action for submit button: {$action}", E_USER_WARNING);
+
 		$this->actions[] = $action;
 
 		$args = array(
@@ -113,19 +148,39 @@ abstract class scbOptionsPage extends scbForms {
 		return $output;
 	}
 
+	// To be used in ::page_head()
+	function admin_msg($msg, $class = "updated")
+	{
+		echo "<div class='$class fade'><p>$msg</p></div>\n";
+	}
+
+	// Wraps a string in a <script> tag
+	function js_wrap($string)
+	{
+		return "\n<script language='text/javascript'>\n" . $string . "\n</script>\n";
+	}
+
+	// Wraps a string in a <style> tag
+	function css_wrap($string)
+	{
+		return "\n<style type='text/css'>\n" . $string . "\n</style>\n";
+	}
+
 
 //_____INTERNAL METHODS (DON'T WORRY ABOUT THESE)_____
 
 
 	// Registers a page
-	function page_init() {
+	function page_init()
+	{
 		extract($this->args);
 		$this->pagehook = add_submenu_page($parent, $page_title, $menu_title, $capability, $page_slug, array($this, '_page_content_hook'));
 
 		add_action('admin_print_styles-' . $this->pagehook, array($this, 'page_head'));
 	}
 
-	function _action_link($links) {
+	function _action_link($links)
+	{
 		$url = add_query_arg('page', $this->args['page_slug'], admin_url($this->args['parent']));
 		$links[] = "<a href='$url'>" . $this->args['action_link'] . "</a>";
 
@@ -133,24 +188,26 @@ abstract class scbOptionsPage extends scbForms {
 	}
 
 	// Update options
-	function form_handler() {
+	function form_handler()
+	{
 		if ( empty($_POST['action']) )
 			return false;
 
 		check_admin_referer($this->nonce);
 
 		foreach ( $this->options->get() as $name => $value )
-			$new_options[$name] = $_POST[$name];
+			$this->formdata[$name] = $_POST[$name];
 
-		$new_options = $this->validate($new_options);
+		$this->formdata = $this->validate($new_options);
 
-		$this->options->update($new_options);
+		$this->options->update($this->formdata);
 
 		$this->admin_msg(__('Settings <strong>saved</strong>.', $this->textdomain));
 	}
 
 	// Generates a standard page head
-	function page_header() {
+	function page_header()
+	{
 		$this->form_handler();
 
 		echo "<div class='wrap'>\n";
@@ -158,18 +215,21 @@ abstract class scbOptionsPage extends scbForms {
 	}
 
 	// Generates a standard page footer
-	function page_footer() {
+	function page_footer()
+	{
 		echo "</div>\n";
 	}
 
-	function _page_content_hook() {
+	function _page_content_hook()
+	{
 		$this->page_header();
 		$this->page_content();
 		$this->page_footer();
 	}
 
 	// Checks and sets default args
-	function _check_args() {
+	function _check_args()
+	{
 		if ( empty($this->args['page_title']) )
 			trigger_error('Page title cannot be empty', E_USER_ERROR);
 
@@ -190,7 +250,8 @@ abstract class scbOptionsPage extends scbForms {
 	}
 
 	// Set plugin_dir
-	function _set_url($file) {
+	function _set_url($file)
+	{
 		if ( function_exists('plugins_url') )
 			$this->plugin_url = plugins_url(plugin_basename(dirname($file)));
 		else

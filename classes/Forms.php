@@ -110,6 +110,13 @@ class scbForms
 // ____________WRAPPERS____________
 
 
+	function table_wrap($content)
+	{
+		$output = "\n<table class='form-table'>\n" . $content . "\n</table>\n";
+	
+		return $output;
+	}
+
 	function form_wrap($content, $nonce = 'update_options')
 	{
 		$output = "\n<form method='post' action=''>\n";
@@ -120,18 +127,11 @@ class scbForms
 		return $output;
 	}
 
-	function table_wrap($content)
-	{
-		$output = "\n<table class='form-table'>\n" . $content . "\n</table>\n";
-	
-		return $output;
-	}
-
-	function form_table_wrap($content)
+	function form_table_wrap($content, $nonce = 'update_options')
 	{
 		$output = self::table_wrap($content);
-		$output = self::form_wrap($output);
-		
+		$output = self::form_wrap($output, $nonce);
+
 		return $output;
 	}
 
@@ -151,34 +151,42 @@ class scbForms
 			'extra' => 'class="regular-text"'
 		)), EXTR_SKIP);
 
-		$f1 = is_array($name);
-		$f2 = is_array($value);
+		$name_is_array = is_array($name);
+		$value_is_array = is_array($value);
 
 		// Set default values
-		if ( 'text' == $type && !$f1 && !isset($value) )
-			$value = stripslashes(wp_specialchars(@$options[$name], ENT_QUOTES));
+		if ( 'text' == $type && !isset($value) )
+			if ( !$name_is_array )
+				$value = stripslashes(wp_specialchars(@$options[$name], ENT_QUOTES));
+			else
+			{
+				foreach ( $name as $cur_name )
+					$value[] = stripslashes(wp_specialchars(@$options[$cur_name], ENT_QUOTES));
+
+				$value_is_array = true;
+			}
 
 		if ( in_array($type, array('checkbox', 'radio')) )
 		{
 			if ( !isset($value) )
 				$value = true;
 
-			if ( !isset($desc) && !$f1 && !$f2 && $value !== true )
+			if ( !isset($desc) && !$name_is_array && !$value_is_array && $value !== true )
 				$desc = $value;
 		}
 
 		// Expand names or values
-		if ( !$f1 && !$f2 )
+		if ( !$name_is_array && !$value_is_array )
 			$a = array($name => $value);
-		elseif ( $f1 && !$f2 )
+		elseif ( $name_is_array && !$value_is_array )
 			$a = array_fill_keys($name, $value);
-		elseif ( !$f1 && $f2 )
+		elseif ( !$name_is_array && $value_is_array )
 			$a = array_fill_keys($value, $name);
 		else
 			$a = array_combine($name, $value);
 
 		// Determine what goes where
-		if ( !$f1 && $f2 ) 
+		if ( !$name_is_array && $value_is_array ) 
 		{
 			$i1 = 'val';
 			$i2 = 'name';
@@ -189,7 +197,7 @@ class scbForms
 			$i2 = 'val';
 		}
 
-		if ( $f1 || $f2 )
+		if ( $name_is_array || $value_is_array )
 			$l1 = 'name';
 		else
 			$l1 = 'desc';
@@ -224,8 +232,7 @@ class scbForms
 			$input = "<input name='{$cur_name}' value='{$cur_val}' type='{$type}' {$cur_extra}/> ";
 
 			// Set label
-			$label = @$$l1;
-			$label = str_replace('[]', '', $label);
+			$label = str_replace('[]', '', @$$l1);
 			if ( FALSE === strpos($label, $token) )
 				switch ($desc_pos)
 				{
