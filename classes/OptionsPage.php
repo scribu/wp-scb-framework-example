@@ -157,7 +157,7 @@ abstract class scbOptionsPage extends scbForms
 	// Wraps a string in a <script> tag
 	function js_wrap($string)
 	{
-		return "\n<script language='text/javascript'>\n" . $string . "\n</script>\n";
+		return "\n<script language='javascript' type='text/javascript'>\n" . $string . "\n</script>\n";
 	}
 
 	// Wraps a string in a <style> tag

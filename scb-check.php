@@ -24,7 +24,7 @@ function scb_check($file)
 
 	update_option('active_plugins', $current);
 
-	add_action('admin_notices', 'scb_notice');
+	add_action('admin_notices', 'scb_notice', 1);
 
 	return false;
 }
@@ -33,8 +33,10 @@ endif;
 if ( !function_exists('scb_notice') ):
 function scb_notice()
 {
+	remove_action('admin_notices', 'plugin_notices');
+
 	global $wp_version;
-	
+
 	if ( version_compare('2.7', $wp_version, '<=') )
 	{
 		$slug = 'scb-framework';
