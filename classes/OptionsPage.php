@@ -12,21 +12,22 @@ abstract class scbOptionsPage extends scbForms
 	 */
 	protected $args;
 
-	// l10n
+	// Used for l10n
 	protected $textdomain;
 
-	// Hook string created at page init
-	protected $pagehook;
-
-	// Plugin dir url
+	// URL to the current plugin directory.
+	// Useful for adding css and js files
 	protected $plugin_url;
 
-	// scbOptions object
-	protected $options;
-	protected $formdata;
+	// Created at page init
+	protected $pagehook;
 
-	// Form actions
-	protected $actions = array();
+	// scbOptions object holder
+	// Normally, it's used for storing formdata
+	protected $options;
+
+	// Formdata used for filling the form elements
+	protected $formdata = array();
 
 
 //_____MAIN METHODS_____
@@ -40,8 +41,11 @@ abstract class scbOptionsPage extends scbForms
 		$this->_check_args();
 		$this->_set_url($file);
 
-		if ( ! empty($options) )
+		if ( $options !== NULL )
+		{
 			$this->options = $options;
+			$this->formdata = $this->options->get();
+		}
 
 		add_action('admin_menu', array($this, 'page_init'));
 
@@ -49,25 +53,64 @@ abstract class scbOptionsPage extends scbForms
 			add_filter('plugin_action_links_' . plugin_basename($file), array($this, '_action_link'));
 	}
 
-	// This is where all the page args go (DEPRECATED)
+	// This is where all the page args are set (DEPRECATED)
 	function setup(){}
 
 	// This is where the css and js go
+	// Both wp_enqueue_*() and inline code can be added
 	function page_head(){}
+
+	// A generic page header
+	function page_header()
+	{
+		$this->form_handler();
+
+		echo "<div class='wrap'>\n";
+		echo "<h2>" . $this->args['page_title'] . "</h2>\n";
+	}
+
 
 	// This is where the page content goes
 	abstract function page_content();
 
-	// Validate new options
-	function validate($new_options)
+
+	// A generic page footer
+	function page_footer()
 	{
-		return $new_options;
+		echo "</div>\n";
+	}
+
+
+	// This is where the form data is validated
+	function validate($formdata)
+	{
+		return $formdata;
+	}
+
+	// A generic form handler
+	function form_handler()
+	{
+		if ( empty($_POST['action']) )
+			return false;
+
+		check_admin_referer($this->nonce);
+
+		foreach ( $this->formdata as $name => $value )
+			$new_data[$name] = $_POST[$name];
+
+		$this->formdata = $this->validate($new_data);
+
+		if ( isset($this->options) )
+			$this->options->update($this->formdata);
+
+		$this->admin_msg(__('Settings <strong>saved</strong>.', $this->textdomain));
 	}
 
 
 //_____HELPER METHODS_____
 
 
+	// See scbForms::input()
 	function input($args, $options = NULL)
 	{
 		if ( $options === NULL )
@@ -76,6 +119,7 @@ abstract class scbOptionsPage extends scbForms
 		return parent::input($args, $options);
 	}
 
+	// See scbForms::form()
 	function form($rows, $options = NULL)
 	{
 		if ( $options === NULL )
@@ -84,6 +128,7 @@ abstract class scbOptionsPage extends scbForms
 		return parent::form($rows, $options);
 	}
 
+	// See scbForms::table()
 	function table($rows, $options = NULL)
 	{
 		if ( $options === NULL )
@@ -92,6 +137,7 @@ abstract class scbOptionsPage extends scbForms
 		return parent::table($rows, $options);
 	}
 
+	// See scbForms::table_row()
 	function table_row($row, $options = NULL)
 	{
 		if ( $options === NULL )
@@ -100,6 +146,7 @@ abstract class scbOptionsPage extends scbForms
 		return parent::table_row($row, $options);
 	}
 
+	// See scbForms::table_wrap()
 	function form_wrap($content, $nonce = NULL, $submit_button = true)
 	{
 		if ( $nonce === NULL )
@@ -113,7 +160,7 @@ abstract class scbOptionsPage extends scbForms
 		return parent::form_wrap($content, $nonce);
 	}
 
-	// Generates a form table with a submit button
+	// See scbForms::form_table()
 	function form_table($rows, $options = NULL, $submit_button = true)
 	{
 		if ( $options === NULL )
@@ -124,13 +171,13 @@ abstract class scbOptionsPage extends scbForms
 		return $this->form_wrap($output, $this->nonce, $submit_button);
 	}
 
-	// Generates a submit form button
+	// Generates a form submit button
 	function submit_button($action = 'action', $value = 'Save Changes', $class = "button")
 	{
-		if ( in_array($action, $this->actions) )
+		if ( in_array($action, (array) $this->_actions) )
 			trigger_error("Duplicate action for submit button: {$action}", E_USER_WARNING);
 
-		$this->actions[] = $action;
+		$this->_actions[] = $action;
 
 		$args = array(
 			'type' => 'submit',
@@ -148,7 +195,7 @@ abstract class scbOptionsPage extends scbForms
 		return $output;
 	}
 
-	// To be used in ::page_head()
+	// To be used in page_head()
 	function admin_msg($msg, $class = "updated")
 	{
 		echo "<div class='$class fade'><p>$msg</p></div>\n";
@@ -179,6 +226,13 @@ abstract class scbOptionsPage extends scbForms
 		add_action('admin_print_styles-' . $this->pagehook, array($this, 'page_head'));
 	}
 
+	function _page_content_hook()
+	{
+		$this->page_header();
+		$this->page_content();
+		$this->page_footer();
+	}
+
 	function _action_link($links)
 	{
 		$url = add_query_arg('page', $this->args['page_slug'], admin_url($this->args['parent']));
@@ -187,47 +241,6 @@ abstract class scbOptionsPage extends scbForms
 		return $links;
 	}
 
-	// Update options
-	function form_handler()
-	{
-		if ( empty($_POST['action']) )
-			return false;
-
-		check_admin_referer($this->nonce);
-
-		foreach ( $this->options->get() as $name => $value )
-			$this->formdata[$name] = $_POST[$name];
-
-		$this->formdata = $this->validate($new_options);
-
-		$this->options->update($this->formdata);
-
-		$this->admin_msg(__('Settings <strong>saved</strong>.', $this->textdomain));
-	}
-
-	// Generates a standard page head
-	function page_header()
-	{
-		$this->form_handler();
-
-		echo "<div class='wrap'>\n";
-		echo "<h2>".$this->args['page_title']."</h2>\n";
-	}
-
-	// Generates a standard page footer
-	function page_footer()
-	{
-		echo "</div>\n";
-	}
-
-	function _page_content_hook()
-	{
-		$this->page_header();
-		$this->page_content();
-		$this->page_footer();
-	}
-
-	// Checks and sets default args
 	function _check_args()
 	{
 		if ( empty($this->args['page_title']) )
