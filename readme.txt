@@ -16,9 +16,9 @@ These classes are:
 
 * *scbForms* - form generation
 * *scbOptions* - option handling
-* *scbOptionsPage* - admin page handling
+* *scbAdminPage* - admin page generation
 * *scbBoxesPage* - admin page with meta boxes
+* *scbWidget* - widget generation
 * *scbCron* - cron handling
-* *scbWidget* - widget handling
 
 You can learn more about it [here](http://scribu.net/wordpress/scb-framework).
