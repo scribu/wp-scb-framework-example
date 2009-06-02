@@ -1,18 +1,21 @@
 <?php
 
-class scbOptions {
+class scbOptions 
+{
 	public $key;
 	public $defaults;
 	public $wp_filter_id;	// used by WP hooks
 
 	private $data;
 
-	function __construct($key, $file = '', $defaults = '') {
+	function __construct($key, $file = '', $defaults = '')
+	{
 		$this->key = $key;
 		$this->defaults = $defaults;
 		$this->data = get_option($this->key);
 
-		if ( is_array($this->defaults) ) {
+		if ( is_array($this->defaults) )
+		{
 
 			if ( $this->data === FALSE )
 				$this->data = array();
@@ -24,7 +27,8 @@ class scbOptions {
 	}
 
 	// Get all data, certain fields or a single field
-	function get($field = '') {
+	function get($field = '')
+	{
 		if ( empty($field) )
 			return $this->data;
 
@@ -37,16 +41,19 @@ class scbOptions {
 		return $result;
 	}
 
-	function __get($field) {
+	function __get($field)
+	{
 		return $this->data[$field];
 	}
 
-	function __set($field, $data) {
+	function __set($field, $data)
+	{
 		$this->update_part(array($field => $data));
 	}
 
 	// Update one or more fields, leaving the others intact
-	function update_part($newdata) {
+	function update_part($newdata)
+	{
 		if ( !is_array($newdata) )
 			return trigger_error("Wrong data_type", E_USER_WARNING);
 
@@ -54,7 +61,8 @@ class scbOptions {
 	}
 
 	// Update data
-	function update($newdata) {
+	function update($newdata)
+	{
 		if ( $this->data === $newdata )
 			return;
 
@@ -65,23 +73,26 @@ class scbOptions {
 	}
 
 	// A combination of reset and update
-	function update_reset() {
+	function update_reset()
+	{
 		$this->update(array_merge($this->defaults, $this->data));
 	}
 
 	// Reset option to defaults
-	function reset() {
+	function reset()
+	{
 		$this->update($this->defaults);
 	}
 
 	// Delete option
-	function delete() {
+	function delete()
+	{
 		delete_option($this->key);
 	}
 }
 
 // WP < 2.7
 if ( !function_exists('register_uninstall_hook') ) :
-function register_uninstall_hook() {}
+	function register_uninstall_hook(){}
 endif;
 

@@ -1,6 +1,6 @@
 <?php
 
-abstract class scbBoxesPage extends scbOptionsPage
+abstract class scbBoxesPage extends scbAdminPage
 {
 	public $boxes;
 
@@ -54,6 +54,7 @@ abstract class scbBoxesPage extends scbOptionsPage
 		{
 			// Add boxes
 			add_meta_box($i[0], $i[1], array($this, "{$i[0]}_box"), $this->pagehook, $i[2]);
+
 			// Add handlers
 			add_action('form-handler-' . $this->pagehook, array($this, "{$i[0]}_handler"));
 		}
@@ -62,17 +63,19 @@ abstract class scbBoxesPage extends scbOptionsPage
 	// Adds necesary code for JS to work
 	function _boxes_js_init()
 	{
+		echo $this->js_wrap(
+<<<EOT
+//<![CDATA[
+jQuery(document).ready( function($){
+	// close postboxes that should be closed
+	$('.if-js-closed').removeClass('if-js-closed').addClass('closed');
+	// postboxes setup
+	postboxes.add_postbox_toggles('$this->pagehook');
+});
+//]]>
+EOT
+);
 ?>
-<script type="text/javascript">
-	//<![CDATA[
-	jQuery(document).ready( function($){
-		// close postboxes that should be closed
-		$('.if-js-closed').removeClass('if-js-closed').addClass('closed');
-		// postboxes setup
-		postboxes.add_postbox_toggles('<?php echo $this->pagehook; ?>');
-	});
-	//]]>
-</script>
 
 <form style='display: none' method='get' action=''>
 	<p>

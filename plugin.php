@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: scbFramework
-Version: 1.0b
+Version: 1.0
 Description: Useful classes for plugin developers
 Author: scribu
 Author URI: http://scribu.net
@@ -19,9 +19,11 @@ abstract class scbFramework
 			spl_autoload_register(array(__CLASS__, 'autoload'));
 		else
 			// Load all classes manually
-			foreach ( array('scbForms', 'scbOptions', 'scbOptionsPage', 'scbBoxesPage', 'scbWidget', 'scbCron') as $class )
+			foreach ( array('scbForms', 'scbOptions', 'scbWidget', 'scbCron',
+				'scbOptionsPage', 'scbAdminPage', 'scbBoxesPage') as $class )
 				self::autoload($class);
 
+//		register_activation_hook(__FILE, array(__CLASS__, 'put_first'));
 		add_action('shutdown', array(__CLASS__, 'put_first'));
 	}
 

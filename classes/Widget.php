@@ -1,7 +1,14 @@
 <?php
 
-class scbWidget extends WP_Widget {
-	function widget($args, $instance) {
+// Adds an input() method that let's you use it with scbForms
+
+class scbWidget extends WP_Widget
+{
+	// You can use this function if you don't want to wory about widget args
+	function content($instance){}
+
+	function widget($args, $instance)
+	{
 		extract($args);
 
 		echo $before_widget . $before_title . $instance['title'] . $after_title;
@@ -9,16 +16,11 @@ class scbWidget extends WP_Widget {
 		echo $after_widget;
 	}
 
-	function input($args, $options = array()) {
+	function input($args, $options = array()) 
+	{
 		// Add default label position
 		if ( !in_array($args['type'], array('checkbox', 'radio')) && empty($args['desc_pos']) )
 			$args['desc_pos'] = 'before';
-
-		// First check names
-		if ( FALSE !== $args['check'] ) {
-			scbForms::_check_names($args['names'], $options);
-			$args['check'] = false;
-		}
 
 		// Then add prefix to names and options
 		$new_options = array();
