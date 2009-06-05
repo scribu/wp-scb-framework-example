@@ -10,15 +10,13 @@ A set of useful classes for faster plugin development.
 
 == Description ==
 
-This is a base plugin required by other plugins. It consists of several classes that help plugin developers write plugins easier.
-
-These classes are:
+This is a plugin toolkit that helps developers write plugins faster. It consists of several classes which handle common tasks:
 
 * *scbForms* - form generation
-* *scbOptions* - option handling
 * *scbAdminPage* - admin page generation
 * *scbBoxesPage* - admin page with meta boxes
 * *scbWidget* - widget generation
+* *scbOptions* - option handling
 * *scbCron* - cron handling
 
-You can learn more about it [here](http://scribu.net/wordpress/scb-framework).
+You can read more about it [here](http://scribu.net/wordpress/scb-framework).
