@@ -2,19 +2,21 @@
 
 class scbForms
 {
-	/* Generates one or more input fields, with labels
-		$args =	array (
-			'type' => text | textarea | checkbox | radio | select
-			'name' => string | array
-			'value' => string | array (default: 1 or $options[$name])
-			'extra' => string (default: class="regular-text")
-			'desc' => string (default: name)
-			'desc_pos' => 'before' | 'after' | 'none' (default: after)
-		);
-		$options = array('name' => 'value'...)
-	*/
+	/* Generates one or more form elements of the same type,
+		including <select>s and <textarea>s
 
-	function input($args, $options = array())
+		$args =	array (
+			'type' => string  (mandatory)
+			'name' => string | array  (mandatory)
+			'value' => string | array
+			'desc' => string | false
+			'desc_pos' => 'before' | 'after' | 'foo %input% bar'  (default: after)
+			'extra' => string  (default: class="regular-text")
+		);
+
+		$formdata = associative array with the formdata with which to fill the elements
+	*/
+	function input($args, $formdata = array())
 	{
 		// Backwards compat
 		foreach ( array('name', 'value') as $key )
@@ -39,9 +41,9 @@ class scbForms
 
 		switch ( $args['type'] )
 		{
-			case  'select':	return self::_select($args, $options);
-			case 'textarea': return self::_textarea($args, $options);
-			default: return self::_input($args, $options);
+			case  'select':	return self::_select($args, $formdata);
+			case 'textarea': return self::_textarea($args, $formdata);
+			default: return self::_input($args, $formdata);
 		}
 	}
 
@@ -55,10 +57,10 @@ class scbForms
 	}
 
 	// Deprecated
-	function textarea($args, $deprecated = '')
+	function textarea($args, $content = '')
 	{
-		if ( !empty($deprecated) )
-			$args['value'] = $deprecated;
+		if ( !empty($content) )
+			$args['value'] = $content;
 
 		return self::_textarea($args);
 	}
@@ -67,22 +69,22 @@ class scbForms
 // ____________UTILITIES____________
 
 
-	function form($inputs, $options)
+	function form($inputs, $formdata = NULL, $nonce)
 	{
 		$output = '';
 		foreach ( $inputs as $input )
-			$output .= self::input($input, $options);
+			$output .= self::input($input, $formdata);
 
-		$output = self::form_wrap($output);
+		$output = self::form_wrap($output, $nonce);
 
 		return $output;
 	}
 
-	function table($rows, $options = NULL)
+	function table($rows, $formdata = NULL)
 	{
 		$output = '';
 		foreach ( $rows as $row )
-			$output .= self::table_row($row, $options);
+			$output .= self::table_row($row, $formdata);
 
 		$output = self::table_wrap($output);
 
@@ -90,20 +92,20 @@ class scbForms
 	}
 
 	// Generates multiple rows and wraps them in a form table
-	function form_table($rows, $options = NULL)
+	function form_table($rows, $formdata = NULL)
 	{
 		$output = '';
 		foreach ( $rows as $row )
-			$output .= self::table_row($row, $options);
+			$output .= self::table_row($row, $formdata);
 
 		$output = self::form_table_wrap($output);
 
 		return $output;
 	}
 
-	function table_row($args, $options = NULL)
+	function table_row($args, $formdata = NULL)
 	{
-		return self::row_wrap($args['title'], self::input($args, $options));
+		return self::row_wrap($args['title'], self::input($args, $formdata));
 	}
 
 
@@ -113,7 +115,7 @@ class scbForms
 	function table_wrap($content)
 	{
 		$output = "\n<table class='form-table'>\n" . $content . "\n</table>\n";
-	
+
 		return $output;
 	}
 
@@ -144,26 +146,26 @@ class scbForms
 // ____________PRIVATE METHODS____________
 
 
-	private static function _input($args, $options)
+	private static function _input($args, $formdata)
 	{
 		extract(wp_parse_args($args, array(
 			'desc_pos' => 'after',
 			'extra' => 'class="regular-text"'
 		)), EXTR_SKIP);
 
-		$name_is_array = is_array($name);
-		$value_is_array = is_array($value);
+		$an = is_array($name);
+		$av = is_array($value);
 
 		// Set default values
 		if ( 'text' == $type && !isset($value) )
-			if ( !$name_is_array )
-				$value = stripslashes(wp_specialchars(@$options[$name], ENT_QUOTES));
+			if ( !$an )
+				$value = stripslashes(wp_specialchars(@$formdata[$name], ENT_QUOTES));
 			else
 			{
 				foreach ( $name as $cur_name )
-					$value[] = stripslashes(wp_specialchars(@$options[$cur_name], ENT_QUOTES));
+					$value[] = stripslashes(wp_specialchars(@$formdata[$cur_name], ENT_QUOTES));
 
-				$value_is_array = true;
+				$av = true;
 			}
 
 		if ( in_array($type, array('checkbox', 'radio')) )
@@ -171,22 +173,22 @@ class scbForms
 			if ( !isset($value) )
 				$value = true;
 
-			if ( !isset($desc) && !$name_is_array && !$value_is_array && $value !== true )
+			if ( !isset($desc) && !$an && !$av && $value !== true )
 				$desc = $value;
 		}
 
 		// Expand names or values
-		if ( !$name_is_array && !$value_is_array )
+		if ( !$an && !$av )
 			$a = array($name => $value);
-		elseif ( $name_is_array && !$value_is_array )
+		elseif ( $an && !$av )
 			$a = array_fill_keys($name, $value);
-		elseif ( !$name_is_array && $value_is_array )
+		elseif ( !$an && $av )
 			$a = array_fill_keys($value, $name);
 		else
 			$a = array_combine($name, $value);
 
 		// Determine what goes where
-		if ( !$name_is_array && $value_is_array ) 
+		if ( !$an && $av ) 
 		{
 			$i1 = 'val';
 			$i2 = 'name';
@@ -197,7 +199,7 @@ class scbForms
 			$i2 = 'val';
 		}
 
-		if ( $name_is_array || $value_is_array )
+		if ( $an || $av )
 			$l1 = 'name';
 		else
 			$l1 = 'desc';
@@ -217,7 +219,7 @@ class scbForms
 			// Checked or not
 			if ( in_array($type, array('checkbox', 'radio')) )
 			{
-				$match = @$options[str_replace('[]', '', $cur_name)];
+				$match = @$formdata[str_replace('[]', '', $cur_name)];
 				if ( is_array($match) )
 					$match = $match[$i++];
 
@@ -242,7 +244,7 @@ class scbForms
 			$label = trim(str_replace($token, $input, $label));
 
 			// Add label
-			if ( 'none' == $desc_pos || empty($label) )
+			if ( FALSE === $desc || empty($label) )
 				$output[] = $input . "\n";
 			else
 				$output[] = "<label>{$label}</label>\n";
@@ -251,7 +253,7 @@ class scbForms
 		return implode("\n", $output);
 	}
 
-	private static function _select($args, $options)
+	private static function _select($args, $formdata)
 	{
 		extract(wp_parse_args($args, array(
 			'name' => '',
@@ -263,8 +265,8 @@ class scbForms
 		)), EXTR_SKIP);
 
 		$cur_val = $selected;
-		if ( isset($options[$name]) )
-			$cur_val = $options[$name];
+		if ( isset($formdata[$name]) )
+			$cur_val = $formdata[$name];
 
 		if ( !is_array($value) )
 			return trigger_error("Second argument is expected to be an array", E_USER_WARNING);
@@ -299,7 +301,7 @@ class scbForms
 		return "<select name='{$name}' $extra>\n{$opts}</select>\n";
 	}
 
-	private static function _textarea($args, $options)
+	private static function _textarea($args, $formdata)
 	{
 		extract(wp_parse_args($args, array(
 			'name' => '', 

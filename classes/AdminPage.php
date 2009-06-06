@@ -120,12 +120,15 @@ abstract class scbAdminPage extends scbForms
 	}
 
 	// See scbForms::form()
-	function form($rows, $options = NULL)
+	function form($rows, $options = NULL, $nonce = NULL)
 	{
+		if ( $nonce === NULL )
+			$nonce = $this->nonce;
+
 		if ( $options === NULL )
 			$options = $this->formdata;
 
-		return parent::form($rows, $options);
+		return parent::form($rows, $options, $nonce);
 	}
 
 	// See scbForms::table()
