@@ -199,62 +199,68 @@ class scbForms
 			$i2 = 'val';
 		}
 
-		// Set label
-		if ( !isset($desc) )
-			$l1 = 'name';
-		else
-			$l1 = 'desc';
-
-
 		// Generate output
-		$i = 0; $j = 0;
+		$i = 0;
 		foreach ( $a as $name => $val )
 		{
-			$cur_name = $$i1;
-			$cur_val = $$i2;
+			$cur_args['name'] = $$i1;
+			$cur_args['value'] = $$i2;
 
-			if ( $l1 == 'desc' && is_array($desc) )
-				$cur_desc = $desc[$j++];
-			else
-				$cur_desc = str_replace('[]', '', @$$l1);
+			if ( is_array($desc) )
+				$cur_args['desc'] = $desc[$i++];
+			elseif ( isset($desc) )
+				$cur_args['desc'] = $desc;
+			elseif ( in_array($type, array('checkbox', 'radio')) )
+				$cur_args['desc'] = str_replace('[]', '', $$i2);
 
-			// Build extra string
-			$cur_extra = $extra;
+			$cur_args['type'] = $type;
+			$cur_args['desc_pos'] = $desc_pos;
+			$cur_args['extra'] = $extra;
 
-			// Checked or not
-			if ( in_array($type, array('checkbox', 'radio')) )
-			{
-				$match = @$formdata[str_replace('[]', '', $cur_name)];
-				if ( is_array($match) )
-					$match = $match[$i++];
-
-				if ( $match == $cur_val )
-					$cur_extra .= " checked='checked'";
-			}
-
-			if ( FALSE === strpos($cur_name, '[]') )
-				$cur_extra .= " id='{$cur_name}'";
-
-			// Build the item
-			$input = "<input name='{$cur_name}' value='{$cur_val}' type='{$type}' {$cur_extra}/> ";
-
-			// Set label
-			if ( FALSE === strpos($cur_desc, self::$token) )
-				switch ($desc_pos)
-				{
-					case 'before': $cur_desc .= ' ' . self::$token; break;
-					case 'after': $cur_desc = self::$token . ' ' . $cur_desc;
-				}
-			$cur_desc = trim(str_replace(self::$token, $input, $cur_desc));
-
-			// Add label
-			if ( FALSE === $desc || empty($cur_desc) )
-				$output[] = $input . "\n";
-			else
-				$output[] = "<label>{$cur_desc}</label>\n";
+			$output[] = self::_input_single($cur_args, $formdata);
 		}
 
 		return implode("\n", $output);
+	}
+
+	private static function _input_single($args, $formdata)
+	{
+		extract($args);
+
+		// Checked or not
+		if ( in_array($type, array('checkbox', 'radio')) )
+		{
+			$match = @$formdata[str_replace('[]', '', $name)];
+			if ( is_array($match) )
+				$match = $match[$i++];
+
+			if ( $match == $value )
+				$extra .= " checked='checked'";
+		}
+
+		if ( FALSE === strpos($name, '[]') )
+			$extra .= " id='{$name}'";
+
+		// Build the item
+		$input = "<input name='{$name}' value='{$value}' type='{$type}' {$extra}/> ";
+
+		// Set label
+		if ( FALSE === strpos($desc, self::$token) )
+			switch ($desc_pos)
+			{
+				case 'before': $label = $desc .' ' . self::$token; break;
+				case 'after': $label = self::$token . ' ' . $desc;
+			}
+
+		$label = trim(str_replace(self::$token, $input, $label));
+
+		// Add label
+		if ( empty($label) )
+			$output = $input . "\n";
+		else
+			$output = "<label>{$label}</label>\n";
+
+		return $output;	
 	}
 
 	private static function _select($args, $formdata)
