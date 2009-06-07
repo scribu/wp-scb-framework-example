@@ -9,7 +9,7 @@ class scbForms
 			'type' => string  (mandatory)
 			'name' => string | array  (mandatory)
 			'value' => string | array
-			'desc' => string | false
+			'desc' => string | array | false
 			'desc_pos' => 'before' | 'after' | 'foo %input% bar'  (default: after)
 			'extra' => string  (default: class="regular-text")
 		);
@@ -41,11 +41,14 @@ class scbForms
 
 		switch ( $args['type'] )
 		{
-			case  'select':	return self::_select($args, $formdata);
-			case 'textarea': return self::_textarea($args, $formdata);
-			default: return self::_input($args, $formdata);
+			case 'select':  	return self::_select($args, $formdata);
+			case 'textarea':	return self::_textarea($args, $formdata);
 		}
+
+		return self::_input($args, $formdata);
 	}
+
+	static $token = '%input%';
 
 	// Deprecated
 	function select($args, $options = array())
@@ -153,65 +156,67 @@ class scbForms
 			'extra' => 'class="regular-text"'
 		)), EXTR_SKIP);
 
-		$an = is_array($name);
-		$av = is_array($value);
-
 		// Set default values
 		if ( 'text' == $type && !isset($value) )
-			if ( !$an )
+			if ( !is_array($name) )
 				$value = stripslashes(wp_specialchars(@$formdata[$name], ENT_QUOTES));
 			else
-			{
 				foreach ( $name as $cur_name )
 					$value[] = stripslashes(wp_specialchars(@$formdata[$cur_name], ENT_QUOTES));
-
-				$av = true;
-			}
 
 		if ( in_array($type, array('checkbox', 'radio')) )
 		{
 			if ( !isset($value) )
 				$value = true;
 
-			if ( !isset($desc) && !$an && !$av && $value !== true )
+			if ( !isset($desc)
+				&& !is_array($name)
+				&& !is_array($value)
+				&& !is_bool($value)
+			)
 				$desc = $value;
 		}
 
 		// Expand names or values
-		if ( !$an && !$av )
+		if ( !is_array($name) && !is_array($value) )
 			$a = array($name => $value);
-		elseif ( $an && !$av )
+		elseif ( is_array($name) && !is_array($value) )
 			$a = array_fill_keys($name, $value);
-		elseif ( !$an && $av )
+		elseif ( !is_array($name) && is_array($value) )
 			$a = array_fill_keys($value, $name);
 		else
 			$a = array_combine($name, $value);
 
 		// Determine what goes where
-		if ( !$an && $av ) 
+		if ( !is_array($name) && is_array($value) )
 		{
 			$i1 = 'val';
 			$i2 = 'name';
-		} 
+		}
 		else 
 		{
 			$i1 = 'name';
 			$i2 = 'val';
 		}
 
-		if ( $an || $av )
+		// Set label
+		if ( !isset($desc) )
 			$l1 = 'name';
 		else
 			$l1 = 'desc';
 
-		$token = '%input%';
 
 		// Generate output
-		$i = 0;
+		$i = 0; $j = 0;
 		foreach ( $a as $name => $val )
 		{
 			$cur_name = $$i1;
 			$cur_val = $$i2;
+
+			if ( $l1 == 'desc' && is_array($desc) )
+				$cur_desc = $desc[$j++];
+			else
+				$cur_desc = str_replace('[]', '', @$$l1);
 
 			// Build extra string
 			$cur_extra = $extra;
@@ -234,20 +239,19 @@ class scbForms
 			$input = "<input name='{$cur_name}' value='{$cur_val}' type='{$type}' {$cur_extra}/> ";
 
 			// Set label
-			$label = str_replace('[]', '', @$$l1);
-			if ( FALSE === strpos($label, $token) )
+			if ( FALSE === strpos($cur_desc, self::$token) )
 				switch ($desc_pos)
 				{
-					case 'before': $label .= ' ' . $token; break;
-					case 'after': $label = $token . ' ' . $label;
+					case 'before': $cur_desc .= ' ' . self::$token; break;
+					case 'after': $cur_desc = self::$token . ' ' . $cur_desc;
 				}
-			$label = trim(str_replace($token, $input, $label));
+			$cur_desc = trim(str_replace(self::$token, $input, $cur_desc));
 
 			// Add label
-			if ( FALSE === $desc || empty($label) )
+			if ( FALSE === $desc || empty($cur_desc) )
 				$output[] = $input . "\n";
 			else
-				$output[] = "<label>{$label}</label>\n";
+				$output[] = "<label>{$cur_desc}</label>\n";
 		}
 
 		return implode("\n", $output);
