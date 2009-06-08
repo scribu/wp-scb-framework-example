@@ -251,6 +251,8 @@ class scbForms
 				case 'before': $label = $desc .' ' . self::$token; break;
 				case 'after': $label = self::$token . ' ' . $desc;
 			}
+		else
+			$label = $desc;
 
 		$label = trim(str_replace(self::$token, $input, $label));
 

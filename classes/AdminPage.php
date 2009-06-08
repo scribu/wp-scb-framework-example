@@ -187,7 +187,7 @@ abstract class scbAdminPage extends scbForms
 			'names' => $action,
 			'values' => $value,
 			'extra' => '',
-			'desc_pos' => 'none'
+			'desc' => false
 		);
 
 		if ( ! empty($class) )
