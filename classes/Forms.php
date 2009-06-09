@@ -159,10 +159,10 @@ class scbForms
 		// Set default values
 		if ( 'text' == $type && !isset($value) )
 			if ( !is_array($name) )
-				$value = stripslashes(wp_specialchars(@$formdata[$name], ENT_QUOTES));
+				$value = stripslashes(esc_html(@$formdata[$name]));
 			else
 				foreach ( $name as $cur_name )
-					$value[] = stripslashes(wp_specialchars(@$formdata[$cur_name], ENT_QUOTES));
+					$value[] = stripslashes(esc_html(@$formdata[$cur_name]));
 
 		if ( in_array($type, array('checkbox', 'radio')) )
 		{
@@ -323,7 +323,7 @@ class scbForms
 		)), EXTR_SKIP);
 
 		if ( !$escaped )
-			$value = stripslashes(wp_specialchars($value, ENT_QUOTES));
+			$value = stripslashes(esc_html($value));
 
 		if ( FALSE === strpos($name, '[]') )
 			$extra .= " id='{$name}'";
@@ -342,9 +342,17 @@ class scbForms
 	}
 }
 
+// WP < 2.8
+if ( !function_exists('esc_html') ) :
+function esc_html($text)
+{
+	return wp_specialchars($text, ENT_QUOTES);
+}
+endif;
+
 // PHP < 5.2
 if ( !function_exists('array_fill_keys') ) :
-function array_fill_keys($keys, $value) 
+function array_fill_keys($keys, $value)
 {
 	if ( !is_array($keys) )
 		trigger_error('First argument is expected to be an array.' . gettype($keys) . 'given', E_USER_WARNING);
