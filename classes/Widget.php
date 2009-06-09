@@ -4,19 +4,29 @@
 
 class scbWidget extends WP_Widget
 {
-	// You can use this function if you don't want to wory about widget args
-	function content($instance){}
-
 	function widget($args, $instance)
 	{
 		extract($args);
 
-		echo $before_widget . $before_title . $instance['title'] . $after_title;
+		echo $before_widget;
+
+		if ( !empty($instance['title']) )
+			echo $before_title . $instance['title'] . $after_title;
+
 		$this->content($instance);
+
 		echo $after_widget;
 	}
 
-	function input($args, $formdata = array()) 
+	function content($instance) {}
+
+
+// ____HELPER METHODS____
+
+
+	// See scbForms::input()
+	// Allows extra parameter $args['title']
+	function input($args, $formdata = array())
 	{
 		// Add default class
 		if ( !isset($args['extra']) )
@@ -47,6 +57,37 @@ class scbWidget extends WP_Widget
 		$input = scbForms::input($args, $new_formdata);
 
 		return "<p>{$input}\n<br />\n$desc\n</p>\n";
+	}
+
+	// Migrate from old scbWidget to WP_Widget
+	static function migrate($base)
+	{
+		$old_base = 'multiwidget_' . $base;
+		$new_base = 'widget_' . $base;
+
+		if ( ! $old = get_option($old_base) )
+			return;
+
+		foreach ( $old as $widget )
+		{
+			if ( ! $id = $widget['__multiwidget'] )
+				continue;
+			unset($widget['__multiwidget']);
+
+			$migrated[$id] = $widget;
+		}
+
+		$widgets = get_option('sidebars_widgets');
+
+		foreach ( array_keys($migrated) as $key )
+			$widgets['wp_inactive_widgets'][] = $base . '-' . $key;
+
+		update_option('sidebars_widgets', $widgets);
+
+		$migrated['_multiwidget'] = 1;
+
+		update_option($new_base, $migrated);
+		delete_option($old_base);
 	}
 }
 
