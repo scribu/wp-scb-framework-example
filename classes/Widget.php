@@ -2,8 +2,11 @@
 
 // Adds compatibility methods between WP_Widget and scbForms
 
-class scbWidget extends WP_Widget
+abstract class scbWidget extends WP_Widget
 {
+	static $widgets = array();
+	static $migrations = array();
+
 	function widget($args, $instance)
 	{
 		extract($args);
@@ -19,6 +22,14 @@ class scbWidget extends WP_Widget
 	}
 
 	function content($instance) {}
+
+	static function init($class, $file = '', $base = '') {
+		self::$widgets[] = $class;
+		self::$migrations[] = $base;
+
+		add_action('widgets_init', array(__CLASS__, 'scb_register'));
+		register_activation_hook($file, array(__CLASS__, 'scb_migrate'));
+	}
 
 
 // ____HELPER METHODS____
@@ -59,8 +70,24 @@ class scbWidget extends WP_Widget
 		return "<p>{$input}\n<br />\n$desc\n</p>\n";
 	}
 
+
+// ____PRIVATE METHODS____
+
+
+	static function scb_register()
+	{
+		foreach ( self::$widgets as $widget )
+			register_widget($widget);
+	}
+
+	static function scb_migrate()
+	{
+		foreach ( self::$migrations as $base )
+			self::migrate($base);
+	}
+
 	// Migrate from old scbWidget to WP_Widget
-	static function migrate($base)
+	private static function migrate($base)
 	{
 		$old_base = 'multiwidget_' . $base;
 		$new_base = 'widget_' . $base;

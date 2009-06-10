@@ -3,17 +3,14 @@
 abstract class scbAdminPage extends scbForms
 {
 	/** Page args
-	 * string $parent (default: options-general.php)
-	 * string $page_title
-	 * string $menu_title (optional)
-	 * string $page_slug (optional)
-	 * array $action_link (default: Settings)
-	 * string $nonce (optional)
+	 * string $parent  (default: options-general.php)
+	 * string $page_title  (mandatory)
+	 * string $menu_title
+	 * string $page_slug
+	 * array $action_link  (default: Settings)
+	 * string $nonce
 	 */
 	protected $args;
-
-	// Used for l10n
-	protected $textdomain;
 
 	// URL to the current plugin directory.
 	// Useful for adding css and js files
@@ -103,7 +100,7 @@ abstract class scbAdminPage extends scbForms
 		if ( isset($this->options) )
 			$this->options->update($this->formdata);
 
-		$this->admin_msg(__('Settings <strong>saved</strong>.', $this->textdomain));
+		$this->admin_msg(__('Settings <strong>saved</strong>.'));
 	}
 
 
@@ -246,7 +243,7 @@ abstract class scbAdminPage extends scbForms
 		$this->args = wp_parse_args($this->args, array(
 			'menu_title' => $this->args['page_title'],
 			'page_slug' => '',
-			'action_link' => __('Settings', $this->textdomain),
+			'action_link' => __('Settings'),
 			'parent' => 'options-general.php',
 			'capability' => 'manage_options',
 			'nonce' => ''
