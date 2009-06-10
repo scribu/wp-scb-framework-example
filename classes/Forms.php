@@ -164,18 +164,8 @@ class scbForms
 				foreach ( $name as $cur_name )
 					$value[] = stripslashes(esc_html(@$formdata[$cur_name]));
 
-		if ( in_array($type, array('checkbox', 'radio')) )
-		{
-			if ( !isset($value) )
-				$value = true;
-
-			if ( !isset($desc)
-				&& !is_array($name)
-				&& !is_array($value)
-				&& !is_bool($value)
-			)
-				$desc = $value;
-		}
+		if ( !isset($value) && in_array($type, array('checkbox', 'radio')) )
+			$value = true;
 
 		// Expand names or values
 		if ( !is_array($name) && !is_array($value) )
@@ -206,11 +196,12 @@ class scbForms
 			$cur_args['name'] = $$i1;
 			$cur_args['value'] = $$i2;
 
+			// Set desc
 			if ( is_array($desc) )
 				$cur_args['desc'] = $desc[$i++];
 			elseif ( isset($desc) )
 				$cur_args['desc'] = $desc;
-			elseif ( in_array($type, array('checkbox', 'radio')) )
+			elseif ( !is_bool($$i2) && in_array($type, array('checkbox', 'radio')) )
 				$cur_args['desc'] = str_replace('[]', '', $$i2);
 
 			$cur_args['type'] = $type;
@@ -225,10 +216,13 @@ class scbForms
 
 	private static function _input_single($args, $formdata)
 	{
+	
+//echo "<pre>"; var_dump($args); echo "</pre>";
+
 		extract($args);
 
 		// Checked or not
-		if ( in_array($type, array('checkbox', 'radio')) )
+		if ( !is_bool($value) && in_array($type, array('checkbox', 'radio')) )
 		{
 			$match = @$formdata[str_replace('[]', '', $name)];
 			if ( is_array($match) )
@@ -237,6 +231,8 @@ class scbForms
 			if ( $match == $value )
 				$extra .= " checked='checked'";
 		}
+		else if ( $value )
+			$extra .= " checked='checked'";
 
 		if ( FALSE === strpos($name, '[]') )
 			$extra .= " id='{$name}'";

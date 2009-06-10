@@ -150,28 +150,22 @@ abstract class scbAdminPage extends scbForms
 	}
 
 	// See scbForms::table_wrap()
-	function form_wrap($content, $nonce = NULL, $submit_button = true)
+	function form_wrap($content, $submit_button = true)
 	{
-		if ( $nonce === NULL )
-			$nonce = $this->nonce;
-
 		if ( $submit_button === true )
 			$submit_button = $this->submit_button();
 
 		$content .= $submit_button;
 
-		return parent::form_wrap($content, $nonce);
+		return parent::form_wrap($content, $this->nonce);
 	}
 
 	// See scbForms::form_table()
 	function form_table($rows, $options = NULL, $submit_button = true)
 	{
-		if ( $options === NULL )
-			$options = $this->formdata;
-
 		$output = $this->table($rows, $options);
 
-		return $this->form_wrap($output, $this->nonce, $submit_button);
+		return $this->form_wrap($output, $submit_button);
 	}
 
 	// Generates a form submit button
