@@ -27,7 +27,7 @@ abstract class scbFramework
 		add_action('shutdown', array(__CLASS__, 'put_first'));
 	}
 
-	static function put_first() 
+	static function put_first()
 	{
 		$plugin = plugin_basename(__FILE__);
 		$current = get_option('active_plugins');

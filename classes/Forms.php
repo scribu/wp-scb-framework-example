@@ -219,6 +219,7 @@ class scbForms
 			'name' => NULL,
 			'value' => true,
 			'desc_pos' => 'after',
+			'desc' => NULL,
 			'checked' => NULL,
 			'extra' => array(),
 		));
@@ -233,7 +234,7 @@ class scbForms
 		if ( $checked )
 			$extra[] = "checked='checked'";
 
-		if ( !isset($desc) && !is_bool($value) )
+		if ( $desc === NULL && !is_bool($value) )
 			$desc = str_replace('[]', '', $value);
 
 		return self::_input_gen($args);
