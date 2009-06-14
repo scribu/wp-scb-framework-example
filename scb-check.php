@@ -45,7 +45,7 @@ function scb_notice()
 			'&amp;TB_iframe=true&amp;width=600&amp;height=550') . '" class="thickbox onclick">' . __('Install now') . '</a>]';
 	}
 
-	echo "<div class='updated fade'><p>One or more plugins require that <a href='http://scribu.net/wordpress/scb-framework'>scbFramework</a> be installed. $link</p></div>";
+	echo "<div class='updated fade'><p>One or more plugins require that <a href='http://scribu.net/wordpress/scb-framework'>scbFramework</a> be installed and active. $link</p></div>";
 }
 endif;
 

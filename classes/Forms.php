@@ -27,6 +27,7 @@ class scbForms
 		}
 
 		// Check required fields
+		$error = false;
 		foreach ( array('name', 'type') as $key )
 		{
 			if ( isset($args[$key]) )

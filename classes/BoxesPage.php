@@ -8,6 +8,25 @@ abstract class scbBoxesPage extends scbAdminPage
 	{
 		parent::page_init();
 		add_action('load-' . $this->pagehook, array($this, 'boxes_init'));
+
+		register_uninstall_hook($file, array($this, 'uninstall'));
+	}
+
+	function uninstall()
+	{
+		global $wpdb;
+
+		$hook = str_replace('-', '', $this->pagehook);
+
+		foreach ( array('metaboxhidden', 'closedpostboxes', 'wp_metaboxorder') as $option )
+			$keys[] = "'{$option}_{$hook}'";
+
+		$keys = '(' . implode(', ', $keys) . ')';
+
+		$wpdb->query("
+			DELETE FROM {$wpdb->usermeta}
+			WHERE meta_key IN {$keys}
+		");
 	}
 
 	function page_content()
@@ -37,6 +56,9 @@ abstract class scbBoxesPage extends scbAdminPage
 		check_admin_referer($this->nonce);
 
 		do_action('form-handler-' . $this->pagehook);
+
+		if ( $this->options )
+			$this->formdata = $this->options->get();
 	}
 
 	function boxes_init()
