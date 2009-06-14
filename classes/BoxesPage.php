@@ -11,7 +11,7 @@ $this->boxes = array(
 
 you must also define two methods in your class:
 
-	function settings_box() - this is where the box content is outputed
+	function settings_box() - this is where the box content is echoed
 	function settings_handler() - this is where the box settings are saved
 */
 abstract class scbBoxesPage extends scbAdminPage
@@ -51,24 +51,28 @@ div.inside p.submit {float:left !important; padding: 5px 5px 10px 5px !important
 	function page_content()
 	{
 		$this->default_css();
+
 		global $screen_layout_columns;
 
-		$hide2 = $hide3 = $hide4 = '';
-		switch ( $screen_layout_columns ) {
-			case 4:
-				$width = 'width:24.5%;';
-				break;
-			case 3:
-				$width = 'width:32.67%;';
-				$hide4 = 'display:none;';
-				break;
-			case 2:
-				$width = 'width:49%;';
-				$hide3 = $hide4 = 'display:none;';
-				break;
-			default:
-				$width = 'width:98%;';
-				$hide2 = $hide3 = $hide4 = 'display:none;';
+		if ( isset($screen_layout_columns) )
+		{
+			$hide2 = $hide3 = $hide4 = '';
+			switch ( $screen_layout_columns ) {
+				case 4:
+					$width = 'width:24.5%;';
+					break;
+				case 3:
+					$width = 'width:32.67%;';
+					$hide4 = 'display:none;';
+					break;
+				case 2:
+					$width = 'width:49%;';
+					$hide3 = $hide4 = 'display:none;';
+					break;
+				default:
+					$width = 'width:98%;';
+					$hide2 = $hide3 = $hide4 = 'display:none;';
+			}
 		}
 ?>
 <div id='<?php echo $this->pagehook ?>-widgets' class='metabox-holder'>
@@ -107,10 +111,6 @@ div.inside p.submit {float:left !important; padding: 5px 5px 10px 5px !important
 		if ( $this->options )
 			$this->formdata = $this->options->get();
 	}
-
-
-//_____INTERNAL METHODS (DON'T WORRY ABOUT THESE)_____
-
 
 	function columns($columns)
 	{
