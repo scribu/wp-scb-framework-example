@@ -41,11 +41,12 @@ abstract class scbBoxesPage extends scbAdminPage
 	{
 ?>
 <style type="text/css">
-div.inside {clear:both; overflow:hidden}
-div.inside p {margin:10px}
-div.inside p.submit {float:left !important; padding: 5px 5px 10px 5px !important}
-div.inside table.widefat tbody th.check-column {padding-bottom: 7px !important}
-div.inside table.widefat {margin: 0 0 10px 10px}
+.meta-box-sortables {margin: 0 5px !important}
+.inside {clear:both; overflow:hidden}
+.inside p {margin:10px}
+.inside p.submit {float:left !important; padding: 5px 5px 10px 5px !important}
+.inside table.widefat tbody th.check-column {padding-bottom: 7px !important}
+.inside table.widefat {margin: 0 0 10px 10px}
 </style>
 <?php
 	}
