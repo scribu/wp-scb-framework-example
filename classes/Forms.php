@@ -283,7 +283,7 @@ class scbForms
 		$label = trim(str_replace(self::$token, $input, $label));
 
 		// Add label
-		if ( empty($label) )
+		if ( empty($label) || $desc === false )
 			$output = $input . "\n";
 		else
 			$output = "<label>{$label}</label>\n";
@@ -309,6 +309,9 @@ class scbForms
 		if ( !is_array($value) )
 			return trigger_error("Second argument is expected to be an array", E_USER_WARNING);
 
+		if ( empty($value) )
+			$value = array('' => '');
+
 		if ( !self::is_associative($value) && !$numeric )
 			$value = array_combine($value, $value);
 
@@ -324,6 +327,9 @@ class scbForms
 
 		foreach ( $value as $key => $value )
 		{
+			if ( empty($key) && empty($value) )
+				continue;
+
 			$cur_extra = array();
 			if ( $key == $cur_val )
 				$cur_extra[] = "selected='selected'";
