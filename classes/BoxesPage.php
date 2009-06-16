@@ -45,8 +45,9 @@ abstract class scbBoxesPage extends scbAdminPage
 .inside {clear:both; overflow:hidden}
 .inside p {margin:10px}
 .inside p.submit {float:left !important; padding: 5px 5px 10px 5px !important}
-.inside table.widefat tbody th.check-column {padding-bottom: 7px !important}
-.inside table.widefat {margin: 0 0 10px 10px}
+.inside .widefat {margin: 0 0 10px 10px}
+.inside .widefat .check-column {padding-bottom: 7px !important}
+.inside .form-table th {width: 30%; max-width: 200px}
 </style>
 <?php
 	}
