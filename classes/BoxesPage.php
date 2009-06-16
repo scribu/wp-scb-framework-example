@@ -42,12 +42,12 @@ abstract class scbBoxesPage extends scbAdminPage
 ?>
 <style type="text/css">
 .meta-box-sortables {margin: 0 5px !important}
-.inside {clear:both; overflow:hidden}
-.inside p {margin:10px}
-.inside p.submit {float:left !important; padding: 5px 5px 10px 5px !important}
-.inside .widefat {margin: 0 0 10px 10px}
+.inside {clear:both; overflow:hidden; padding: 10px 10px 0 10px !important}
+.inside table {margin: 0 !important; padding: 0 !important}
+.inside .form-table th {width: 30%; max-width: 200px; padding: 10px 0 !important}
 .inside .widefat .check-column {padding-bottom: 7px !important}
-.inside .form-table th {width: 30%; max-width: 200px}
+.inside p, .inside table {margin: 0 0 10px 0 !important}
+.inside p.submit {float:left !important; padding: 0 !important}
 </style>
 <?php
 	}

@@ -187,10 +187,8 @@ abstract class scbAdminPage extends scbForms
 	// Generates a form submit button
 	function submit_button($value = 'Save Changes', $action = 'action', $class = "button")
 	{
-		if ( in_array($action, (array) $this->_actions) )
-			trigger_error("Duplicate action for submit button: {$action}", E_USER_WARNING);
-
-		$this->_actions[] = $action;
+		if ( empty($value) )
+			return;
 
 		$args = array(
 			'type' => 'submit',
