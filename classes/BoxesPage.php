@@ -45,6 +45,7 @@ abstract class scbBoxesPage extends scbAdminPage
 .inside {clear:both; overflow:hidden; padding: 10px 10px 0 10px !important}
 .inside table {margin: 0 !important; padding: 0 !important}
 .inside table td {vertical-align: middle !important}
+.inside table .regular-text {width: 100% !important}
 .inside .form-table th {width: 30%; max-width: 200px; padding: 10px 0 !important}
 .inside .widefat .check-column {padding-bottom: 7px !important}
 .inside p, .inside table {margin: 0 0 10px 0 !important}
