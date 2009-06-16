@@ -181,7 +181,8 @@ class scbForms
 
 		// Set constant args
 		$const_args = self::array_slice_assoc($args, array('type', 'desc_pos', 'checked'));
-		$const_args['extra'] = explode(' ', $extra);
+		if ( isset($extra) )
+			$const_args['extra'] = explode(' ', $extra);
 
 		$i = 0;
 		foreach ( $a as $name => $val )
