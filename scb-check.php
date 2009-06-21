@@ -17,12 +17,8 @@ function scb_check($file)
 		return true;
 
 	// Deactivate plugin
-	$plugin = plugin_basename($file);
-	$current = get_option('active_plugins');
-
-	array_splice($current, array_search($plugin, $current), 1 ); // Fixed Array-fu!
-
-	update_option('active_plugins', $current);
+	require_once ABSPATH . '/wp-admin/includes/plugin.php';
+	deactivate_plugins(plugin_basename($file), true);
 
 	add_action('admin_notices', 'scb_notice', 1);
 
