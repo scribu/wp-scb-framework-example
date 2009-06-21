@@ -10,7 +10,7 @@ Plugin URI: http://scribu.net/wordpress/scb-framework
 
 abstract class scbFramework
 {
-	static $version = '1.0';
+	static $version = '1.1';
 
 	static function init()
 	{
