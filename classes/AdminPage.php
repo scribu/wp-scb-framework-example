@@ -22,6 +22,8 @@ abstract class scbAdminPage extends scbForms
 	// scbOptions object holder
 	// Normally, it's used for storing formdata
 	protected $options;
+
+	// l10n
 	protected $textdomain;
 
 	// Formdata used for filling the form elements
@@ -38,7 +40,7 @@ abstract class scbAdminPage extends scbForms
 		$this->_check_args();
 
 		$this->file = $file;
-		$this->_set_url($file);
+		$this->plugin_url = plugins_dir_url($file);
 
 		if ( $options !== NULL )
 		{
@@ -225,7 +227,7 @@ abstract class scbAdminPage extends scbForms
 	// Wraps a string in a <script> tag
 	function js_wrap($string)
 	{
-		return "\n<script language='javascript' type='text/javascript'>\n" . $string . "\n</script>\n";
+		return "\n<script type='text/javascript'>\n" . $string . "\n</script>\n";
 	}
 
 	// Wraps a string in a <style> tag
@@ -282,15 +284,16 @@ abstract class scbAdminPage extends scbForms
 		if ( empty($this->args['nonce']) )
 			$this->nonce = $this->args['page_slug'];
 	}
-
-	// Set plugin_dir
-	function _set_url($file)
-	{
-		if ( function_exists('plugins_url') )
-			$this->plugin_url = plugins_url(plugin_basename(dirname($file)));
-		else
-			// WP < 2.6
-			$this->plugin_url = get_option('siteurl') . '/wp-content/plugins/' . plugin_basename(dirname($file));
-	}
 }
 
+// WP < 2.8
+if ( !function_exists('plugins_dir_url') ) :
+function plugins_dir_url($file) 
+{
+	// WP < 2.6
+	if ( !function_exists('plugins_url') )
+		return trailingslashit(get_option('siteurl') . '/wp-content/plugins/' . plugin_basename($file));
+
+	return trailingslashit(plugins_url(plugin_basename(dirname($file))));
+}
+endif;
