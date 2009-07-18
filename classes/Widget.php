@@ -51,10 +51,9 @@ abstract class scbWidget extends WP_Widget
 		$new_formdata = array();
 		foreach ( (array) $args['name'] as $name )
 		{
-			if ( false !== strpos($name, '[]') )
-			{	$name = str_replace('[]', '', $name);
-				$newname = $this->get_field_name($name) . '[]';
-			} else
+			if ( false !== strpos($name, '[') )
+				$newname = str_replace('[]', '', $this->get_field_name('')) . str_replace('[]', '', $name) . '[]';
+			else
 				$newname = $this->get_field_name($name);
 
 			$new_formdata[ $newname ] = $formdata[$name];

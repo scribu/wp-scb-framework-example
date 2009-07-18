@@ -1,9 +1,9 @@
 === scbFramework ===
 Contributors: scribu
 Donate link: http://scribu.net/wordpress
-Tags: framework, toolkit, forms, cron, settings
+Tags: admin, toolkit, forms, cron, settings
 Requires at least: 2.5
-Tested up to: 2.8
+Tested up to: 2.8.1
 Stable tag: 1.1
 
 A set of useful classes for faster plugin development.
