@@ -4,7 +4,7 @@ Donate link: http://scribu.net/wordpress
 Tags: admin, toolkit, forms, cron, settings
 Requires at least: 2.5
 Tested up to: 2.9-rare
-Stable tag: 1.1
+Stable tag: 1.2
 
 A set of useful classes for faster plugin development.
 
