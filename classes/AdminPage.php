@@ -64,8 +64,6 @@ abstract class scbAdminPage extends scbForms
 	// A generic page header
 	function page_header()
 	{
-		$this->form_handler();
-
 		echo "<div class='wrap'>\n";
 		echo "<h2>" . $this->args['page_title'] . "</h2>\n";
 	}
@@ -244,6 +242,7 @@ abstract class scbAdminPage extends scbForms
 	function page_init()
 	{
 		extract($this->args);
+
 		$this->pagehook = add_submenu_page($parent, $page_title, $menu_title, $capability, $page_slug, array($this, '_page_content_hook'));
 
 		add_action('admin_print_styles-' . $this->pagehook, array($this, 'page_head'));
@@ -251,6 +250,8 @@ abstract class scbAdminPage extends scbForms
 
 	function _page_content_hook()
 	{
+		$this->form_handler();
+
 		$this->page_header();
 		$this->page_content();
 		$this->page_footer();
