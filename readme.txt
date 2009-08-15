@@ -24,6 +24,9 @@ You can find out more about it [here](http://scribu.net/wordpress/scb-framework)
 
 == Changelog ==
 
+= 1.2.1 =
+* fixed PHP 5.0 compatibility issue
+
 = 1.2 =
 * added the scbTable class
 * fixed widget input names
