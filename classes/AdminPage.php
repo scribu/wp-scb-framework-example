@@ -267,12 +267,18 @@ abstract class scbAdminPage extends scbForms
 ?>
 <script type="text/javascript">
 jQuery(document).ready(function($){
+	var $spinner = $(new Image()).attr('src', '<?php echo admin_url("images/wpspin_light.gif"); ?>');
+
 	$('form').submit(function(e){
+		var $this_spinner = $spinner.clone();
+
 		var $form = $(this);
 		var $submit = $form.find(":submit");
 
 		if ( $submit.length > 1 )
 			return;
+
+		$submit.before($this_spinner).hide();
 
 		var data = $(this).serializeArray();
 		data.push({name: $submit.attr('name'), value: $submit.val()});
@@ -285,6 +291,9 @@ jQuery(document).ready(function($){
 				$prev.fadeOut('slow', function(){ $msg.fadeIn('slow'); });
 			else
 				$msg.fadeIn('slow');
+				
+			$this_spinner.hide();
+			$submit.show();
 		});
 
 		e.stopPropagation();
