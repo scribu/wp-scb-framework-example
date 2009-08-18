@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: scbFramework
-Version: 1.2.1
+Version: 1.2.2a
 Description: Useful classes for plugin developers
 Author: scribu
 Author URI: http://scribu.net
@@ -10,7 +10,7 @@ Plugin URI: http://scribu.net/wordpress/scb-framework
 
 abstract class scbFramework
 {
-	const version = '1.2';
+	const version = '1.2.2';
 
 	static function init()
 	{
@@ -20,7 +20,7 @@ abstract class scbFramework
 		else
 			// Load all classes manually
 			foreach ( array('scbForms', 'scbOptions', 'scbWidget', 'scbCron',
-				'scbAdminPage', 'scbBoxesPage', 'scbTable') as $class )
+				'scbAdminPage', 'scbBoxesPage', 'scbTable', 'scbDependency') as $class )
 				self::autoload($class);
 
 		add_action('shutdown', array(__CLASS__, 'put_first'));
