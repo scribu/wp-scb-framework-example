@@ -15,8 +15,8 @@ class scbCron
 	{
 		$this->set_args($args);
 
-		register_activation_hook($file, array($this, 'activate'));
-		register_deactivation_hook($file, array($this, 'deactivate'));
+		register_activation_hook($file, array($this, 'reset'));
+		register_deactivation_hook($file, array($this, 'unschedule'));
 
 		if ( $debug )
 			add_action('admin_footer', array(get_class(), 'debug'));
@@ -62,7 +62,7 @@ class scbCron
 		{
 			$this->schedule = $schedule;
 			$this->reset();
-		} 
+		}
 		elseif ( $interval && $this->interval != $interval )
 		{
 			$this->schedule = $interval . 'secs';
@@ -87,16 +87,16 @@ class scbCron
 
 	function reset()
 	{
-		$this->deactivate();
-		$this->activate();
+		$this->unschedule();
+		$this->schedule();
 	}
 
-	function activate()
+	function schedule()
 	{
 		wp_schedule_event(time(), $this->schedule, $this->hook, $this->callback_args);
 	}
 
-	function deactivate()
+	function unschedule()
 	{
 		wp_clear_scheduled_hook($this->hook);
 	}
@@ -108,7 +108,7 @@ class scbCron
 		echo "</pre>";
 	}
 
-	static function callback_to_string($callback)
+	private static function callback_to_string($callback)
 	{
 		if ( !is_array($callback) )
 			$str = $callback;
