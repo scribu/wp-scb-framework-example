@@ -21,7 +21,7 @@ class scbCron
 		register_deactivation_hook($file, array($this, 'unschedule'));
 
 		if ( $debug )
-			add_action('admin_footer', array(get_class(), 'debug'));
+			self::debug();
 	}
 
 	// Change the interval of the cron job
@@ -72,11 +72,16 @@ class scbCron
 	// Display current cron jobs
 	function debug()
 	{
+		add_action('admin_footer', array(__CLASS__, '_debug'));
+	}
+
+	function _debug()
+	{
 		if ( ! current_user_can('manage_options') )
 			return;
 
 		echo "<pre>";
-		var_dump(get_option('cron'));
+		print_r(get_option('cron'));
 		echo "</pre>";
 	}
 
@@ -118,7 +123,8 @@ class scbCron
 		{
 			$this->schedule = $interval . 'secs';
 			$this->interval = $interval;
-			add_filter('cron_schedules', array($this, 'add_timing'));
+
+			add_filter('cron_schedules', array($this, '_add_timing'));
 		}
 		elseif ( $schedule )
 			$this->schedule = $schedule;
@@ -143,3 +149,17 @@ class scbCron
 	}
 }
 
+/*
+Doesn't require $args
+
+function really_clear_scheduled_hook($name)
+{
+	$crons = _get_cron_array();
+
+	foreach ( $crons as $timestamp => $hook )
+		if ( $hook == $name )
+			unset($crons[$hook]);
+
+	_set_cron_array( $crons );
+}
+*/
