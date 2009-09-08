@@ -4,6 +4,8 @@ class scbCron
 {
 	protected $hook;
 	protected $schedule;
+	protected $interval;
+	protected $time;
 	protected $callback_args;
 
 	/* 
@@ -20,28 +22,32 @@ class scbCron
 		register_activation_hook($file, array($this, 'reset'));
 		register_deactivation_hook($file, array($this, 'unschedule'));
 
+		add_filter('cron_schedules', array($this, '_add_timing'));
+
 		if ( $debug )
 			self::debug();
 	}
 
-	// Change the interval of the cron job
-	//$args: string $schedule OR number $interval
+	/* Change the interval of the cron job
+	 * $args:
+	 *	- string $schedule OR number $interval
+	 *	- time (optional)
+	 */
 	function reschedule($args)
 	{
 		extract($args);
 
 		if ( $schedule && $this->schedule != $schedule )
-		{
 			$this->schedule = $schedule;
-			$this->reset();
-		}
 		elseif ( $interval && $this->interval != $interval )
 		{
 			$this->schedule = $interval . 'secs';
 			$this->interval = $interval;
-			add_filter('cron_schedules', array($this, '_add_timing'));
-			$this->reset();
 		}
+
+		$this->time = $time;
+
+		$this->reset();
 	}
 
 	// Reset the schedule
@@ -52,21 +58,29 @@ class scbCron
 	}
 
 	// Set the cron job
-	function schedule()
+	function schedule($time = 0)
 	{
-		wp_schedule_event(time(), $this->schedule, $this->hook, $this->callback_args);
+		if ( ! $this->time )
+			$this->time = time();
+
+		wp_schedule_event($this->time, $this->schedule, $this->hook, $this->callback_args);
 	}
 
 	// Clear the cron job
 	function unschedule()
 	{
-		wp_clear_scheduled_hook($this->hook);
+		wp_clear_scheduled_hook($this->hook, $this->callback_args);
 	}
 
 	// Execute the job now
 	function do_now()
 	{
 		do_action($this->hook);
+	}
+
+	function do_once($delay = 0)
+	{
+		wp_schedule_single_event(time() + $delay, $this->hook, $this->callback_args);
 	}
 
 	// Display current cron jobs
@@ -123,8 +137,6 @@ class scbCron
 		{
 			$this->schedule = $interval . 'secs';
 			$this->interval = $interval;
-
-			add_filter('cron_schedules', array($this, '_add_timing'));
 		}
 		elseif ( $schedule )
 			$this->schedule = $schedule;
@@ -163,3 +175,4 @@ function really_clear_scheduled_hook($name)
 	_set_cron_array( $crons );
 }
 */
+
