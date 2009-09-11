@@ -2,10 +2,11 @@
 
 class scbCron
 {
-	protected $hook;
 	protected $schedule;
 	protected $interval;
 	protected $time;
+
+	protected $hook;
 	protected $callback_args;
 
 	/* 
@@ -57,19 +58,19 @@ class scbCron
 		$this->schedule();
 	}
 
-	// Set the cron job
-	function schedule($time = 0)
+	// Clear the cron job
+	function unschedule()
+	{
+#		wp_clear_scheduled_hook($this->hook, $this->callback_args);
+		self::really_clear_scheduled_hook($this->hook);
+	}
+
+	protected function schedule()
 	{
 		if ( ! $this->time )
 			$this->time = time();
 
 		wp_schedule_event($this->time, $this->schedule, $this->hook, $this->callback_args);
-	}
-
-	// Clear the cron job
-	function unschedule()
-	{
-		wp_clear_scheduled_hook($this->hook, $this->callback_args);
 	}
 
 	// Execute the job now
@@ -78,6 +79,7 @@ class scbCron
 		do_action($this->hook);
 	}
 
+	// Execute the job with a given delay
 	function do_once($delay = 0)
 	{
 		wp_schedule_single_event(time() + $delay, $this->hook, $this->callback_args);
@@ -146,6 +148,23 @@ class scbCron
 		$this->callback_args = (array) $callback_args;
 	}
 
+	private static function really_clear_scheduled_hook($name)
+	{
+		$crons = _get_cron_array();
+
+		foreach ( $crons as $timestamp => $hooks )
+		{
+			foreach ( $hooks as $hook => $args )
+				if ( $hook == $name )
+					unset($crons[$timestamp][$hook]);
+					
+			if ( empty($hooks) )
+				unset($crons[$timestamp]);
+		}
+
+		_set_cron_array( $crons );
+	}
+
 	private static function _callback_to_string($callback)
 	{
 		if ( !is_array($callback) )
@@ -160,19 +179,4 @@ class scbCron
 		return $str;
 	}
 }
-
-/*
-Doesn't require $args
-
-function really_clear_scheduled_hook($name)
-{
-	$crons = _get_cron_array();
-
-	foreach ( $crons as $timestamp => $hook )
-		if ( $hook == $name )
-			unset($crons[$hook]);
-
-	_set_cron_array( $crons );
-}
-*/
 
