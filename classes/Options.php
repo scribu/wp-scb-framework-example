@@ -1,8 +1,10 @@
 <?php
 
-class scbOptions 
+// Usage: http://scribu.net/wordpress/scb-framework/scb-options.html
+
+class scbOptions
 {
-	protected $defaults;		// the default value(s)
+	protected $defaults;	// the default value(s)
 
 	protected $key;			// the option name
 	protected $data;		// the option value
@@ -19,13 +21,28 @@ class scbOptions
 		{
 			$this->data = (array) $this->data;
 
-			register_activation_hook($file, array($this, 'update_reset'));
+			register_activation_hook($file, array($this, '_update_reset'));
 		}
 
-		register_uninstall_hook($file, array($this, 'delete'));
+		register_uninstall_hook($file, array($this, '_delete'));
 	}
 
-	// Get all data fields, certain fields or a single field
+	function __get($field)
+	{
+		return $this->data[$field];
+	}
+
+	function __set($field, $data)
+	{
+		$this->update_part(array($field => $data));
+	}
+
+	/**
+	 * Get all data fields, certain fields or a single field
+	 *
+	 * @param string|array $field The field to get or an array of fields
+	 * @return mixed Whatever is in those fields
+	 */
 	function get($field = '')
 	{
 		if ( empty($field) )
@@ -40,26 +57,41 @@ class scbOptions
 		return $result;
 	}
 
-	function __get($field)
+	/**
+	 * Set all data fields, certain fields or a single field
+	 *
+	 * @param string|array $field The field to update or an associative array
+	 * @param mixed $value The new value (ignored if $field is array)
+	 * @return null
+	 */
+	function set($field, $value = '')
 	{
-		return $this->data[$field];
+		if ( is_array($field) )
+			return $this->update_part($field);
+		else
+			return $this->update_part(array($field => $data));
 	}
 
-	function __set($field, $data)
-	{
-		$this->update_part(array($field => $data));
-	}
-
-	// Update one or more fields, leaving the others intact
+	/**
+	 * Update one or more fields, leaving the others intact
+	 *
+	 * @param array $newdata An associative array
+	 * @return null
+	 */
 	function update_part($newdata)
 	{
 		if ( ! is_array($newdata) )
-			return trigger_error("Wrong data_type", E_USER_WARNING);
-
-		$this->update(array_merge($this->data, $newdata));
+			trigger_error("Wrong data_type", E_USER_WARNING);
+		else
+			$this->update(array_merge($this->data, $newdata));
 	}
 
-	// Update all data fields
+	/**
+	 * Update all data fields
+	 *
+	 * @param array $newdata An associative array
+	 * @return null
+	 */
 	function update($newdata)
 	{
 		if ( $this->data === $newdata )
@@ -70,20 +102,24 @@ class scbOptions
 		update_option($this->key, $this->data);
 	}
 
-	// Add new fields with their default values
-	function update_reset()
-	{
-		$this->update(array_merge($this->defaults, $this->data));
-	}
-
-	// Reset option to defaults
+	/**
+	 * Reset option to defaults
+	 *
+	 * @return null
+	 */
 	function reset()
 	{
 		$this->update($this->defaults);
 	}
 
+	// Add new fields with their default values
+	function _update_reset()
+	{
+		$this->update(array_merge($this->defaults, $this->data));
+	}
+
 	// Delete option
-	function delete()
+	function _delete()
 	{
 		delete_option($this->key);
 	}
