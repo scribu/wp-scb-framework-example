@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: scbFramework
-Version: 1.2.2a
+Version: 1.3
 Description: Useful classes for plugin developers
 Author: scribu
 Author URI: http://scribu.net
@@ -10,7 +10,7 @@ Plugin URI: http://scribu.net/wordpress/scb-framework
 
 abstract class scbFramework
 {
-	const version = '1.2.2';
+	const version = '1.3';
 
 	static function init()
 	{
