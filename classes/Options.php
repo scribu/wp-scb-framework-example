@@ -2,12 +2,12 @@
 
 class scbOptions 
 {
-	public $key;			// the option name
-	public $defaults;		// the default value(s)
+	protected $defaults;		// the default value(s)
+
+	protected $key;			// the option name
+	protected $data;		// the option value
 
 	public $wp_filter_id;	// used by WP hooks
-
-	protected $data;
 
 	function __construct($key, $file = '', $defaults = '')
 	{
@@ -67,8 +67,7 @@ class scbOptions
 
 		$this->data = $newdata;
 
-		update_option($this->key, $this->data) or
-		   add_option($this->key, $this->data);
+		update_option($this->key, $this->data);
 	}
 
 	// Add new fields with their default values
