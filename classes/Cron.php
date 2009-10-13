@@ -9,12 +9,15 @@ class scbCron
 	protected $hook;
 	protected $callback_args;
 
-	/* 
-		Create a new cron job
-		$args:
-			string $action OR callback $callback
+	/**
+	 * Create a new cron job
+	 *
+	 * @param string Reference to main plugin file
+	 * @param array List of args:
+	 		string $action OR callback $callback
 			string $schedule OR number $interval
 			array $callback_args (optional)
+	 * @param bool Debug mode
 	 */
 	function __construct($file, $args, $debug = false)
 	{

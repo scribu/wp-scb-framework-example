@@ -11,7 +11,14 @@ class scbOptions
 
 	public $wp_filter_id;	// used by WP hooks
 
-	function __construct($key, $file = '', $defaults = '')
+	/**
+	 * Create a new set of options
+	 *
+	 * @param key Option name
+	 * @param string Reference to main plugin file
+	 * @param array An associative array of default values
+	 */
+	function __construct($key, $file, $defaults = '')
 	{
 		$this->key = $key;
 		$this->defaults = $defaults;
@@ -25,16 +32,6 @@ class scbOptions
 		}
 
 		register_uninstall_hook($file, array($this, '_delete'));
-	}
-
-	function __get($field)
-	{
-		return $this->data[$field];
-	}
-
-	function __set($field, $data)
-	{
-		$this->update_part(array($field => $data));
 	}
 
 	/**
@@ -67,23 +64,11 @@ class scbOptions
 	function set($field, $value = '')
 	{
 		if ( is_array($field) )
-			return $this->update_part($field);
+			$newdata = $field;
 		else
-			return $this->update_part(array($field => $data));
-	}
+			$newdata = array($field => $data);
 
-	/**
-	 * Update one or more fields, leaving the others intact
-	 *
-	 * @param array $newdata An associative array
-	 * @return null
-	 */
-	function update_part($newdata)
-	{
-		if ( ! is_array($newdata) )
-			trigger_error("Wrong data_type", E_USER_WARNING);
-		else
-			$this->update(array_merge($this->data, $newdata));
+		$this->update(array_merge($this->data, $newdata));
 	}
 
 	/**
@@ -110,6 +95,18 @@ class scbOptions
 	function reset()
 	{
 		$this->update($this->defaults);
+	}
+
+	// Magic method: $options->field
+	function __get($field)
+	{
+		return $this->data[$field];
+	}
+
+	// Magic method: $options->field = $value
+	function __set($field, $value)
+	{
+		$this->set($field, $value);
 	}
 
 	// Add new fields with their default values
