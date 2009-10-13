@@ -29,6 +29,7 @@ You can find out more about it [here](http://scribu.net/wordpress/scb-framework)
 * Options: added set(); deprecated update_part()
 * Cron: new methods: do_now(), do_once()
 * dropped support for WordPress older than 2.8
+* [more info](http://scribu.net/wordpress/scb-framework/sf-1-3.html)
 
 = 1.2.1 =
 * fixed PHP 5.0 compatibility issue
@@ -37,6 +38,7 @@ You can find out more about it [here](http://scribu.net/wordpress/scb-framework)
 * added the scbTable class
 * fixed widget input names
 * use plugin_dir_url()
+* [more info](http://scribu.net/wordpress/scb-framework/sf-1-2.html)
 
 = 1.1 =
 * better scbBoxesPage
