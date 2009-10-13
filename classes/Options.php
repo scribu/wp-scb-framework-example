@@ -66,7 +66,9 @@ class scbOptions
 		if ( is_array($field) )
 			$newdata = $field;
 		else
-			$newdata = array($field => $data);
+			$newdata = array($field => $value);
+
+		debug($newdata);
 
 		$this->update(array_merge($this->data, $newdata));
 	}
