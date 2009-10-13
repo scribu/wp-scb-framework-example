@@ -24,6 +24,12 @@ You can find out more about it [here](http://scribu.net/wordpress/scb-framework)
 
 == Changelog ==
 
+= 1.2.2 =
+* AdminPage: ajax submit
+* Options: added set(); deprecated update_part()
+* Cron: 
+* dropped support for WordPress older than 2.8
+
 = 1.2.1 =
 * fixed PHP 5.0 compatibility issue
 

@@ -72,9 +72,9 @@ class scbOptions
 	}
 
 	/**
-	 * Update all data fields
+	 * Update raw data
 	 *
-	 * @param array $newdata An associative array
+	 * @param mixed $newdata
 	 * @return null
 	 */
 	function update($newdata)
@@ -96,6 +96,10 @@ class scbOptions
 	{
 		$this->update($this->defaults);
 	}
+
+
+//_____INTERNAL METHODS_____
+
 
 	// Magic method: $options->field
 	function __get($field)
@@ -119,6 +123,12 @@ class scbOptions
 	function _delete()
 	{
 		delete_option($this->key);
+	}
+
+	// DEPRECATED
+	function update_part($data)
+	{
+		$this->set($data);
 	}
 }
 
