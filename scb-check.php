@@ -1,7 +1,7 @@
 <?php
 
 /*
-This code allows users to get a nice notice to install scbFramework 
+This code allows users to get a nice notice to install scbFramework
 when they activate a plugin that uses it.
 
 Add these two lines in your main plugin file, at the beginning:

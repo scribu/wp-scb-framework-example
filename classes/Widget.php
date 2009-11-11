@@ -2,13 +2,11 @@
 
 // Adds compatibility methods between WP_Widget and scbForms
 
-abstract class scbWidget extends WP_Widget
-{
-	static $widgets = array();
-	static $migrations = array();
+abstract class scbWidget extends WP_Widget {
+	private static $widgets = array();
+	private static $migrations = array();
 
-	function widget($args, $instance)
-	{
+	function widget($args, $instance) {
 		extract($args);
 
 		echo $before_widget;
@@ -37,8 +35,7 @@ abstract class scbWidget extends WP_Widget
 
 	// See scbForms::input()
 	// Allows extra parameter $args['title']
-	function input($args, $formdata = array())
-	{
+	function input($args, $formdata = array()) {
 		// Add default class
 		if ( !isset($args['extra']) )
 			$args['extra'] = 'class="widefat"';
@@ -49,8 +46,7 @@ abstract class scbWidget extends WP_Widget
 
 		// Then add prefix to names and formdata
 		$new_formdata = array();
-		foreach ( (array) $args['name'] as $name )
-		{
+		foreach ( (array) $args['name'] as $name ) {
 			if ( false !== strpos($name, '[') )
 				$newname = str_replace('[]', '', $this->get_field_name('')) . str_replace('[]', '', $name) . '[]';
 			else
@@ -81,29 +77,25 @@ abstract class scbWidget extends WP_Widget
 // ____PRIVATE METHODS____
 
 
-	static function scb_register()
-	{
+	static function scb_register() {
 		foreach ( self::$widgets as $widget )
 			register_widget($widget);
 	}
 
-	static function scb_migrate()
-	{
+	static function scb_migrate() {
 		foreach ( self::$migrations as $base )
 			self::migrate($base);
 	}
 
 	// Migrate from old scbWidget to WP_Widget
-	private static function migrate($base)
-	{
+	private static function migrate($base) {
 		$old_base = 'multiwidget_' . $base;
 		$new_base = 'widget_' . $base;
 
 		if ( ! $old = get_option($old_base) )
 			return;
 
-		foreach ( $old as $widget )
-		{
+		foreach ( $old as $widget ) {
 			if ( ! $id = $widget['__multiwidget'] )
 				continue;
 			unset($widget['__multiwidget']);

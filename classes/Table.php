@@ -1,13 +1,11 @@
 <?php
 
 // Takes care of creating, updating and deleting database tables
-class scbTable
-{
+class scbTable {
 	protected $name;
 	protected $columns;
 
-	function __construct($name, $file, $columns)
-	{
+	function __construct($name, $file, $columns) {
 		global $wpdb;
 
 		$wpdb->$name = $this->name = $wpdb->prefix . $name;
@@ -17,8 +15,7 @@ class scbTable
 		register_uninstall_hook($file, array($this, 'uninstall'));
 	}
 
-	function install()
-	{
+	function install() {
 		global $wpdb;
 #		$wpdb->show_errors = true;
 
@@ -27,8 +24,7 @@ class scbTable
 		dbDelta("CREATE TABLE $this->name ($this->columns);");
 	}
 
-	function uninstall()
-	{
+	function uninstall() {
 		global $wpdb;
 
 		$wpdb->query("DROP TABLE IF EXISTS $this->name");
