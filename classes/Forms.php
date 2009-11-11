@@ -1,6 +1,6 @@
 <?php
 
-class scbForms {
+abstract class scbForms {
 	/* Generates one or more form elements of the same type,
 	   including <select>s and <textarea>s.
 
@@ -15,7 +15,7 @@ class scbForms {
 
 		$formdata = associative array with the formdata with which to fill the elements
 	*/
-	function input($args, $formdata = array()) {
+	static function input($args, $formdata = array()) {
 		$args = self::_validate_data($args);
 		$formdata = self::_validate_data($formdata);
 		
@@ -50,7 +50,7 @@ class scbForms {
 	static $token = '%input%';
 
 	// Deprecated
-	function select($args, $options = array()) {
+	static function select($args, $options = array()) {
 		if ( !empty($options) )
 			$args['value'] = $options;
 
@@ -58,7 +58,7 @@ class scbForms {
 	}
 
 	// Deprecated
-	function textarea($args, $content = '') {
+	static function textarea($args, $content = '') {
 		if ( !empty($content) )
 			$args['value'] = $content;
 
@@ -69,7 +69,7 @@ class scbForms {
 // ____________UTILITIES____________
 
 
-	function form($inputs, $formdata = NULL, $nonce) {
+	static function form($inputs, $formdata = NULL, $nonce) {
 		$output = '';
 		foreach ( $inputs as $input )
 			$output .= self::input($input, $formdata);
@@ -79,7 +79,7 @@ class scbForms {
 		return $output;
 	}
 
-	function table($rows, $formdata = NULL) {
+	static function table($rows, $formdata = NULL) {
 		$output = '';
 		foreach ( $rows as $row )
 			$output .= self::table_row($row, $formdata);
@@ -90,7 +90,7 @@ class scbForms {
 	}
 
 	// Generates multiple rows and wraps them in a form table
-	function form_table($rows, $formdata = NULL) {
+	static function form_table($rows, $formdata = NULL) {
 		$output = '';
 		foreach ( $rows as $row )
 			$output .= self::table_row($row, $formdata);
@@ -100,7 +100,7 @@ class scbForms {
 		return $output;
 	}
 
-	function table_row($args, $formdata = NULL) {
+	static function table_row($args, $formdata = NULL) {
 		return self::row_wrap($args['title'], self::input($args, $formdata));
 	}
 
@@ -108,13 +108,13 @@ class scbForms {
 // ____________WRAPPERS____________
 
 
-	function table_wrap($content) {
+	static function table_wrap($content) {
 		$output = "\n<table class='form-table'>\n" . $content . "\n</table>\n";
 
 		return $output;
 	}
 
-	function form_wrap($content, $nonce = 'update_options') {
+	static function form_wrap($content, $nonce = 'update_options') {
 		$output = "\n<form method='post' action=''>\n";
 		$output .= $content;
 		$output .= wp_nonce_field($action = $nonce, $name = "_wpnonce", $referer = true , $echo = false);
@@ -123,14 +123,14 @@ class scbForms {
 		return $output;
 	}
 
-	function form_table_wrap($content, $nonce = 'update_options') {
+	static function form_table_wrap($content, $nonce = 'update_options') {
 		$output = self::table_wrap($content);
 		$output = self::form_wrap($output, $nonce);
 
 		return $output;
 	}
 
-	function row_wrap($title, $content) {
+	static function row_wrap($title, $content) {
 		return "\n<tr>\n\t<th scope='row'>" . $title . "</th>\n\t<td>\n\t\t" . $content . "\t</td>\n\n</tr>";
 	}
 
@@ -274,7 +274,7 @@ class scbForms {
 	}
 
 	// Generate html with the final args
-	function _input_gen($args) {
+	private static function _input_gen($args) {
 		extract(wp_parse_args($args, array(
 			'name' => NULL,
 			'value' => NULL,

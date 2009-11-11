@@ -4,7 +4,7 @@ Donate link: http://scribu.net/wordpress
 Tags: admin, toolkit, forms, cron, settings
 Requires at least: 2.8
 Tested up to: 2.9-rare
-Stable tag: trunk
+Stable tag: 1.3
 
 A set of useful classes for faster plugin development.
 
@@ -23,6 +23,9 @@ This is a plugin toolkit that helps developers write plugins faster. It consists
 You can find out more about it [here](http://scribu.net/wordpress/scb-framework).
 
 == Changelog ==
+
+= 1.3.1 =
+* uses __call()
 
 = 1.3 =
 * AdminPage: ajax submit

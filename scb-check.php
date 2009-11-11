@@ -11,8 +11,7 @@ Add these two lines in your main plugin file, at the beginning:
 */
 
 if ( !function_exists('scb_check') ):
-function scb_check($file)
-{
+function scb_check($file) {
 	if ( class_exists('scbFramework') )
 		return true;
 
@@ -27,14 +26,12 @@ function scb_check($file)
 endif;
 
 if ( !function_exists('scb_notice') ):
-function scb_notice()
-{
+function scb_notice() {
 	remove_action('admin_notices', 'plugin_notices');
 
 	global $wp_version;
 
-	if ( version_compare('2.7', $wp_version, '<=') )
-	{
+	if ( version_compare('2.7', $wp_version, '<=') ) {
 		$slug = 'scb-framework';
 
 		$link = '[<a href="' . admin_url('plugin-install.php?tab=plugin-information&amp;plugin=' . $slug .

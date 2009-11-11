@@ -1,6 +1,6 @@
 <?php
 
-abstract class scbAdminPage extends scbForms {
+abstract class scbAdminPage {
 	/** Page args
 	 * string $parent  (default: options-general.php)
 	 * string $page_title  (mandatory)
@@ -51,7 +51,7 @@ abstract class scbAdminPage extends scbForms {
 			add_filter('plugin_action_links_' . plugin_basename($file), array($this, '_action_link'));
 	}
 
-	// This is where all the page args are set (DEPRECATED)
+	// This is where all the page args are set
 	function setup(){}
 
 	// This is where the css and js go
@@ -73,7 +73,6 @@ abstract class scbAdminPage extends scbForms {
 	function page_footer() {
 		echo "</div>\n";
 	}
-
 
 	// This is where the form data is validated
 	function validate($new_data, $old_data) {
@@ -101,49 +100,6 @@ abstract class scbAdminPage extends scbForms {
 
 //_____HELPER METHODS_____
 
-
-	// See scbForms::input()
-	function input($args, $options = NULL) {
-		if ( $options === NULL )
-			$options = $this->formdata;
-
-		return parent::input($args, $options);
-	}
-
-	// See scbForms::form()
-	function form($rows, $options = NULL) {
-		if ( $options === NULL )
-			$options = $this->formdata;
-
-		return parent::form($rows, $options, $this->nonce);
-	}
-
-	// See scbForms::table()
-	function table($rows, $options = NULL) {
-		if ( $options === NULL )
-			$options = $this->formdata;
-
-		return parent::table($rows, $options);
-	}
-
-	// See scbForms::table_row()
-	function table_row($row, $options = NULL) {
-		if ( $options === NULL )
-			$options = $this->formdata;
-
-		return parent::table_row($row, $options);
-	}
-
-	// Mimics scbForms::form_table()
-	function form_table($rows, $options = NULL) {
-		$output = $this->table($rows, $options);
-
-		$args = array_slice(func_get_args(), 2);
-		array_unshift($args, $output);
-
-		return call_user_func_array(array($this, 'form_wrap'), $args);
-	}
-
 	// Generates a form submit button
 	function submit_button($value = '', $action = 'action', $class = "button") {
 		if ( empty($value) )
@@ -160,7 +116,7 @@ abstract class scbAdminPage extends scbForms {
 		if ( ! empty($class) )
 			$args['extra'] = "class='{$class}'";
 
-		$output = "<p class='submit'>\n" . parent::input($args) . "</p>\n";
+		$output = "<p class='submit'>\n" . scbForms::input($args) . "</p>\n";
 
 		return $output;
 	}
@@ -187,17 +143,7 @@ abstract class scbAdminPage extends scbForms {
 			$content .= call_user_func_array(array($this, 'submit_button'), $button_args);
 		}
 
-		return parent::form_wrap($content, $this->nonce);
-	}
-
-	// Mimics scbForms::form_table_wrap()
-	function form_table_wrap($content) {
-		$output = self::table_wrap($content);
-
-		$args = array_slice(func_get_args(), 1);
-		array_unshift($args, $output);
-
-		return call_user_func_array(array($this, 'form_wrap'), $args);
+		return scbForms::form_wrap($content, $this->nonce);
 	}
 
 	// Generates a standard admin notice
@@ -218,6 +164,17 @@ abstract class scbAdminPage extends scbForms {
 
 //_____INTERNAL METHODS (DON'T WORRY ABOUT THESE)_____
 
+	// Allow calling of scbForms methods, with contextual defaults
+	function __call($name, $args) {
+		if ( ! isset($args[1]) ) {
+			if ( in_array( $name, array('form_wrap', 'form_table_wrap') ) )
+				$args[1] = $this->nonce;
+			else
+				$args[1] = $this->formdata;
+		}
+
+		return call_user_func_array(array('scbForms', $name), $args);
+	}
 
 	// Registers a page
 	function page_init() {
