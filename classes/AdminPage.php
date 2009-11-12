@@ -35,7 +35,7 @@ abstract class scbAdminPage {
 	// Constructor
 	function __construct($file, $options = NULL) {
 		$this->setup();
-		$this->_check_args();
+		$this->check_args();
 
 		$this->file = $file;
 		$this->plugin_url = plugin_dir_url($file);
@@ -51,7 +51,7 @@ abstract class scbAdminPage {
 			add_filter('plugin_action_links_' . plugin_basename($file), array($this, '_action_link'));
 	}
 
-	// This is where all the page args are set
+	// This is where all the page args can be set
 	function setup(){}
 
 	// This is where the css and js go
@@ -64,17 +64,15 @@ abstract class scbAdminPage {
 		echo "<h2>" . $this->args['page_title'] . "</h2>\n";
 	}
 
-
 	// This is where the page content goes
 	abstract function page_content();
-
 
 	// A generic page footer
 	function page_footer() {
 		echo "</div>\n";
 	}
 
-	// This is where the form data is validated
+	// This is where the form data should be validated
 	function validate($new_data, $old_data) {
 		return $new_data;
 	}
@@ -98,7 +96,8 @@ abstract class scbAdminPage {
 	}
 
 
-//_____HELPER METHODS_____
+// ____________UTILITIES____________
+
 
 	// Generates a form submit button
 	function submit_button($value = '', $action = 'action', $class = "button") {
@@ -123,15 +122,9 @@ abstract class scbAdminPage {
 
 	/*
 	Mimics scbForms::form_wrap()
-	Second argument can be:
-		- bool:
-			true	- add a submit button with the default arguments
-			false	- don't add a submit button at all
-		- string:
-			- <input ... />	(backwards compat)
-			- the value of the submit button
-			  In this last case, additional arguments will be transmitted to the
-			  submit_button() method
+	$this->form_wrap($content);	// generates a form with a default submit button
+	$this->form_wrap($content, false); // generates a form with no submit button
+	$this->form_wrap($content, $text = 'Save changes', $name = 'action', $class = 'button');	// the last 3 arguments are sent to submit_button()
 	*/
 	function form_wrap($content, $submit_button = true) {
 		if ( true === $submit_button ) {
@@ -162,7 +155,8 @@ abstract class scbAdminPage {
 	}
 
 
-//_____INTERNAL METHODS (DON'T WORRY ABOUT THESE)_____
+// ____________INTERNAL METHODS____________
+
 
 	// Allow calling of scbForms methods, with contextual defaults
 	function __call($name, $args) {
@@ -260,7 +254,7 @@ jQuery(document).ready(function($){
 		return $links;
 	}
 
-	function _check_args() {
+	private function check_args() {
 		if ( empty($this->args['page_title']) )
 			trigger_error('Page title cannot be empty', E_USER_ERROR);
 
