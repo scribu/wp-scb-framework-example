@@ -1,5 +1,10 @@
 <?php
 
+/*
+Creates an admin page
+
+You must set $this->args and define the page_content() method
+*/
 abstract class scbAdminPage {
 	/** Page args
 	 * string $parent  (default: options-general.php)

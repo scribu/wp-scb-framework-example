@@ -290,6 +290,8 @@ abstract class scbForms {
 
 		$extra = implode(' ', $extra);
 
+		$value = esc_attr($value);
+
 		// Build the item
 		$input = "<input name='{$name}' value='{$value}' type='{$type}'{$extra} /> ";
 
@@ -376,7 +378,7 @@ abstract class scbForms {
 		)), EXTR_SKIP);
 
 		if ( !$escaped )
-			$value = stripslashes(esc_html($value));
+			$value = wp_htmledit_pre(stripslashes($value));
 
 		$extra = self::validate_extra($extra, $name);
 

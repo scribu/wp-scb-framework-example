@@ -7,12 +7,14 @@ For example, if you defined the boxes like this:
 
 $this->boxes = array(
 	array('settings', 'Settings box', 'normal')
+	...
 );
 
-You must also define two methods in your class:
+You must also define two methods in your clas for each box:
 
 function settings_box() - this is where the box content is echoed
 function settings_handler() - this is where the box settings are saved
+...
 */
 abstract class scbBoxesPage extends scbAdminPage {
 	/*
