@@ -298,7 +298,7 @@ abstract class scbForms {
 		// Set label
 		if ( FALSE === strpos($desc, self::token) ) {
 			switch ($desc_pos) {
-				case 'before': $label = $desc .' ' . self::token; break;
+				case 'before': $label = $desc . ' ' . self::token; break;
 				case 'after': $label = self::token . ' ' . $desc;
 			}
 		} else {
@@ -308,11 +308,10 @@ abstract class scbForms {
 		$label = trim(str_replace(self::token, $input, $label));
 
 		// Add label
-		if ( empty($label) || $desc === false ) {
+		if ( empty($label) || $desc === false )
 			$output = $input . "\n";
-		} else {
+		else
 			$output = "<label>{$label}</label>\n";
-		}
 
 		return $output;
 	}

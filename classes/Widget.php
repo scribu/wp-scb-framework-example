@@ -74,7 +74,7 @@ abstract class scbWidget extends WP_Widget {
 	}
 
 
-// ____PRIVATE METHODS____
+// ____________PRIVATE METHODS____________
 
 
 	static function scb_register() {
