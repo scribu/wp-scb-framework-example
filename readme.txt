@@ -25,7 +25,7 @@ You can find out more about it [here](http://scribu.net/wordpress/scb-framework)
 == Changelog ==
 
 = 1.3.1 =
-* uses __call()
+* scbAdmin uses __call()
 
 = 1.3 =
 * AdminPage: ajax submit

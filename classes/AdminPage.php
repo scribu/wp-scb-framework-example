@@ -121,10 +121,10 @@ abstract class scbAdminPage {
 		return $output;
 	}
 
-	/* 
+	/*
 	Mimics scbForms::form_wrap()
 	Second argument can be:
-		- bool: 
+		- bool:
 			true	- add a submit button with the default arguments
 			false	- don't add a submit button at all
 		- string:
@@ -231,7 +231,7 @@ jQuery(document).ready(function($){
 				$prev.fadeOut('slow', function(){ $msg.fadeIn('slow'); });
 			else
 				$msg.fadeIn('slow');
-				
+
 			$this_spinner.hide();
 			$submit.show();
 		});
@@ -275,7 +275,7 @@ jQuery(document).ready(function($){
 
 		if ( empty($this->args['page_slug']) )
 			$this->args['page_slug'] = sanitize_title_with_dashes($this->args['menu_title']);
-			
+
 		if ( empty($this->args['nonce']) )
 			$this->nonce = $this->args['page_slug'];
 	}

@@ -1,6 +1,6 @@
 <?php
 
-/* 
+/*
 Creates an admin page with widgets, similar to the dashboard
 
 For example, if you defined the boxes like this:
@@ -139,7 +139,7 @@ abstract class scbBoxesPage extends scbAdminPage {
 		wp_enqueue_script('common');
 		wp_enqueue_script('wp-lists');
 		wp_enqueue_script('postbox');
-		
+
 		$this->_add_boxes();
 	}
 

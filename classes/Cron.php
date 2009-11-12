@@ -31,7 +31,7 @@ class scbCron {
 	}
 
 	/* Change the interval of the cron job
-	 * 
+	 *
 	 * @param array List of args:
 			string $schedule OR number $interval
 	 		timestamp $time (optional)
@@ -155,7 +155,7 @@ class scbCron {
 			foreach ( $hooks as $hook => $args )
 				if ( $hook == $name )
 					unset($crons[$timestamp][$hook]);
-					
+
 			if ( empty($hooks) )
 				unset($crons[$timestamp]);
 		}

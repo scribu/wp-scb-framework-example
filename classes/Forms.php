@@ -1,6 +1,8 @@
 <?php
 
 abstract class scbForms {
+	const token = '%input%';
+
 	/* Generates one or more form elements of the same type,
 	   including <select>s and <textarea>s.
 
@@ -18,7 +20,7 @@ abstract class scbForms {
 	static function input($args, $formdata = array()) {
 		$args = self::_validate_data($args);
 		$formdata = self::_validate_data($formdata);
-		
+
 		// Backwards compat
 		foreach ( array('name', 'value') as $key ) {
 			$old = $key . 's';
@@ -42,12 +44,9 @@ abstract class scbForms {
 		switch ( $args['type'] ) {
 			case 'select':  	return self::_select($args, $formdata);
 			case 'textarea':	return self::_textarea($args, $formdata);
+			default:			return self::_input($args, $formdata);
 		}
-
-		return self::_input($args, $formdata);
 	}
-
-	static $token = '%input%';
 
 	// Deprecated
 	static function select($args, $options = array()) {
@@ -69,27 +68,7 @@ abstract class scbForms {
 // ____________UTILITIES____________
 
 
-	static function form($inputs, $formdata = NULL, $nonce) {
-		$output = '';
-		foreach ( $inputs as $input )
-			$output .= self::input($input, $formdata);
-
-		$output = self::form_wrap($output, $nonce);
-
-		return $output;
-	}
-
-	static function table($rows, $formdata = NULL) {
-		$output = '';
-		foreach ( $rows as $row )
-			$output .= self::table_row($row, $formdata);
-
-		$output = self::table_wrap($output);
-
-		return $output;
-	}
-
-	// Generates multiple rows and wraps them in a form table
+	// Generates a table wrapped in a form
 	static function form_table($rows, $formdata = NULL) {
 		$output = '';
 		foreach ( $rows as $row )
@@ -100,6 +79,29 @@ abstract class scbForms {
 		return $output;
 	}
 
+	// Generates a form
+	static function form($inputs, $formdata = NULL, $nonce) {
+		$output = '';
+		foreach ( $inputs as $input )
+			$output .= self::input($input, $formdata);
+
+		$output = self::form_wrap($output, $nonce);
+
+		return $output;
+	}
+
+	// Generates a table
+	static function table($rows, $formdata = NULL) {
+		$output = '';
+		foreach ( $rows as $row )
+			$output .= self::table_row($row, $formdata);
+
+		$output = self::table_wrap($output);
+
+		return $output;
+	}
+
+	// Generates a table row
 	static function table_row($args, $formdata = NULL) {
 		return self::row_wrap($args['title'], self::input($args, $formdata));
 	}
@@ -108,12 +110,15 @@ abstract class scbForms {
 // ____________WRAPPERS____________
 
 
-	static function table_wrap($content) {
-		$output = "\n<table class='form-table'>\n" . $content . "\n</table>\n";
+	// Wraps the given content in a <form><table>
+	static function form_table_wrap($content, $nonce = 'update_options') {
+		$output = self::table_wrap($content);
+		$output = self::form_wrap($output, $nonce);
 
 		return $output;
 	}
 
+	// Wraps the given content in a <form>
 	static function form_wrap($content, $nonce = 'update_options') {
 		$output = "\n<form method='post' action=''>\n";
 		$output .= $content;
@@ -123,13 +128,14 @@ abstract class scbForms {
 		return $output;
 	}
 
-	static function form_table_wrap($content, $nonce = 'update_options') {
-		$output = self::table_wrap($content);
-		$output = self::form_wrap($output, $nonce);
+	// Wraps the given content in a <table>
+	static function table_wrap($content) {
+		$output = "\n<table class='form-table'>\n" . $content . "\n</table>\n";
 
 		return $output;
 	}
 
+	// Wraps the given content in a <tr><td>
 	static function row_wrap($title, $content) {
 		return "\n<tr>\n\t<th scope='row'>" . $title . "</th>\n\t<td>\n\t\t" . $content . "\t</td>\n\n</tr>";
 	}
@@ -137,11 +143,12 @@ abstract class scbForms {
 
 // ____________PRIVATE METHODS____________
 
+
 	// Recursivly transform empty arrays to ''
 	private static function _validate_data($data) {
 		if ( empty($data) )
 			return '';
-			
+
 		if ( ! is_array($data) )
 			return $data;
 
@@ -287,16 +294,16 @@ abstract class scbForms {
 		$input = "<input name='{$name}' value='{$value}' type='{$type}'{$extra} /> ";
 
 		// Set label
-		if ( FALSE === strpos($desc, self::$token) ) {
+		if ( FALSE === strpos($desc, self::token) ) {
 			switch ($desc_pos) {
-				case 'before': $label = $desc .' ' . self::$token; break;
-				case 'after': $label = self::$token . ' ' . $desc;
+				case 'before': $label = $desc .' ' . self::token; break;
+				case 'after': $label = self::token . ' ' . $desc;
 			}
 		} else {
 			$label = $desc;
 		}
 
-		$label = trim(str_replace(self::$token, $input, $label));
+		$label = trim(str_replace(self::token, $input, $label));
 
 		// Add label
 		if ( empty($label) || $desc === false ) {
@@ -362,7 +369,7 @@ abstract class scbForms {
 
 	private static function _textarea($args, $formdata) {
 		extract(wp_parse_args($args, array(
-			'name' => '', 
+			'name' => '',
 			'extra' => 'class="widefat"',
 			'value' => '',
 			'escaped' => FALSE,
@@ -385,7 +392,7 @@ abstract class scbForms {
 		return $extra;
 	}
 
-// Sugar
+// Utilities
 
 	private static function is_associative($array) {
 		if ( !is_array($array) || empty($array) )
@@ -402,21 +409,7 @@ abstract class scbForms {
 			if ( isset($array[$key]) )
 				$r[$key] = $array[$key];
 
-		return $r;			
-	}
-
-	private static function debug()  {
-		$args = func_get_args();
-		
-		echo "<pre>";
-
-		foreach ( $args as $arg )
-			if ( is_array($arg) || is_object($arg) )
-				print_r($arg);
-			else
-				var_dump($arg);
-
-		echo "</pre><br />";
+		return $r;
 	}
 }
 
