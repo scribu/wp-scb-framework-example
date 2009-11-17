@@ -11,8 +11,9 @@ abstract class scbAdminPage {
 	 * string $page_title  (mandatory)
 	 * string $menu_title
 	 * string $page_slug
-	 * array $action_link  (default: Settings)
+	 * string $capability (default: 'manage_options')
 	 * string $nonce
+	 * array $action_link  (default: 'Settings')
 	 */
 	protected $args;
 
@@ -136,7 +137,7 @@ abstract class scbAdminPage {
 			$content .= $this->submit_button();
 		} elseif ( false !== strpos($submit_button, '<input') ) {
 			$content .= $submit_button;
-		} else {
+		} elseif ( false !== $submit_button ) {
 			$button_args = array_slice(func_get_args(), 1);
 			$content .= call_user_func_array(array($this, 'submit_button'), $button_args);
 		}
