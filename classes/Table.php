@@ -17,11 +17,18 @@ class scbTable {
 
 	function install() {
 		global $wpdb;
-#		$wpdb->show_errors = true;
+
+		$charset_collate = '';
+		if ( $wpdb->has_cap( 'collation' ) ) {
+			if ( ! empty($wpdb->charset) )
+				$charset_collate = "DEFAULT CHARACTER SET $wpdb->charset";
+			if ( ! empty($wpdb->collate) )
+				$charset_collate .= " COLLATE $wpdb->collate";
+		}
 
 		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 
-		dbDelta("CREATE TABLE $this->name ($this->columns);");
+		dbDelta("CREATE TABLE $this->name ($this->columns) $charset_collate;");
 	}
 
 	function uninstall() {
