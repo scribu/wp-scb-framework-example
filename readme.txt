@@ -25,7 +25,7 @@ You can find out more about it [here](http://scribu.net/wordpress/scb-framework)
 == Changelog ==
 
 = 1.3.1 =
-* scbAdmin uses __call()
+* scbTable respects collation & charset
 
 = 1.3 =
 * AdminPage: ajax submit
