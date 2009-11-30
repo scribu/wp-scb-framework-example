@@ -10,7 +10,7 @@ $this->boxes = array(
 	...
 );
 
-You must also define two methods in your clas for each box:
+You must also define two methods in your class for each box:
 
 function settings_box() - this is where the box content is echoed
 function settings_handler() - this is where the box settings are saved
