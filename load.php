@@ -44,15 +44,15 @@ class scbLoad {
 
 	function set_autoload() {
 		if ( function_exists('spl_autoload_register') )
-			spl_autoload_register(array($this, 'autoload'));
+			spl_autoload_register(array($this, 'load'));
 		else
 			// Load all classes manually (PHP < 5.1)
 			foreach ( array('scbForms', 'scbOptions', 'scbWidget', 'scbCron',
 				'scbAdminPage', 'scbBoxesPage', 'scbTable', 'scbUtil') as $class )
-				$this->autoload($class);
+				$this->load($class);
 	}
 
-	function autoload($className) {
+	function load($className) {
 		if ( class_exists($className) )
 			return false;
 

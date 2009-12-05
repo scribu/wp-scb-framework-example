@@ -16,12 +16,12 @@ abstract class scbFramework {
 	static function init() {
 		// Set autoload
 		if ( function_exists('spl_autoload_register') )
-			spl_autoload_register(array(__CLASS__, 'autoload'));
+			spl_autoload_register(array(__CLASS__, 'load'));
 		else
 			// Load all classes manually
 			foreach ( array('scbForms', 'scbOptions', 'scbWidget', 'scbCron',
 				'scbAdminPage', 'scbBoxesPage', 'scbTable', 'scbUtil') as $class )
-				self::autoload($class);
+				self::load($class);
 
 		add_action('shutdown', array(__CLASS__, 'put_first'));
 	}
@@ -45,7 +45,7 @@ abstract class scbFramework {
 		update_option('active_plugins', $current);
 	}
 
-	static function autoload($className) {
+	static function load($className) {
 		if ( substr($className, 0, 3) != 'scb' )
 			return false;
 
