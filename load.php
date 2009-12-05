@@ -48,7 +48,7 @@ class scbLoad {
 		else
 			// Load all classes manually (PHP < 5.1)
 			foreach ( array('scbForms', 'scbOptions', 'scbWidget', 'scbCron',
-				'scbAdminPage', 'scbBoxesPage', 'scbTable', 'scbDependency') as $class )
+				'scbAdminPage', 'scbBoxesPage', 'scbTable', 'scbUtil') as $class )
 				$this->autoload($class);
 	}
 

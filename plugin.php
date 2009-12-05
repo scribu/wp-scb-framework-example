@@ -20,7 +20,7 @@ abstract class scbFramework {
 		else
 			// Load all classes manually
 			foreach ( array('scbForms', 'scbOptions', 'scbWidget', 'scbCron',
-				'scbAdminPage', 'scbBoxesPage', 'scbTable', 'scbDependency') as $class )
+				'scbAdminPage', 'scbBoxesPage', 'scbTable', 'scbUtil') as $class )
 				self::autoload($class);
 
 		add_action('shutdown', array(__CLASS__, 'put_first'));
