@@ -74,7 +74,7 @@ foreach ( array('debug', 'html', 'html_link') as $func )
 	function $func() {
 		\$args = func_get_args();
 
-		return call_user_func_array(array('scbUtil', $func), \$args);
+		return call_user_func_array(array('scbUtil', '$func'), \$args);
 	}
 		");
 
