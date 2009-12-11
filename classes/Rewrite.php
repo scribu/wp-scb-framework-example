@@ -1,6 +1,6 @@
 <?php
 
-// Takes care of adding rewrite rules when needed.
+// Helper class for modifying the rewrite rules
 abstract class scbRewrite {
 
 	public function __construct($plugin_file = '') {
