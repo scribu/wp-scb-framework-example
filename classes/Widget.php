@@ -11,7 +11,7 @@ abstract class scbWidget extends WP_Widget {
 
 		echo $before_widget;
 
-		$title = apply_filters('widget_title', $instance['title']);
+		$title = apply_filters('widget_title', $instance['title'], $this->name);
 
 		if ( ! empty($title) )
 			echo $before_title . $title . $after_title;
