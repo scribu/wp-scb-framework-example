@@ -40,6 +40,21 @@ class scbUtil {
 		$wp_styles->do_items((array) $handles);
 	}
 
+	// Minimalist HTML framework
+	static function html($tag, $content = '', $indent = '') {
+		list($closing) = explode(' ', $tag);
+
+		return "{$indent}<{$tag}>{$content}{$indent}</{$closing}>";
+	}
+
+	// Generate an <a> tag
+	static function html_link($url, $title = '') {
+		if ( empty($title) )
+			$title = $url;
+
+		return sprintf("<a href='%s'>%s</a>", $url, $title);
+	}
+
 	// Better debug function
 	static function debug() {
 		echo "<pre>";
@@ -52,9 +67,14 @@ class scbUtil {
 	}
 }
 
-if ( ! function_exists('debug') ) :
-function debug() {
-	return call_user_func_array(array('scbUtil', 'debug'), func_get_args());
-}
-endif;
+// Create shortcuts
+foreach ( array('debug', 'html', 'html_link') as $func )
+	if ( ! function_exists($func) )
+		eval("
+	function $func() {
+		\$args = func_get_args();
+
+		return call_user_func_array(array('scbUtil', $func), \$args);
+	}
+		");
 
