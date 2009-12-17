@@ -4,7 +4,7 @@ Donate link: http://scribu.net/wordpress
 Tags: admin, toolkit, forms, cron, settings
 Requires at least: 2.8
 Tested up to: 2.9-rare
-Stable tag: 1.3
+Stable tag: 1.4
 
 A set of useful classes for faster plugin development.
 
@@ -12,17 +12,24 @@ A set of useful classes for faster plugin development.
 
 This is a plugin toolkit that helps developers write plugins faster. It consists of several classes which handle common tasks:
 
-* *scbForms* - form generation
-* *scbAdminPage* - admin page generation
-* *scbBoxesPage* - admin page with dashboard-like widgets
-* *scbWidget* - widget generation
+* *scbForms* - form creation
+* *scbAdminPage* - admin page creation
+* *scbBoxesPage* - admin page with meta boxes
+* *scbWidget* - widget creation
 * *[scbOptions](http://scribu.net/wordpress/scb-framework/scb-options.html)* - option handling
-* *scbCron* - cron handling
-* *scbTable* - database table handling
+* *scbCron* - wp-cron handling
+* *scbRewrite* - rewrite rules handling
+* *scbTable* - database table creation
+* *scbUtil* - useful functions
 
 You can find out more about it [here](http://scribu.net/wordpress/scb-framework).
 
 == Changelog ==
+
+= 1.4 =
+* new classes: scbUtil & scbRewrite
+* faster loading method
+* scbWidget applies 'widget_title' filter
 
 = 1.3.1 =
 * scbTable respects collation & charset
