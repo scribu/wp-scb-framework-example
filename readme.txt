@@ -30,6 +30,7 @@ You can find out more about it [here](http://scribu.net/wordpress/scb-framework)
 * new classes: scbUtil & scbRewrite
 * faster loading method
 * scbWidget applies 'widget_title' filter
+* [more info](http://scribu.net/wordpress/scb-framework/sf-1-4.html)
 
 = 1.3.1 =
 * scbTable respects collation & charset
