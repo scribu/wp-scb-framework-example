@@ -91,7 +91,7 @@ abstract class scbAdminPage {
 		check_admin_referer($this->nonce);
 
 		foreach ( $this->formdata as $name => $value )
-			$new_data[$name] = $_POST[$name];
+			$new_data[$name] = @$_POST[$name];
 
 		$this->formdata = $this->validate($new_data, $this->formdata);
 
