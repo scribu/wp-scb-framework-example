@@ -26,7 +26,8 @@ You can find out more about it [here](http://scribu.net/wordpress/scb-framework)
 
 == Changelog ==
 
-= 1.4.1 =
+= 1.5 =
+* added scbOptions::get_defaults()
 * made scbAdminPage::submit_button() accept an array of arguments
 
 = 1.4 =
