@@ -194,7 +194,7 @@ abstract class scbForms {
 		
 		// Correct descriptions
 		$_after = '';
-		if ( !$a_desc ) {
+		if ( !$a_desc && false === strpos($desc, self::token) ) {
 			if ( $a_value ) {
 				$_after = $desc;
 				$args['desc'] = $desc = $value;
