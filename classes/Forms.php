@@ -43,8 +43,6 @@ class scbForms {
 		self::$args = $args;
 		self::$formdata = self::_validate_data($formdata);
 
-debug(self::$formdata);
-
 		switch ( $args['type'] ) {
 			case 'select':  	return self::_select();
 			case 'textarea':	return self::_textarea();
