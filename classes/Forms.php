@@ -27,18 +27,15 @@ class scbForms {
 		$error = false;
 		foreach ( array('name', 'value') as $key ) {
 			$old = $key . 's';
-			if ( isset($args[$old]) )
+
+			if ( isset($args[$old]) ) {
 				$args[$key] = $args[$old];
-
-			if ( isset($args[$key]) )
-				continue;
-
-			$error = true;
-			trigger_error("No $key specified", E_USER_WARNING);
+				unset($args[$old]);
+			}
 		}
 
-		if ( $error )
-			return;
+		if ( !isset($args['name']) || empty($args['name']) )
+			return trigger_error("Empty name", E_USER_WARNING);
 
 		self::$args = $args;
 		self::$formdata = self::_validate_data($formdata);
