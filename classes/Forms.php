@@ -335,7 +335,7 @@ class scbForms {
 		)), EXTR_SKIP);
 
 		if ( empty($value) )
-			$value = array();
+			$value = array('' => '');
 
 		if ( !is_array($value) )
 			return trigger_error("'value' argument is expected to be an array", E_USER_WARNING);
