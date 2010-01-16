@@ -149,11 +149,11 @@ class scbForms {
 
 	// Recursivly transform empty arrays to ''
 	private static function validate_data($data) {
-		if ( empty($data) )
-			return '';
-
 		if ( ! is_array($data) )
 			return $data;
+
+		if ( empty($data) )
+			return '';
 
 		foreach ( $data as $key => &$value )
 			$value = self::validate_data($value);
