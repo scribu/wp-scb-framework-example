@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: scbFramework
-Version: 1.4.1a
+Version: 1.5a
 Description: Useful classes for plugin developers
 Author: scribu
 Author URI: http://scribu.net
