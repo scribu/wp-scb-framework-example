@@ -125,7 +125,7 @@ class scbCron {
 		extract($args);
 
 		// Set hook
-		if ( $callback ) {
+		if ( isset($callback) ) {
 			$this->hook = self::_callback_to_string($callback);
 
 			add_action($this->hook, $callback);
@@ -136,16 +136,17 @@ class scbCron {
 		}
 
 		// Set schedule
-		if ( $interval ) {
+		if ( isset($interval) ) {
 			$this->schedule = $interval . 'secs';
 			$this->interval = $interval;
-		} elseif ( $schedule ) {
+		} elseif ( isset($schedule) ) {
 			$this->schedule = $schedule;
 		} else {
 			trigger_error('$schedule OR $interval not set', E_USER_WARNING);
 		}
 
-		$this->callback_args = (array) $callback_args;
+		if ( isset($callback_args) )
+			$this->callback_args = (array) $callback_args;
 	}
 
 	protected static function really_clear_scheduled_hook($name) {
