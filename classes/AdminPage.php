@@ -64,6 +64,10 @@ abstract class scbAdminPage {
 	// Both wp_enqueue_*() and inline code can be added
 	function page_head(){}
 
+	// This is where the contextual help goes
+	// @return string
+	function page_help(){}
+
 	// A generic page header
 	function page_header() {
 		echo "<div class='wrap'>\n";
@@ -246,8 +250,10 @@ abstract class scbAdminPage {
 
 		$this->ajax_response();
 
-		add_action('admin_footer', array($this, 'ajax_submit'), 20);
 		add_action('admin_print_styles-' . $this->pagehook, array($this, 'page_head'));
+		add_contextual_help($this->pagehook, $this->page_help());
+
+		add_action('admin_footer', array($this, 'ajax_submit'), 20);
 	}
 
 	function ajax_response() {
