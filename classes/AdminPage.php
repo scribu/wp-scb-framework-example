@@ -52,6 +52,7 @@ abstract class scbAdminPage {
 		}
 
 		add_action('admin_menu', array($this, 'page_init'));
+		add_filter('contextual_help', array($this, '_contextual_help'), 10, 2);
 
 		if ( $this->args['action_link'] )
 			add_filter('plugin_action_links_' . plugin_basename($file), array($this, '_action_link'));
@@ -251,9 +252,18 @@ abstract class scbAdminPage {
 		$this->ajax_response();
 
 		add_action('admin_print_styles-' . $this->pagehook, array($this, 'page_head'));
-		add_contextual_help($this->pagehook, $this->page_help());
 
 		add_action('admin_footer', array($this, 'ajax_submit'), 20);
+	}
+
+	function _contextual_help($help, $screen) {
+		if ( is_object($screen) )
+			$screen = $screen->id;
+
+		if ( $screen == $this->pagehook && $actual_help = $this->page_help() )
+			return $actual_help;
+
+		return $help;
 	}
 
 	function ajax_response() {
