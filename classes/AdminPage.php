@@ -41,16 +41,16 @@ abstract class scbAdminPage {
 
 	// Constructor
 	function __construct($file, $options = NULL) {
-		$this->setup();
-		$this->check_args();
-
-		$this->file = $file;
-		$this->plugin_url = plugin_dir_url($file);
-
 		if ( $options !== NULL ) {
 			$this->options = $options;
 			$this->formdata = $this->options->get();
 		}
+
+		$this->file = $file;
+		$this->plugin_url = plugin_dir_url($file);
+
+		$this->setup();
+		$this->check_args();
 
 		add_action('admin_menu', array($this, 'page_init'));
 		add_filter('contextual_help', array($this, '_contextual_help'), 10, 2);
