@@ -27,9 +27,11 @@ You can find out more about it [here](http://scribu.net/wordpress/scb-framework)
 == Changelog ==
 
 = 1.5 =
+* added scbAdminPage::page_help()
+* scbAdminPage can create top level menus
+* scbBoxesPage can handle multiple boxes with the same callbacks
+* scbAdminPage::submit_button() accepts an array of arguments
 * added scbOptions::get_defaults()
-* made scbAdminPage::submit_button() accept an array of arguments
-* made scbBoxesPage handle multiple boxes with the same callbacks 
 
 = 1.4 =
 * new classes: scbUtil & scbRewrite
