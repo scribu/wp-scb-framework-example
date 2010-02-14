@@ -1,9 +1,9 @@
 === scbFramework ===
 Contributors: scribu
 Donate link: http://scribu.net/wordpress
-Tags: admin, toolkit, forms, cron, settings, rewrite
+Tags: admin, toolkit, framework, forms, cron, settings, rewrite
 Requires at least: 2.8
-Tested up to: 2.9
+Tested up to: 3.0
 Stable tag: 1.4
 
 A set of useful classes for faster plugin development.
@@ -15,8 +15,8 @@ This is a plugin toolkit that helps developers write plugins faster. It consists
 * *scbForms* - form creation
 * *scbAdminPage* - admin page creation
 * *scbBoxesPage* - admin page with meta boxes
-* *scbWidget* - widget creation
 * *[scbOptions](http://scribu.net/wordpress/scb-framework/scb-options.html)* - option handling
+* *scbWidget* - widget creation
 * *scbCron* - wp-cron handling
 * *scbRewrite* - rewrite rules handling
 * *scbTable* - database table creation
