@@ -22,7 +22,7 @@ This is a plugin toolkit that helps developers write plugins faster. It consists
 * *scbTable* - database table creation
 * *scbUtil* - useful functions
 
-You can find out more about it [here](http://scribu.net/wordpress/scb-framework).
+Want to take a quick look at the code? Go [here](http://plugins.trac.wordpress.org/browser/scb-framework/trunk/classes).
 
 == Changelog ==
 
