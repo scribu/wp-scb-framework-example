@@ -125,12 +125,16 @@ class scbCron {
 		extract($args);
 
 		// Set hook
-		if ( isset($callback) ) {
+		if ( $action ) {
+			$this->hook = $action;
+		} elseif ( isset($callback) ) {
 			$this->hook = self::_callback_to_string($callback);
 
 			add_action($this->hook, $callback);
-		} elseif ( $action ) {
-			$this->hook = $action;
+		} elseif ( method_exists($this, 'callback') ) {
+			$this->hook = self::_callback_to_string($callback);
+
+			add_action($this->hook, $callback);
 		} else {
 			trigger_error('$action OR $callback not set', E_USER_WARNING);
 		}

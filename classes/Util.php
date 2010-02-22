@@ -30,7 +30,18 @@ class scbUtil {
 	}
 
 	// Better debug function
-	static function debug() {
+	static function debug_raw() {
+		echo "<pre>";
+		foreach ( func_get_args() as $arg )
+			if ( is_array($arg) || is_object($arg) )
+				print_r($arg);
+			else
+				var_dump($arg);
+		echo "</pre>";
+	}
+
+	// Unobtrusive debug function
+	function debug($a) {
 		// integrate with FirePHP
 		if ( function_exists('FB') ) {
 			foreach ( func_get_args() as $arg )
@@ -39,13 +50,13 @@ class scbUtil {
 			return;
 		}
 
-		echo "<pre>";
-		foreach ( func_get_args() as $arg )
-			if ( is_array($arg) || is_object($arg) )
-				print_r($arg);
-			else
-				var_dump($arg);
-		echo "</pre>";
+		$args = func_get_args();
+
+		ob_start();
+		call_user_func_array('debug_raw', $args);
+		$output = ob_get_clean();
+
+		register_shutdown_function(create_function('', "if ( current_user_can('administrator') ) echo '$output';"));
 	}
 
 	// Minimalist HTML framework
@@ -84,7 +95,7 @@ class scbUtil {
 }
 
 // Create shortcuts
-foreach ( array('debug', 'html', 'html_link') as $func )
+foreach ( array('debug', 'debug_raw', 'html', 'html_link') as $func )
 	if ( ! function_exists($func) )
 		eval("
 	function $func() {
