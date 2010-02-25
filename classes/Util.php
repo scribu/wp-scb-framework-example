@@ -58,6 +58,14 @@ class scbDebug {
 	function __construct($args) {
 		$this->args = $args;
 
+		// integrate with FirePHP
+		if ( function_exists('FB') ) {
+			foreach ( $this->args as $arg )
+				FB($arg);
+
+			return;
+		}
+
 		register_shutdown_function(array($this, '_delayed'));
 	}
 
@@ -74,14 +82,6 @@ class scbDebug {
 	function _delayed() {
 		if ( !current_user_can('administrator') )
 			return;
-
-		// integrate with FirePHP
-		if ( function_exists('FB') ) {
-			foreach ( $this->args as $arg )
-				FB($arg);
-
-			return;
-		}
 
 		$this->raw($this->args);
 	}
