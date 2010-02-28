@@ -8,6 +8,14 @@ abstract class scbWidget extends WP_Widget {
 	private static $widgets = array();
 	private static $migrations = array();
 
+	static function init($class, $file = '', $base = '') {
+		self::$widgets[] = $class;
+		self::$migrations[] = $base;
+
+		add_action('widgets_init', array(__CLASS__, 'scb_register'));
+		register_activation_hook($file, array(__CLASS__, 'scb_migrate'));
+	}
+
 	function widget($args, $instance) {
 		$instance = wp_parse_args($instance, $this->defaults);
 
@@ -25,15 +33,8 @@ abstract class scbWidget extends WP_Widget {
 		echo $after_widget;
 	}
 
+	// This is where the widget output goes
 	function content($instance) {}
-
-	static function init($class, $file = '', $base = '') {
-		self::$widgets[] = $class;
-		self::$migrations[] = $base;
-
-		add_action('widgets_init', array(__CLASS__, 'scb_register'));
-		register_activation_hook($file, array(__CLASS__, 'scb_migrate'));
-	}
 
 
 // ____HELPER METHODS____
