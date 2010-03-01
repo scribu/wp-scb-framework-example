@@ -58,6 +58,10 @@ class scbDebug {
 	function __construct($args) {
 		$this->args = $args;
 
+		register_shutdown_function(array($this, '_delayed'));
+	}
+
+	static function raw($args) {
 		// integrate with FirePHP
 		if ( function_exists('FB') ) {
 			foreach ( $this->args as $arg )
@@ -66,10 +70,6 @@ class scbDebug {
 			return;
 		}
 
-		register_shutdown_function(array($this, '_delayed'));
-	}
-
-	static function raw($args) {
 		echo "<pre>";
 		foreach ( $args as $arg )
 			if ( is_array($arg) || is_object($arg) )
@@ -91,16 +91,11 @@ endif;
 if ( ! function_exists('debug') ):
 function debug() {
 	$args = func_get_args();
-	
-	new scbDebug($args);
-}
-endif;
 
-if ( ! function_exists('debug_raw') ):
-function debug_raw() {
-	$args = func_get_args();
-
-	scbDebug::raw($args);
+	if ( defined('WP_DEBUG') )
+		scbDebug::raw($args);
+	else
+		new scbDebug($args);
 }
 endif;
 
@@ -128,6 +123,7 @@ endif;
 
 // _____Compatibility layer_____
 
+// WP < 3.0
 if ( ! function_exists('__return_false') ) :
 function __return_false() {
 	return false;
