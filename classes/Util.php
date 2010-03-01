@@ -62,14 +62,6 @@ class scbDebug {
 	}
 
 	static function raw($args) {
-		// integrate with FirePHP
-		if ( function_exists('FB') ) {
-			foreach ( $this->args as $arg )
-				FB($arg);
-
-			return;
-		}
-
 		echo "<pre>";
 		foreach ( $args as $arg )
 			if ( is_array($arg) || is_object($arg) )
@@ -83,6 +75,14 @@ class scbDebug {
 		if ( !current_user_can('administrator') )
 			return;
 
+		// integrate with FirePHP
+		if ( function_exists('FB') ) {
+			foreach ( $this->args as $arg )
+				FB($arg);
+
+			return;
+		}
+
 		$this->raw($this->args);
 	}
 }
@@ -92,10 +92,7 @@ if ( ! function_exists('debug') ):
 function debug() {
 	$args = func_get_args();
 
-	if ( defined('WP_DEBUG') )
-		scbDebug::raw($args);
-	else
-		new scbDebug($args);
+	new scbDebug($args);
 }
 endif;
 
