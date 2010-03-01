@@ -75,14 +75,6 @@ class scbDebug {
 		if ( !current_user_can('administrator') )
 			return;
 
-		// integrate with FirePHP
-		if ( function_exists('FB') ) {
-			foreach ( $this->args as $arg )
-				FB($arg);
-
-			return;
-		}
-
 		$this->raw($this->args);
 	}
 }
@@ -91,6 +83,14 @@ endif;
 if ( ! function_exists('debug') ):
 function debug() {
 	$args = func_get_args();
+
+	// integrate with FirePHP
+	if ( function_exists('FB') ) {
+		foreach ( $this->args as $arg )
+			FB($arg);
+
+		return;
+	}
 
 	new scbDebug($args);
 }
