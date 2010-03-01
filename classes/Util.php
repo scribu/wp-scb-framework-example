@@ -86,8 +86,7 @@ function debug() {
 
 	// integrate with FirePHP
 	if ( function_exists('FB') ) {
-		foreach ( $this->args as $arg )
-			FB($arg);
+		fb($args);
 
 		return;
 	}
