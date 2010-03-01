@@ -125,3 +125,18 @@ function html_link($url, $title = '') {
 }
 endif;
 
+
+// _____Compatibility layer_____
+
+if ( ! function_exists('__return_false') ) :
+function __return_false() {
+	return false;
+}
+endif;
+
+if ( ! function_exists('__return_true') ) :
+function __return_true() {
+	return true;
+}
+endif;
+
