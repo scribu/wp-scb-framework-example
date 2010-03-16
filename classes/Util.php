@@ -70,6 +70,13 @@ class scbDebug {
 		register_shutdown_function(array($this, '_delayed'));
 	}
 
+	function _delayed() {
+		if ( !current_user_can('administrator') )
+			return;
+
+		$this->raw($this->args);
+	}
+
 	static function raw($args) {
 		echo "<pre>";
 		foreach ( $args as $arg )
@@ -79,13 +86,6 @@ class scbDebug {
 				var_dump($arg);
 		echo "</pre>";	
 	}
-
-	function _delayed() {
-		if ( !current_user_can('administrator') )
-			return;
-
-		$this->raw($this->args);
-	}
 }
 endif;
 
@@ -94,9 +94,9 @@ function debug() {
 	$args = func_get_args();
 
 	// integrate with FirePHP
-	if ( 1==0 && class_exists('FirePHP') ) {
+	if ( class_exists('FirePHP') ) {
 		$firephp = FirePHP::getInstance(true);
-		$firephp->group('aaa');
+		$firephp->group('');
 		foreach ( $args as $arg )
 			$firephp->log($arg);
 		$firephp->groupEnd();
@@ -108,6 +108,13 @@ function debug() {
 }
 endif;
 
+if ( ! function_exists('debug_raw') ):
+function debug_raw() {
+	$args = func_get_args();
+
+	scbDebug::raw($args);
+}
+endif;
 
 // _____Minimalist HTML framework_____
 
@@ -128,6 +135,7 @@ function html_link($url, $title = '') {
 	return sprintf("<a href='%s'>%s</a>", $url, $title);
 }
 endif;
+
 
 // _____Compatibility layer_____
 
