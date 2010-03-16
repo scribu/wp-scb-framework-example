@@ -27,11 +27,14 @@ Want to take a quick look at the code? Go [here](http://plugins.trac.wordpress.o
 == Changelog ==
 
 = 1.5 =
-* added scbAdminPage::page_help()
-* scbAdminPage can create top level menus
-* scbBoxesPage can handle multiple boxes with the same callbacks
+* new methods for scbOptions: get_defaults(); cleanup(); __isset();
+* new method for scbAdminPage: page_help();
+* new method for scbUtil: add_uninstall_hook();
 * scbAdminPage::submit_button() accepts an array of arguments
-* added scbOptions::get_defaults()
+* scbAdminPage can create top level menus
+* scbBoxesPage can assign the same handler to multiple boxes, with different arguments
+* debug() outputs at the end of the page, only for administrators
+* [more info](http://scribu.net/wordpress/scb-framework/sf-1-5.html)
 
 = 1.4 =
 * new classes: scbUtil & scbRewrite
