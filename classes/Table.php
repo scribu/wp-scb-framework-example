@@ -12,7 +12,7 @@ class scbTable {
 		$this->columns = $columns;
 
 		register_activation_hook($file, array($this, 'install'));
-		register_uninstall_hook($file, array($this, 'uninstall'));
+		scbUtil::add_uninstall_hook($file, array($this, 'uninstall'));
 	}
 
 	function install() {

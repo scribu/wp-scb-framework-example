@@ -48,6 +48,13 @@ class scbUtil {
 
 		return implode(',', $values);
 	}
+
+	// Have more than one uninstall hooks; also prevents an UPDATE query on each page load
+	static function add_uninstall_hook($plugin, $callback) {
+		register_uninstall_hook($plugin, '__return_false');	// dummy
+
+		add_action('uninstall_' . plugin_basename($plugin), $callback);
+	}
 }
 
 
@@ -121,7 +128,6 @@ function html_link($url, $title = '') {
 	return sprintf("<a href='%s'>%s</a>", $url, $title);
 }
 endif;
-
 
 // _____Compatibility layer_____
 
