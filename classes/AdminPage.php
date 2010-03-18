@@ -284,7 +284,7 @@ abstract class scbAdminPage {
 			'capability' => 'manage_options',
 			'menu_title' => $this->args['page_title'],
 			'page_slug' => '',
-			'nonce' => ''
+			'nonce' => '',
 			'action_link' => __('Settings', $this->textdomain),
 		));
 

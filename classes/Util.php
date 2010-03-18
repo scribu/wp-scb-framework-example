@@ -96,7 +96,7 @@ function debug() {
 	// integrate with FirePHP
 	if ( class_exists('FirePHP') ) {
 		$firephp = FirePHP::getInstance(true);
-		$firephp->group('');
+		$firephp->group('debug');
 		foreach ( $args as $arg )
 			$firephp->log($arg);
 		$firephp->groupEnd();
