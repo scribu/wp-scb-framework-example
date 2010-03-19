@@ -266,11 +266,12 @@ abstract class scbAdminPage {
 		if ( ! $this->pagehook )
 			return;
 
-		$this->ajax_response();
+		if ( $ajax_submit ) {
+			$this->ajax_response();
+			add_action('admin_footer', array($this, 'ajax_submit'), 20);
+		}
 
 		add_action('admin_print_styles-' . $this->pagehook, array($this, 'page_head'));
-
-		add_action('admin_footer', array($this, 'ajax_submit'), 20);
 	}
 
 	private function check_args() {
@@ -286,6 +287,7 @@ abstract class scbAdminPage {
 			'page_slug' => '',
 			'nonce' => '',
 			'action_link' => __('Settings', $this->textdomain),
+			'ajax_submit' => false,
 		));
 
 		if ( empty($this->args['page_slug']) )
@@ -356,7 +358,6 @@ jQuery(document).ready(function($){
 });
 </script>
 <?php
-		$this->page_head();
 	}
 
 	function _page_content_hook() {
