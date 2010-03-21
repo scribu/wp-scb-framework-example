@@ -37,6 +37,43 @@ abstract class scbAdminPage {
 	// Formdata used for filling the form elements
 	protected $formdata = array();
 
+	// Registration component
+	private static $registered = array();
+
+	static function register($class, $file, $options = null) {
+		if ( isset(self::$registered[$class]) )
+			return false;
+
+		self::$registered[$class] = array($file, $options);
+
+		add_action('_admin_menu', array(__CLASS__, '_pages_init'));
+
+		return true;
+	}
+
+	static function replace($old_class, $new_class) {
+		if ( ! isset(self::$registered[$old_class]) )
+			return false;
+
+		self::$registered[$new_class] = self::$registered[$old_class];
+		unset(self::$registered[$old_class]);
+
+		return true;
+	}
+
+	static function remove($class) {
+		if ( ! isset(self::$registered[$class]) )
+			return false;
+
+		unset(self::$registered[$class]);
+
+		return true;
+	}
+
+	static function _pages_init() {
+		foreach ( self::$registered as $class => $args )
+			new $class($args[0], $args[1]);
+	}
 
 //  ____________MAIN METHODS____________
 
