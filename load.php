@@ -64,7 +64,7 @@ abstract class scbLoad3 {
 }
 endif;
 
-scbLoad3::register('15', __FILE__, array(
+scbLoad3::register(1, __FILE__, array(
 	'scbOptions', 'scbForms', 'scbAdminPage', 'scbBoxesPage',
 	'scbWidget', 'scbCron', 'scbTable', 'scbUtil', 'scbRewrite',
 ));
