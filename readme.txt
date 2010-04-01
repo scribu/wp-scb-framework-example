@@ -22,7 +22,9 @@ This is a plugin toolkit that helps developers write plugins faster. It consists
 * *scbTable* - database table creation
 * *scbUtil* - useful functions
 
-Want to take a quick look at the code? Go [here](http://plugins.trac.wordpress.org/browser/scb-framework/trunk/classes).
+Want to take a quick look at the code? Go [here](http://plugins.trac.wordpress.org/browser/scb-framework/trunk/scb).
+
+You can download this plugin to get a quick start on using the framework.
 
 == Changelog ==
 
