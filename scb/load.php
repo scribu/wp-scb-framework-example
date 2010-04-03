@@ -62,6 +62,8 @@ class scbLoad3 {
 	}
 
 	static function get_info() {
+		krsort(self::$candidates);
+
 		return array(self::$loaded, self::$candidates);
 	}
 }
