@@ -26,6 +26,16 @@ Want to take a quick look at the code? Go [here](http://plugins.trac.wordpress.o
 
 You can download this plugin to get a quick start on using the framework.
 
+== Loading ==
+
+The hardest part about writing a library to be used by multiple plugins is how to load it's files.
+
+scbLoad: use __autload().
+
+scbLoad2: load directly
+
+scbLoad3: load directly; attempt to load the newest version of the library, first.
+
 == Changelog ==
 
 = 1.5 =

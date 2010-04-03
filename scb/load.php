@@ -9,6 +9,7 @@ if ( !class_exists('scbLoad3') ) :
 class scbLoad3 {
 
 	private static $candidates;
+	private static $loaded;
 
 	static function init($rev, $file, $classes) {
 		$dir = dirname($file);
@@ -53,12 +54,15 @@ class scbLoad3 {
 
 			$fpath = $path . substr($class_name, 3) . '.php';
 
-			@include $fpath;
+			if ( file_exists($fpath) ) {
+				self::$loaded[$class_name] = $fpath;
+				include $fpath;
+			}
 		}
 	}
 
-	static function get_candidates() {
-		return self::$candidates;
+	static function get_info() {
+		return array(self::$loaded, self::$candidates);
 	}
 }
 endif;
