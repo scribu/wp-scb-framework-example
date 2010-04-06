@@ -38,6 +38,10 @@ scbLoad3: load directly; attempt to load the newest version of the library, firs
 
 == Changelog ==
 
+= 1.6 =
+* smarter loading
+* new methods in scbUtil: array_pluck() and objects_to_assoc()
+
 = 1.5 =
 * new methods for scbOptions: get_defaults(); cleanup(); __isset();
 * new method for scbAdminPage: page_help();
