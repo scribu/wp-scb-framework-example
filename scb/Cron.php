@@ -125,7 +125,7 @@ class scbCron {
 		extract($args);
 
 		// Set hook
-		if ( $action ) {
+		if ( isset($action) ) {
 			$this->hook = $action;
 		} elseif ( isset($callback) ) {
 			$this->hook = self::_callback_to_string($callback);

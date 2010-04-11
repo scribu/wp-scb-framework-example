@@ -45,8 +45,7 @@ abstract class scbBoxesPage extends scbAdminPage {
 	function default_css() {
 ?>
 <style type="text/css">
-.meta-box-sortables {margin: 0 5px !important}
-.inside {clear:both; overflow:hidden; padding: 10px 10px 0 10px !important}
+.inside {clear: both; overflow: hidden; padding: 10px 10px 0 10px !important}
 .inside table {margin: 0 !important; padding: 0 !important}
 .inside table td {vertical-align: middle !important}
 .inside table .regular-text {width: 100% !important}
@@ -102,8 +101,8 @@ abstract class scbBoxesPage extends scbAdminPage {
 	}
 
 	function page_footer() {
-		$this->_boxes_js_init();
 		parent::page_footer();
+		$this->_boxes_js_init();
 	}
 
 	function form_handler() {
@@ -200,14 +199,12 @@ abstract class scbBoxesPage extends scbAdminPage {
 	function _boxes_js_init() {
 		echo $this->js_wrap(
 <<<EOT
-//<![CDATA[
-jQuery(document).ready( function($){
+jQuery(document).ready(function($){
 	// close postboxes that should be closed
 	$('.if-js-closed').removeClass('if-js-closed').addClass('closed');
 	// postboxes setup
 	postboxes.add_postbox_toggles('$this->pagehook');
 });
-//]]>
 EOT
 );
 ?>
