@@ -41,7 +41,8 @@ scbLoad3: load directly; attempt to load the newest version of the library, firs
 = 1.6 =
 * load the most recent version available
 * auto-uninstall for scbWidget
-* new methods in scbUtil: array_pluck() and objects_to_assoc()
+* new methods in scbUtil: array_pluck(), objects_to_assoc(), split_at()
+* move debugging functions to separate file
 
 = 1.5 =
 * new methods for scbOptions: get_defaults(); cleanup(); __isset();
