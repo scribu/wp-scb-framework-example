@@ -26,7 +26,6 @@ class scbDebug {
 		echo "</pre>";	
 	}
 }
-endif;
 
 if ( ! function_exists('debug') ):
 function debug() {
@@ -53,6 +52,5 @@ function debug_raw() {
 
 	scbDebug::raw($args);
 }
-endif;
 endif;
 
