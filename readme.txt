@@ -39,7 +39,8 @@ scbLoad3: load directly; attempt to load the newest version of the library, firs
 == Changelog ==
 
 = 1.6 =
-* smarter loading
+* load the most recent version available
+* auto-uninstall for scbWidget
 * new methods in scbUtil: array_pluck() and objects_to_assoc()
 
 = 1.5 =
