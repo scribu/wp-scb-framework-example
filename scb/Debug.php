@@ -17,6 +17,8 @@ class scbDebug {
 	}
 
 	static function raw($args) {
+		$args = self::array_map_deep('esc_html', $args);
+
 		echo "<pre>";
 		foreach ( $args as $arg )
 			if ( is_array($arg) || is_object($arg) )
@@ -25,10 +27,30 @@ class scbDebug {
 				var_dump($arg);
 		echo "</pre>";	
 	}
+
+	private static function array_map_deep($callback, $arg) {
+		if ( is_scalar($arg) )
+			return call_user_func($callback, $arg);
+
+		foreach ( $arg as &$val )
+			$val = self::array_map_deep($callback, $val);
+
+		return $arg;
+	}
 }
+
 
 if ( ! function_exists('debug') ):
 function debug() {
+	$args = func_get_args();
+
+	scbDebug::raw($args);
+}
+endif;
+
+
+if ( ! function_exists('debug_fb') ):
+function debug_fb() {
 	$args = func_get_args();
 
 	// integrate with FirePHP
@@ -43,14 +65,6 @@ function debug() {
 	}
 
 	new scbDebug($args);
-}
-endif;
-
-if ( ! function_exists('debug_raw') ):
-function debug_raw() {
-	$args = func_get_args();
-
-	scbDebug::raw($args);
 }
 endif;
 
