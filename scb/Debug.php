@@ -29,11 +29,12 @@ class scbDebug {
 	}
 
 	private static function array_map_deep($callback, $arg) {
-		if ( is_scalar($arg) )
+		if ( is_scalar($arg) || is_null($arg) )
 			return call_user_func($callback, $arg);
 
-		foreach ( $arg as &$val )
-			$val = self::array_map_deep($callback, $val);
+		elseif ( is_array($arg) )
+			foreach ( $arg as &$val )
+				$val = self::array_map_deep($callback, $val);
 
 		return $arg;
 	}
