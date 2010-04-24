@@ -17,10 +17,12 @@ This is a plugin toolkit that helps developers write plugins faster. It consists
 * *scbBoxesPage* - admin page with meta boxes
 * *[scbOptions](http://scribu.net/wordpress/scb-framework/scb-options.html)* - option handling
 * *scbWidget* - widget creation
+* *scbQuery* - WP_Query wrapper
 * *scbCron* - wp-cron handling
 * *scbRewrite* - rewrite rules handling
 * *scbTable* - database table creation
 * *scbUtil* - useful functions
+* *scbDebug* - debugging functions
 
 Want to take a quick look at the code? Go [here](http://plugins.trac.wordpress.org/browser/scb-framework/trunk/scb).
 
