@@ -1,22 +1,9 @@
 <?php
 
+// Documentation: http://scribu.net/wordpress/scb-framework/scb-forms.html
+
 class scbForms {
 	const token = '%input%';
-
-	/* Generates one or more form elements of the same type,
-	   including <select>s and <textarea>s.
-
-		$args =	array (
-			'type' => string  (mandatory)
-			'name' => string | array  (mandatory)
-			'value' => string | array
-			'desc' => string | array | false
-			'desc_pos' => 'before' | 'after' | 'foo %input% bar'  (default: after)
-			'extra' => string  (default: class="regular-text")
-		);
-
-		$formdata = associative array with the formdata with which to fill the elements
-	*/
 
 	protected static $args;
 	protected static $formdata = array();
