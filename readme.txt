@@ -2,7 +2,7 @@
 Contributors: scribu
 Donate link: http://scribu.net/wordpress
 Tags: admin, toolkit, framework, forms, cron, settings, rewrite
-Requires at least: 2.8
+Requires at least: 2.9
 Tested up to: 3.0
 Stable tag: 1.6
 
@@ -27,16 +27,6 @@ This is a plugin toolkit that helps developers write plugins faster. It consists
 Want to take a quick look at the code? Go [here](http://plugins.trac.wordpress.org/browser/scb-framework/trunk/scb).
 
 You can download this plugin to get a quick start on using the framework.
-
-== Loading ==
-
-The hardest part about writing a library to be used by multiple plugins is how to load it's files.
-
-scbLoad: use __autload().
-
-scbLoad2: load directly
-
-scbLoad3: load directly; attempt to load the newest version of the library, first.
 
 == Changelog ==
 
