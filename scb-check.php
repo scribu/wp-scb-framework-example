@@ -21,12 +21,10 @@ class _scbNotice {
 	function notice() {
 		global $wp_version;
 
-		if ( version_compare('2.7', $wp_version, '<=') ) {
-			$slug = 'scb-framework';
+		$slug = 'scb-framework';
 
-			$link = '[<a href="' . admin_url('plugin-install.php?tab=plugin-information&amp;plugin=' . $slug .
-				'&amp;TB_iframe=true&amp;width=600&amp;height=550') . '" class="thickbox onclick">' . __('Install now') . '</a>]';
-		}
+		$link = '[<a href="' . admin_url('plugin-install.php?tab=plugin-information&amp;plugin=' . $slug .
+			'&amp;TB_iframe=true&amp;width=600&amp;height=550') . '" class="thickbox onclick">' . __('Install now') . '</a>]';
 
 		$file = plugin_basename($this->file);
 
