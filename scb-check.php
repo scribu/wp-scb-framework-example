@@ -36,7 +36,7 @@ class _scbNotice {
 endif;
 
 if ( !function_exists('scb_check') ):
-function scb_check($file, $deactivate = false) {
+function scb_check($file) {
 	if ( class_exists('scbLoad3') )
 		return true;
 

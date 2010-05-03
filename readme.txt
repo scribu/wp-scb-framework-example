@@ -4,7 +4,7 @@ Donate link: http://scribu.net/wordpress
 Tags: admin, toolkit, framework, forms, cron, settings, rewrite
 Requires at least: 2.8
 Tested up to: 3.0
-Stable tag: 1.5
+Stable tag: 1.6
 
 A set of useful classes for faster plugin development.
 
@@ -42,9 +42,10 @@ scbLoad3: load directly; attempt to load the newest version of the library, firs
 
 = 1.6 =
 * load the most recent version available
-* auto-uninstall for scbWidget
-* new methods in scbUtil: array_pluck(), objects_to_assoc(), split_at()
 * move debugging functions to separate file
+* new methods in scbUtil: array_pluck(), objects_to_assoc(), split_at()
+* auto-uninstall for scbWidget
+* [more info](http://scribu.net/wordpress/scb-framework/sf-1-6.html)
 
 = 1.5 =
 * new methods for scbOptions: get_defaults(); cleanup(); __isset();

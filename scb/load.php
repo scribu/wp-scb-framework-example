@@ -1,10 +1,4 @@
 <?php
-/*
-To load scbFramework, you just need to add this line at the beginning of your plugin:
-
-require_once dirname(__FILE__) . '/scb/load.php';
-*/
-
 if ( !class_exists('scbLoad3') ) :
 class scbLoad3 {
 
