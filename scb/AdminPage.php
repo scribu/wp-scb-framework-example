@@ -30,6 +30,7 @@ abstract class scbAdminPage {
 	// scbOptions object holder
 	// Normally, it's used for storing formdata
 	protected $options;
+	protected $option_name;
 
 	// l10n
 	protected $textdomain;
@@ -87,7 +88,6 @@ abstract class scbAdminPage {
 		if ( NULL !== $options ) {
 			$this->options = $options;
 			$this->formdata = $this->options->get();
-			$this->option_name = $this->options->get_key();
 		}
 
 		$this->file = $file;
@@ -139,7 +139,7 @@ abstract class scbAdminPage {
 		return $new_data;
 	}
 
-	// A generic form handler
+	// Manually handle option saving (use Settings API instead)
 	function form_handler() {
 		if ( empty($_POST['action']) )
 			return false;
@@ -158,6 +158,14 @@ abstract class scbAdminPage {
 			$this->options->update($this->formdata);
 
 		$this->admin_msg();
+	}
+
+	// Manually generate a standard admin notice (use Settings API instead)
+	function admin_msg($msg = '', $class = "updated") {
+		if ( empty($msg) )
+			$msg = __('Settings <strong>saved</strong>.', $this->textdomain);
+
+		echo "<div class='$class fade'><p>$msg</p></div>\n";
 	}
 
 
@@ -311,15 +319,6 @@ abstract class scbAdminPage {
 	// Mimic scbForms inheritance
 	function __call($method, $args) {
 		return call_user_func_array(array('scbForms', $method), $args);
-	}
-
-
-	// Generates a standard admin notice
-	function admin_msg($msg = '', $class = "updated") {
-		if ( empty($msg) )
-			$msg = __('Settings <strong>saved</strong>.', $this->textdomain);
-
-		echo "<div class='$class fade'><p>$msg</p></div>\n";
 	}
 
 	// Wraps a string in a <script> tag
