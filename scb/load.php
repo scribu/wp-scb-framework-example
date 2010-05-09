@@ -24,7 +24,7 @@ class scbLoad4 {
 
 		add_action('activate_plugin',  array(__CLASS__, 'delayed_activation'));
 
-		add_action('plugins_loaded', array(__CLASS__, 'load'));
+		add_action('plugins_loaded', array(__CLASS__, 'load'), 10, 0);
 	}
 
 	static function load($do_callbacks = true) {
