@@ -9,7 +9,7 @@ abstract class scbRewrite {
 		add_action('generate_rewrite_rules', array($this, 'generate'));
 
 		if ( $plugin_file )
-			register_activation_hook($plugin_file, array(__CLASS__, 'flush'));
+			scbUtil::add_activation_hook($plugin_file, array(__CLASS__, 'flush'));
 	}
 
 	// This is where the actual code goes

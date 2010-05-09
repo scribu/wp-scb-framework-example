@@ -21,7 +21,7 @@ class scbCron {
 	function __construct($file, $args, $debug = false) {
 		$this->_set_args($args);
 
-		register_activation_hook($file, array($this, 'reset'));
+		scbUtil::add_activation_hook($file, array($this, 'reset'));
 		register_deactivation_hook($file, array($this, 'unschedule'));
 
 		add_filter('cron_schedules', array($this, '_add_timing'));
