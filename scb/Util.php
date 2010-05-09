@@ -32,7 +32,7 @@ class scbUtil {
 		echo "</script>";
 	}
 
-	// Enable delayed activation (when using scb_init())
+	// Enable delayed activation (to be used with scb_init())
 	static function add_activation_hook($plugin, $callback) {
 		add_action('scb_activation_' . plugin_basename($plugin), $callback);
 	}
