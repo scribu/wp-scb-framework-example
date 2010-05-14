@@ -10,5 +10,6 @@ Plugin URI: http://scribu.net/wordpress/scb-framework
 
 require dirname(__FILE__) . '/scb/load.php';
 
-// The rest of your plugin code goes here
+scb_init();
 
+// See example.php for usage
