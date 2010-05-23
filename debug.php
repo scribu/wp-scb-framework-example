@@ -17,8 +17,6 @@ class scbDebug {
 	}
 
 	static function raw($args) {
-		$args = scbUtil::array_map_recursive('esc_html', $args);
-
 		echo "<pre>";
 		foreach ( $args as $arg )
 			if ( is_array($arg) || is_object($arg) )
@@ -34,20 +32,10 @@ class scbDebug {
 }
 
 
-if ( ! function_exists('debug') ):
-function debug() {
+// Integrate with FirePHP
+function fb_debug() {
 	$args = func_get_args();
 
-	scbDebug::raw($args);
-}
-endif;
-
-
-if ( ! function_exists('debug_fb') ):
-function debug_fb() {
-	$args = func_get_args();
-
-	// integrate with FirePHP
 	if ( class_exists('FirePHP') ) {
 		$firephp = FirePHP::getInstance(true);
 		$firephp->group('debug');
@@ -60,11 +48,14 @@ function debug_fb() {
 
 	new scbDebug($args);
 }
-endif;
 
-if ( ! function_exists('scb_debug') ):
-function scb_debug() {
+function debug() {
+	$args = func_get_args();
+
+	scbDebug::raw($args);
+}
+
+function debug_scb() {
 	add_action('shutdown', array('scbDebug', 'info'));
 }
-endif;
 
