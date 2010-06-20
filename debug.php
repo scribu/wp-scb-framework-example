@@ -16,14 +16,18 @@ class scbDebug {
 		$this->raw($this->args);
 	}
 
-	static function raw($args) {
-		echo "<pre>";
+	static function raw($args, $with_pre = true) {
+		if ( $with_pre )
+			echo "<pre>";
+
 		foreach ( $args as $arg )
 			if ( is_array($arg) || is_object($arg) )
 				print_r($arg);
 			else
 				var_dump($arg);
-		echo "</pre>";	
+
+		if ( $with_pre )
+			echo "</pre>";
 	}
 
 	static function info() {
@@ -57,5 +61,26 @@ function debug() {
 
 function debug_scb() {
 	add_action('shutdown', array('scbDebug', 'info'));
+}
+
+function dpb() {
+	echo '<pre>';
+	debug_print_backtrace();
+	echo '</pre>';
+}
+
+function debug_lq() {
+	global $wpdb;
+	
+	debug($wpdb->last_query);
+}
+
+function debug_ajax() {
+	if ( !defined('DOING_AJAX') )
+		return;
+
+	$args = func_get_args();
+	scbDebug::raw($args, false);
+	die;
 }
 
