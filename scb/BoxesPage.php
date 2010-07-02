@@ -205,7 +205,8 @@ jQuery( document ).ready( function( $ ){
 	// postboxes setup
 	postboxes.add_postbox_toggles( '$this->pagehook' );
 } );
-EOT );
+EOT
+		);
 ?>
 
 <form style='display: none' method='get' action=''>

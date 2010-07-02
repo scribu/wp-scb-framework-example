@@ -323,23 +323,14 @@ class scbForms {
 		if ( false === $text ) {
 			$opts = '';
 		} else {
-			$opts = "\t<option value=''";
-			if ( $cur_val === array( 'foo' ) )
-				$opts .= " selected='selected'";
-			$opts .= ">{$text}</option>\n";
+			$opts = "\t<option value=''" . selected( $cur_val, array( 'foo' ), false ) . ">{$text}</option>\n";
 		}
 
 		foreach ( $value as $key => $value ) {
 			if ( empty( $key ) || empty( $value ) )
 				continue;
 
-			$cur_extra = array();
-			if ( ( string ) $key == ( string ) $cur_val )
-				$cur_extra[] = "selected='selected'";
-
-			$cur_extra = self::validate_extra( $cur_extra, $key );
-
-			$opts .= "\t<option value='{$key}'{$cur_extra}>{$value}</option>\n";
+			$opts .= "\t<option value='{$key}'" . selected( (string) $key, (string) $cur_val, false) . '>' . $value . "</option>\n";
 		}
 
 		$extra = self::validate_extra( $extra, $name );
