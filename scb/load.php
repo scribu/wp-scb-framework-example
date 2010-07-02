@@ -49,7 +49,7 @@ class scbLoad4 {
 		self::load(false);
 		call_user_func($callback);
 
-		if ( in_array($plugin, array_keys(get_site_option('active_sitewide_plugins', array()))) ) {
+		if ( is_plugin_active_for_network($plugin) ) {
 			// network wide activation
 			foreach ( self::get_active_blogs() as $blog_id ) {
 				switch_to_blog($blog_id);
