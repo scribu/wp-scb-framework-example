@@ -1,5 +1,11 @@
 <?php
 
+function scb_error_handler($errno, $errstr) {
+	echo $errstr;
+	dpb();
+}
+set_error_handler('scb_error_handler', E_WARNING|E_ERROR|E_USER_WARNING|E_USER_ERROR);
+
 class scbDebug {
 	private $args;
 
