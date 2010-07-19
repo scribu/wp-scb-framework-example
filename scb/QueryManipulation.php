@@ -40,7 +40,7 @@ class scbQueryManipulation {
 		return $value;
 	}
 
-	function alter($query) {
+	function alter( $query ) {
 		$this->bits = call_user_func( $this->callback, $this->bits, $this->wp_query );
 	}
 
