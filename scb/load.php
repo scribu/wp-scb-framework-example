@@ -3,7 +3,7 @@
 $GLOBALS['_scb_data'] = array( 22, __FILE__, array(
 	'scbUtil', 'scbOptions', 'scbForms', 'scbTable',
 	'scbWidget', 'scbAdminPage', 'scbBoxesPage',
-	'scbQuery', 'scbRewrite', 'scbCron', ) );
+	'scbQueryManipulation', 'scbRewrite', 'scbCron', ) );
 
 if ( !class_exists( 'scbLoad4' ) ) :
 class scbLoad4 {

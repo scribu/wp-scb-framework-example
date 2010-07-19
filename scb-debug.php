@@ -4,7 +4,36 @@ function scb_error_handler($errno, $errstr) {
 	echo $errstr;
 	dpb();
 }
-set_error_handler('scb_error_handler', E_WARNING|E_ERROR|E_USER_WARNING|E_USER_ERROR);
+set_error_handler('scb_error_handler', E_ERROR|E_WARNING|E_USER_WARNING|E_USER_ERROR);
+
+function debug_filters( $tag = false ) {
+	global $wp_filter;
+
+	if ( $tag ) {
+		$hook[ $tag ] = $wp_filter[ $tag ];
+
+		if ( !is_array( $hook[ $tag ] ) ) {
+			trigger_error("Nothing found for '$tag' hook", E_USER_NOTICE);
+			return;
+		}
+	}
+	else {
+		$hook = $wp_filter;
+		ksort( $hook );
+	}
+
+	echo '<pre>';
+	foreach ( $hook as $tag => $priority ) {
+		echo "<br />&gt;&gt;&gt;&gt;&gt;\t<strong>$tag</strong><br />";
+		ksort( $priority );
+		foreach ( $priority as $priority => $function ) {
+			echo $priority;
+			foreach( $function as $name => $properties )
+				echo "\t$name<br>\n";
+		}
+	}
+	echo '</pre>';
+}
 
 class scbDebug {
 	private $args;
