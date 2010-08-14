@@ -4,7 +4,7 @@ function scb_error_handler($errno, $errstr) {
 	echo $errstr;
 	dpb();
 }
-set_error_handler('scb_error_handler', E_ERROR|E_WARNING|E_USER_WARNING|E_USER_ERROR);
+set_error_handler('scb_error_handler', E_WARNING|E_ERROR|E_RECOVERABLE_ERROR|E_USER_WARNING|E_USER_ERROR);
 
 function debug_filters( $tag = false ) {
 	global $wp_filter;
