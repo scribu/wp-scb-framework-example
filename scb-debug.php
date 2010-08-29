@@ -1,15 +1,31 @@
 <?php
 
 function scb_error_handler($errno, $errstr) {
-	echo $errstr;
-	
+    if (!(error_reporting() & $errno)) {
+        // This error code is not included in error_reporting
+        return;
+    }
+
 	ob_start();
 	debug_print_backtrace();
-	$out = explode( "\n#", ob_get_clean());
-	$out = array_slice( $out, 1);
+	$out = ob_get_clean();
+
+	if ( false !== strpos($out, 'wp_cron()') )
+		return;
+
+	$out = explode( "\n#", $out );
+	$out = array_slice( $out, 1 );
+
+	echo $errstr;
 	echo '<pre>' . "\n#" . implode( "\n#", $out ) . '</pre>';
 }
 set_error_handler('scb_error_handler', E_WARNING|E_ERROR|E_RECOVERABLE_ERROR|E_USER_WARNING|E_USER_ERROR);
+
+function dpb() {
+	echo '<pre>';
+	debug_print_backtrace();
+	echo '</pre>';
+}
 
 function debug_filters( $tag = false ) {
 	global $wp_filter;
@@ -99,14 +115,13 @@ function debug() {
 	scbDebug::raw($args);
 }
 
-function debug_scb() {
-	add_action('shutdown', array('scbDebug', 'info'));
-}
+function debug_a() {
+	if ( !current_user_can('administrator') )
+		return;
 
-function dpb() {
-	echo '<pre>';
-	debug_print_backtrace();
-	echo '</pre>';
+	$args = func_get_args();
+
+	scbDebug::raw($args);
 }
 
 function debug_lq() {

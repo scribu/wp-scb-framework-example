@@ -27,6 +27,8 @@ Want to take a quick look at the code? Go [here](http://plugins.trac.wordpress.o
 
 You can download this plugin to get a quick start on using the framework.
 
+Links: [Framework News & Docs](http://scribu.net/wordpress/scb-framework) | [Author's Site](http://scribu.net)
+
 == Changelog ==
 
 = 1.6 =
