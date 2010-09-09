@@ -19,7 +19,6 @@ This is a plugin toolkit that helps developers write plugins faster. It consists
 * *scbWidget* - widget creation
 * *scbQueryManipulation* - easier way to manipulate SQL in WP_Query
 * *scbCron* - wp-cron handling
-* *scbRewrite* - rewrite rules handling
 * *scbTable* - database table creation
 * *scbUtil* - useful functions
 
@@ -30,6 +29,10 @@ You can download this plugin to get a quick start on using the framework.
 Links: [Framework News & Docs](http://scribu.net/wordpress/scb-framework) | [Author's Site](http://scribu.net)
 
 == Changelog ==
+
+= 1.7 =
+* replaced scbQuery with scbQueryManipulation
+* removed scbRewrite
 
 = 1.6 =
 * load the most recent version available
