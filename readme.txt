@@ -2,7 +2,7 @@
 Contributors: scribu
 Donate link: http://scribu.net/wordpress
 Tags: admin, toolkit, framework, forms, cron, settings, rewrite
-Requires at least: 2.9
+Requires at least: 3.0
 Tested up to: 3.0
 Stable tag: 1.6
 
