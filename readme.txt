@@ -4,7 +4,7 @@ Donate link: http://scribu.net/wordpress
 Tags: admin, toolkit, framework, forms, cron, settings, rewrite
 Requires at least: 3.0
 Tested up to: 3.0
-Stable tag: trunk
+Stable tag: r24
 
 A set of useful classes for faster plugin development.
 
