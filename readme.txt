@@ -4,7 +4,7 @@ Donate link: http://scribu.net/wordpress
 Tags: admin, toolkit, framework, forms, cron, settings, rewrite
 Requires at least: 3.0
 Tested up to: 3.0
-Stable tag: 1.6
+Stable tag: trunk
 
 A set of useful classes for faster plugin development.
 
@@ -30,11 +30,13 @@ Links: [Framework News & Docs](http://scribu.net/wordpress/scb-framework) | [Aut
 
 == Changelog ==
 
-= 1.7 =
+= 09 Sep 2010 (r24) =
+* delayed activation (scbLoad4)
 * replaced scbQuery with scbQueryManipulation
 * removed scbRewrite
+* added attributes param to html()
 
-= 1.6 =
+= 1.6 (r9) =
 * load the most recent version available
 * move debugging functions to separate file
 * new methods in scbUtil: array_pluck(), objects_to_assoc(), split_at()
