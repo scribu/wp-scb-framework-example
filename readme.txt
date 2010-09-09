@@ -35,6 +35,7 @@ Links: [Framework News & Docs](http://scribu.net/wordpress/scb-framework) | [Aut
 * replaced scbQuery with scbQueryManipulation
 * removed scbRewrite
 * added attributes param to html()
+* [more info](http://scribu.net/wordpress/scb-framework/revision-24.html)
 
 = 1.6 (r9) =
 * load the most recent version available
