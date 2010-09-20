@@ -14,12 +14,12 @@ function scb_error_handler($errno, $errstr) {
 		return;
 
 	$out = explode( "\n#", $out );
-	$out = array_slice( $out, 1 );
+#	$out = array_slice( $out, 1 );
 
 	echo $errstr;
 	echo '<pre>' . "\n#" . implode( "\n#", $out ) . '</pre>';
 }
-set_error_handler('scb_error_handler', E_WARNING|E_ERROR|E_RECOVERABLE_ERROR|E_USER_WARNING|E_USER_ERROR);
+#set_error_handler('scb_error_handler', E_WARNING|E_ERROR|E_RECOVERABLE_ERROR|E_USER_WARNING|E_USER_ERROR);
 
 function dpb() {
 	echo '<pre>';
@@ -120,6 +120,13 @@ function debug_a() {
 		return;
 
 	$args = func_get_args();
+
+	scbDebug::raw($args);
+}
+
+function debug_h() {
+	$args = func_get_args();
+	$args = array_map('esc_html', $args);
 
 	scbDebug::raw($args);
 }
