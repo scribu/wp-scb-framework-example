@@ -13,8 +13,8 @@ class scbTable {
 		$this->columns = $columns;
 		$this->upgrade_method = $upgrade_method;
 
+		$wpdb->tables[] = $name;
 		$wpdb->$name = $this->name;
-		$wpdb->tables[] = $this->name;
 
 		scbUtil::add_activation_hook( $file, array( $this, 'install' ) );
 		scbUtil::add_uninstall_hook( $file, array( $this, 'uninstall' ) );
