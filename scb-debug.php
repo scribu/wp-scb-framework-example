@@ -19,7 +19,7 @@ function scb_error_handler($errno, $errstr) {
 	echo $errstr;
 	echo '<pre>' . "\n#" . implode( "\n#", $out ) . '</pre>';
 }
-#set_error_handler('scb_error_handler', E_WARNING|E_ERROR|E_RECOVERABLE_ERROR|E_USER_WARNING|E_USER_ERROR);
+set_error_handler('scb_error_handler', E_WARNING|E_ERROR|E_RECOVERABLE_ERROR|E_USER_WARNING|E_USER_ERROR);
 
 function dpb() {
 	echo '<pre>';

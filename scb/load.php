@@ -28,7 +28,7 @@ class scbLoad4 {
 		}
 
 		// TODO: don't load when activating a plugin ?
-		add_action( 'plugins_loaded', array( __CLASS__, 'load' ), 10, 0 );
+		add_action( 'plugins_loaded', array( __CLASS__, 'load' ), 9, 0 );
 	}
 
 	static function delayed_activation( $plugin ) {
