@@ -117,16 +117,22 @@ class scbUtil {
 
 
 if ( ! function_exists( 'html' ) ):
-function html( $tag, $attributes = array(), $content = '' ) {
-	if ( is_array( $attributes ) ) {
+function html( $tag ) {
+	$args = func_get_args();
+
+	$tag = array_shift( $args );
+
+	if ( is_array( $args[0] ) ) {
 		$closing = $tag;
+		$attributes = array_shift( $args );
 		foreach ( $attributes as $key => $value ) {
-			$tag .= ' ' . $key . '="' . esc_attr( $value ) . '"';
+			$tag .= ' ' . $key . '="' . htmlspecialchars( $value, ENT_QUOTES ) . '"';
 		}
 	} else {
-		$content = $attributes;
 		list( $closing ) = explode(' ', $tag, 2);
 	}
+
+	$content = implode('', $args);
 
 	return "<{$tag}>{$content}</{$closing}>";
 }
