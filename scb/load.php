@@ -12,7 +12,7 @@ class scbLoad4 {
 	private static $candidates;
 	private static $classes;
 	private static $callbacks = array();
-	
+
 	private static $loaded;
 
 	static function init( $callback = '' ) {
