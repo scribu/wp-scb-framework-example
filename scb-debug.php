@@ -1,26 +1,4 @@
 <?php
-
-function scb_error_handler($errno, $errstr) {
-    if (!(error_reporting() & $errno)) {
-        // This error code is not included in error_reporting
-        return;
-    }
-
-	ob_start();
-	debug_print_backtrace();
-	$out = ob_get_clean();
-
-	if ( false !== strpos($out, 'wp_cron()') )
-		return;
-
-	$out = explode( "\n#", $out );
-#	$out = array_slice( $out, 1 );
-
-	echo $errstr;
-	echo '<pre>' . "\n#" . implode( "\n#", $out ) . '</pre>';
-}
-set_error_handler('scb_error_handler', E_WARNING|E_ERROR|E_RECOVERABLE_ERROR|E_USER_WARNING|E_USER_ERROR);
-
 function dpb() {
 	echo '<pre>';
 	debug_print_backtrace();
