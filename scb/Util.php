@@ -118,7 +118,7 @@ class scbUtil {
 /*
  * Examples:
  * html( 'p', 'Hello world!' );												<p>Hello world!</p>
- * html( 'a', array( 'href' => 'http://example.com' ), 'A link' );			<a href="http://example.com">Some content</a>
+ * html( 'a', array( 'href' => 'http://example.com' ), 'A link' );			<a href="http://example.com">A link</a>
  * html( 'img', array( 'src' => 'http://example.com/f.jpg' ), false );		<img src="http://example.com/f.jpg" />
  * html( 'ul', html( 'li', 'a' ), html( 'li', 'b' ) );						<ul><li>a</li><li>b</li></ul>
  */
