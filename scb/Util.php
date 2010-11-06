@@ -120,7 +120,7 @@ class scbUtil {
  *
  * html( 'p', 'Hello world!' );												<p>Hello world!</p>
  * html( 'a', array( 'href' => 'http://example.com' ), 'A link' );			<a href="http://example.com">A link</a>
- * html( 'img', array( 'src' => 'http://example.com/f.jpg' ), false );		<img src="http://example.com/f.jpg" />
+ * html( 'img', array( 'src' => 'http://example.com/f.jpg' ) );				<img src="http://example.com/f.jpg" />
  * html( 'ul', html( 'li', 'a' ), html( 'li', 'b' ) );						<ul><li>a</li><li>b</li></ul>
  */
 if ( ! function_exists( 'html' ) ):
@@ -139,8 +139,9 @@ function html( $tag ) {
 		list( $closing ) = explode( ' ', $tag, 2 );
 	}
 
-	if ( 1 == count( $args ) && false === $args[0] )
+	if ( in_array( $closing, array( 'area', 'base', 'basefont', 'br', 'hr', 'input', 'img', 'link', 'meta' ) ) ) {
 		return "<{$tag} />";
+	}
 
 	$content = implode( '', $args );
 
