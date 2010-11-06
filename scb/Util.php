@@ -115,7 +115,13 @@ class scbUtil {
 
 //_____Minimalist HTML framework_____
 
-
+/*
+ * Examples:
+ * html( 'p', 'Hello world!' );												<p>Hello world!</p>
+ * html( 'a', array( 'href' => 'http://example.com' ), 'A link' );			<a href="http://example.com">Some content</a>
+ * html( 'img', array( 'src' => 'http://example.com/f.jpg' ), false );		<img src="http://example.com/f.jpg" />
+ * html( 'ul', html( 'li', 'a' ), html( 'li', 'b' ) );						<ul><li>a</li><li>b</li></ul>
+ */
 if ( ! function_exists( 'html' ) ):
 function html( $tag ) {
 	$args = func_get_args();
@@ -129,10 +135,15 @@ function html( $tag ) {
 			$tag .= ' ' . $key . '="' . htmlspecialchars( $value, ENT_QUOTES ) . '"';
 		}
 	} else {
-		list( $closing ) = explode(' ', $tag, 2);
+		list( $closing ) = explode( ' ', $tag, 2 );
 	}
 
-	$content = implode('', $args);
+	if ( 1 == count( $args ) && false === $args[0] ) {
+		debug_h("<{$tag} />");
+		return "<{$tag} />";
+	}
+
+	$content = implode( '', $args );
 
 	return "<{$tag}>{$content}</{$closing}>";
 }
