@@ -117,6 +117,7 @@ class scbUtil {
 
 /*
  * Examples:
+ *
  * html( 'p', 'Hello world!' );												<p>Hello world!</p>
  * html( 'a', array( 'href' => 'http://example.com' ), 'A link' );			<a href="http://example.com">A link</a>
  * html( 'img', array( 'src' => 'http://example.com/f.jpg' ), false );		<img src="http://example.com/f.jpg" />
@@ -138,10 +139,8 @@ function html( $tag ) {
 		list( $closing ) = explode( ' ', $tag, 2 );
 	}
 
-	if ( 1 == count( $args ) && false === $args[0] ) {
-		debug_h("<{$tag} />");
+	if ( 1 == count( $args ) && false === $args[0] )
 		return "<{$tag} />";
-	}
 
 	$content = implode( '', $args );
 
