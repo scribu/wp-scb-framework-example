@@ -19,7 +19,35 @@ class scbCron {
 	 * @param bool Debug mode
 	 */
 	function __construct( $file, $args, $debug = false ) {
-		$this->_set_args( $args );
+		extract( $args, EXTR_SKIP );
+
+		// Set hook
+		if ( isset( $action ) ) {
+			$this->hook = $action;
+		} elseif ( isset( $callback ) ) {
+			$this->hook = self::_callback_to_string( $callback );
+
+			add_action( $this->hook, $callback );
+		} elseif ( method_exists( $this, 'callback' ) ) {
+			$this->hook = self::_callback_to_string( $callback );
+
+			add_action( $this->hook, $callback );
+		} else {
+			trigger_error( '$action OR $callback not set', E_USER_WARNING );
+		}
+
+		// Set schedule
+		if ( isset( $interval ) ) {
+			$this->schedule = $interval . 'secs';
+			$this->interval = $interval;
+		} elseif ( isset( $schedule ) ) {
+			$this->schedule = $schedule;
+		} else {
+			trigger_error( '$schedule OR $interval not set', E_USER_WARNING );
+		}
+
+		if ( isset( $callback_args ) )
+			$this->callback_args = ( array ) $callback_args;
 
 		scbUtil::add_activation_hook( $file, array( $this, 'reset' ) );
 		register_deactivation_hook( $file, array( $this, 'unschedule' ) );
@@ -117,38 +145,6 @@ class scbCron {
 			$this->time = time();
 
 		wp_schedule_event( $this->time, $this->schedule, $this->hook, $this->callback_args );
-	}
-
-	protected function _set_args( $args ) {
-		extract( $args );
-
-		// Set hook
-		if ( isset( $action ) ) {
-			$this->hook = $action;
-		} elseif ( isset( $callback ) ) {
-			$this->hook = self::_callback_to_string( $callback );
-
-			add_action( $this->hook, $callback );
-		} elseif ( method_exists( $this, 'callback' ) ) {
-			$this->hook = self::_callback_to_string( $callback );
-
-			add_action( $this->hook, $callback );
-		} else {
-			trigger_error( '$action OR $callback not set', E_USER_WARNING );
-		}
-
-		// Set schedule
-		if ( isset( $interval ) ) {
-			$this->schedule = $interval . 'secs';
-			$this->interval = $interval;
-		} elseif ( isset( $schedule ) ) {
-			$this->schedule = $schedule;
-		} else {
-			trigger_error( '$schedule OR $interval not set', E_USER_WARNING );
-		}
-
-		if ( isset( $callback_args ) )
-			$this->callback_args = ( array ) $callback_args;
 	}
 
 	protected static function really_clear_scheduled_hook( $name ) {
