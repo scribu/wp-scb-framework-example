@@ -16,9 +16,8 @@ class scbCron {
 	 		string $action OR callback $callback
 			string $schedule OR number $interval
 			array $callback_args ( optional )
-	 * @param bool Debug mode
 	 */
-	function __construct( $file, $args, $debug = false ) {
+	function __construct( $file, $args ) {
 		extract( $args, EXTR_SKIP );
 
 		// Set hook
@@ -51,9 +50,6 @@ class scbCron {
 		register_deactivation_hook( $file, array( $this, 'unschedule' ) );
 
 		add_filter( 'cron_schedules', array( $this, '_add_timing' ) );
-
-		if ( $debug )
-			self::debug();
 	}
 
 	/* Change the interval of the cron job
@@ -127,15 +123,6 @@ class scbCron {
 			'display' => $this->interval . ' seconds' );
 
 		return $schedules;
-	}
-
-	function _debug() {
-		if ( ! current_user_can( 'manage_options' ) )
-			return;
-
-		echo "<pre>";
-		print_r( get_option( 'cron' ) );
-		echo "</pre>";
 	}
 
 	protected function schedule() {
