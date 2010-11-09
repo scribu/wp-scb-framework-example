@@ -107,6 +107,7 @@ class scbCron {
 		if ( is_null( $args ) )
 			$args = $this->callback_args;
 
+		wp_clear_scheduled_hook( $this->hook, $args );
 		wp_schedule_single_event( time() + $delay, $this->hook, $args );
 	}
 
