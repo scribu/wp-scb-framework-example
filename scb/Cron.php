@@ -39,8 +39,6 @@ class scbCron {
 			$this->interval = $interval;
 		} elseif ( isset( $schedule ) ) {
 			$this->schedule = $schedule;
-		} else {
-			trigger_error( '$schedule OR $interval not set', E_USER_WARNING );
 		}
 
 		if ( isset( $callback_args ) )
