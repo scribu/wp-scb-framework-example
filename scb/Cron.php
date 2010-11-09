@@ -89,24 +89,25 @@ class scbCron {
 
 	/**
 	 * Execute the job now
+	 * @param array $args List of arguments to pass to the callback
 	 */
-	function do_now() {
-		do_action( $this->hook );
+	function do_now( $args = null ) {
+		if ( is_null( $args ) )
+			$args = $this->callback_args;
+
+		do_action_ref_array( $this->hook, $args );
 	}
 
 	/**
 	 * Execute the job with a given delay
-	 * @param int Delay in seconds
+	 * @param int $delay in seconds
+	 * @param array $args List of arguments to pass to the callback
 	 */
-	function do_once( $delay = 0 ) {
-		wp_schedule_single_event( time() + $delay, $this->hook, $this->callback_args );
-	}
+	function do_once( $delay = 0, $args = null ) {
+		if ( is_null( $args ) )
+			$args = $this->callback_args;
 
-	/**
-	 * Display current cron jobs
-	 */
-	function debug() {
-		add_action( 'admin_footer', array( __CLASS__, '_debug' ) );
+		wp_schedule_single_event( time() + $delay, $this->hook, $args );
 	}
 
 
