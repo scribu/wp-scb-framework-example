@@ -124,3 +124,19 @@ function debug_ajax() {
 	die;
 }
 
+function debug_cron() {
+	add_action('admin_footer', '_debug_cron');
+}
+
+function _debug_cron() {
+	debug(get_option('cron'));
+}
+
+// Easier timestamp debugging
+function debug_ts() {
+	$args = func_get_args();
+
+	foreach ( $args as $arg )
+		debug( date( 'Y-m-d H:i', $arg ) );
+}
+
