@@ -47,8 +47,10 @@ class scbCron {
 		if ( isset( $callback_args ) )
 			$this->callback_args = ( array ) $callback_args;
 
-		scbUtil::add_activation_hook( $file, array( $this, 'reset' ) );
-		register_deactivation_hook( $file, array( $this, 'unschedule' ) );
+		if ( $this->schedule ) {
+			scbUtil::add_activation_hook( $file, array( $this, 'reset' ) );
+			register_deactivation_hook( $file, array( $this, 'unschedule' ) );
+		}
 
 		add_filter( 'cron_schedules', array( $this, '_add_timing' ) );
 	}
