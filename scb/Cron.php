@@ -20,6 +20,17 @@ class scbCron {
 	function __construct( $file, $args ) {
 		extract( $args, EXTR_SKIP );
 
+		// Set time & schedule
+		if ( isset( $time ) )
+			$this->time = $time;
+
+		if ( isset( $interval ) ) {
+			$this->schedule = $interval . 'secs';
+			$this->interval = $interval;
+		} elseif ( isset( $schedule ) ) {
+			$this->schedule = $schedule;
+		}
+
 		// Set hook
 		if ( isset( $action ) ) {
 			$this->hook = $action;
@@ -31,14 +42,6 @@ class scbCron {
 			add_action( $this->hook, $callback );
 		} else {
 			trigger_error( '$action OR $callback not set', E_USER_WARNING );
-		}
-
-		// Set schedule
-		if ( isset( $interval ) ) {
-			$this->schedule = $interval . 'secs';
-			$this->interval = $interval;
-		} elseif ( isset( $schedule ) ) {
-			$this->schedule = $schedule;
 		}
 
 		if ( isset( $callback_args ) )
