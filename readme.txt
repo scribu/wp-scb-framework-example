@@ -4,7 +4,7 @@ Donate link: http://scribu.net/wordpress
 Tags: admin, toolkit, framework, forms, cron, settings, rewrite
 Requires at least: 3.0
 Tested up to: 3.0
-Stable tag: r24
+Stable tag: trunk
 
 A set of useful classes for faster plugin development.
 
@@ -44,6 +44,12 @@ All plugins and themes will now have access to the scb classes and functions.
 Plugins that come with scbFramework pre-packaged will also use the version in mu-plugins.
 
 == Changelog ==
+
+= 02 Feb 2011 (r31) =
+* scbQueryManipulation WP 3.1 compatibility
+* scbCron enhancements
+* introduced debug_cron(), debug_ts() and debug_h()
+* html() knows about self-closing tags
 
 = 09 Sep 2010 (r24) =
 * delayed activation (scbLoad4)
