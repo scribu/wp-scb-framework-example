@@ -47,8 +47,9 @@ Plugins that come with scbFramework pre-packaged will also use the version in mu
 
 = 05 Apr 2011 (r34) =
 * fixed activation hooks when using scb-load.php
-* add ability to define column widths in scbBoxesPages (props pento)
-* introduce scbUtil::get_current_url()
+* added ability to define column widths in scbBoxesPages (props pento)
+* introduced scbUtil::get_current_url()
+* made scbTable play nice with switch_to_blog()
 
 = 02 Feb 2011 (r31) =
 * scbQueryManipulation WP 3.1 compatibility
