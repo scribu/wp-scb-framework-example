@@ -1,13 +1,15 @@
 <?php
 
-$path = dirname(__FILE__) . '/scb/';
+define( 'SCB_LOAD_MU', true );
 
 foreach ( array(
-	'scbload', 'scbOptions', 'scbForms', 'scbAdminPage', 'scbBoxesPage',
+	'scbOptions', 'scbForms', 'scbAdminPage', 'scbBoxesPage',
 	'scbWidget', 'scbCron', 'scbTable', 'scbUtil', 'scbQueryManipulation'
 ) as $className ) {
-	include $path . substr($className, 3) . '.php';
+	include dirname( __FILE__ ) . '/scb/' . substr( $className, 3 ) . '.php';
 }
 
-unset($path);
+function scb_init( $callback ) {
+	call_user_func( $callback );
+}
 
