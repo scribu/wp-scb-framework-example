@@ -1,4 +1,5 @@
 <?php
+
 function dpb() {
 	echo '<pre>';
 	debug_print_backtrace();
@@ -50,9 +51,8 @@ class scbDebug {
 		$this->raw($this->args);
 	}
 
-	static function raw($args, $with_pre = true) {
-		if ( $with_pre )
-			echo "<pre>";
+	static function raw($args) {
+		echo defined('DOING_AJAX') ? "\n" : "<pre>";
 
 		foreach ( $args as $arg )
 			if ( is_array($arg) || is_object($arg) )
@@ -60,8 +60,7 @@ class scbDebug {
 			else
 				var_dump($arg);
 
-		if ( $with_pre )
-			echo "</pre>";
+		echo defined('DOING_AJAX') ? "\n" : "</pre>";
 	}
 
 	static function info() {
@@ -93,6 +92,7 @@ function debug() {
 	scbDebug::raw($args);
 }
 
+// Debug, only if current user is an administrator
 function debug_a() {
 	if ( !current_user_can('administrator') )
 		return;
@@ -102,28 +102,28 @@ function debug_a() {
 	scbDebug::raw($args);
 }
 
-function debug_h() {
-	$args = func_get_args();
-	$args = array_map('esc_html', $args);
-
-	scbDebug::raw($args);
-}
-
+// Debug last executed SQL query
 function debug_lq() {
 	global $wpdb;
-	
+
 	debug($wpdb->last_query);
 }
 
-function debug_ajax() {
-	if ( !defined('DOING_AJAX') )
-		return;
+// Debug WP_Query is_* flags
+function debug_qf( $wp_query = null ) {
+	if ( !$wp_query )
+		$wp_query = $GLOBALS['wp_query'];
 
-	$args = func_get_args();
-	scbDebug::raw($args, false);
-	die;
+	$flags = array();
+	foreach ( get_object_vars( $wp_query ) as $key => $val ) {
+		if ( 0 === strpos( $key, 'is_' ) && $val )
+			$flags[] = substr( $key, 3 );
+	}
+
+	debug( implode( ' ', $flags ) );
 }
 
+// Debug cron entries
 function debug_cron() {
 	add_action('admin_footer', '_debug_cron');
 }
@@ -132,7 +132,7 @@ function _debug_cron() {
 	debug(get_option('cron'));
 }
 
-// Easier timestamp debugging
+// Debug timestamps
 function debug_ts() {
 	$args = func_get_args();
 
