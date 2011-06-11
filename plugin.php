@@ -1,8 +1,8 @@
 <?php
 /*
-Plugin Name: scbFramework
+Plugin Name: scbFramework Example
 Version: r34
-Description: Useful classes for plugin developers
+Description: A dummy plugin for scbFramework
 Author: scribu
 Author URI: http://scribu.net
 Plugin URI: http://scribu.net/wordpress/scb-framework
@@ -24,8 +24,31 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
+
+//
+
+
 require dirname(__FILE__) . '/scb/load.php';
 
-scb_init();
+function _scb_example_init() {
+	// Creating a custom table
+	$t = new scbTable( 'example_table', __FILE__, "
+		example_id int(20),
+		example varchar(100),
+		PRIMARY KEY  (example_id)
+	");
 
-// See example.php for usage
+	// Creating an options object
+	$options = new scbOptions( 'example_options', __FILE__, array(
+		'default_option_a' => 'foo',
+		'default_option_b' => 'bar',
+	) );
+
+	// Creating a settings page object
+	if ( is_admin() ) {
+		require_once( dirname( __FILE__ ) . '/example.php' );
+		new scbExampleAdmin( __FILE__, $options );
+	}
+}
+scb_init( '_scb_example_init' );
+
