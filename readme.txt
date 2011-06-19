@@ -10,22 +10,15 @@ A set of useful classes for faster plugin development.
 
 == Description ==
 
-This is a plugin toolkit that helps developers write plugins faster. It consists of several classes which handle common tasks:
+This is a plugin toolkit that helps developers write plugins faster. It consists of several classes which handle common tasks, such as generating settings pages, creating database tables and more.
 
-* *[scbForms](http://scribu.net/wordpress/scb-framework/scb-forms.html)* - form generator
-* *[scbOptions](http://scribu.net/wordpress/scb-framework/scb-options.html)* - option handling
-* *scbAdminPage* - admin page creation
-* *scbBoxesPage* - admin page with meta boxes
-* *scbWidget* - widget creation
-* *scbCron* - wp-cron handling
-* *scbTable* - database table creation
-* *scbUtil* - useful functions
+See the [documentation](http://github.com/scribu/wp-scb-framework/wiki) for more details.
 
-Want to take a quick look at the code? Go [here](http://plugins.trac.wordpress.org/browser/scb-framework/trunk/scb).
+To take a quick look at the code, go [here](http://plugins.trac.wordpress.org/browser/scb-framework/trunk/scb).
 
 You can download this plugin to get a quick start on using the framework.
 
-Links: [Framework News & Docs](http://scribu.net/wordpress/scb-framework) | [Author's Site](http://scribu.net)
+Links: [**Wiki**](http://github.com/scribu/wp-scb-framework/wiki) | [Framework News](http://scribu.net/wordpress/scb-framework) | [Author's Site](http://scribu.net)
 
 == Installation ==
 
