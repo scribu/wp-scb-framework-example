@@ -39,10 +39,10 @@ Plugins that come with scbFramework pre-packaged will also use the version in mu
 
 = 19 Jun 2011 (r36) =
 * revamped radio button handling
-* nested name support
+* added support for nested names
 * use html() and esc_textarea() in scbForms
-* deprecate scbQueryManipulation
 * extended example plugin
+* deprecated scbQueryManipulation, scbUtil::array_pluck() and scbUtil::array_extract()
 
 = 05 Apr 2011 (r34) =
 * fixed activation hooks when using scb-load.php
