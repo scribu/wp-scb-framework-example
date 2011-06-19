@@ -14,7 +14,7 @@ This is a plugin toolkit that helps developers write plugins faster. It consists
 
 See the [documentation](http://github.com/scribu/wp-scb-framework/wiki) for more details.
 
-To take a quick look at the code, go [here](http://plugins.trac.wordpress.org/browser/scb-framework/trunk/scb).
+To take a quick look at the code, go [here](http://plugins.trac.wordpress.org/browser/scb-framework/trunk/).
 
 You can download this plugin to get a quick start on using the framework.
 
