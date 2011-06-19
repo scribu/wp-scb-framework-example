@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: scbFramework Example
-Version: r34
+Version: r36
 Description: A dummy plugin for scbFramework
 Author: scribu
 Author URI: http://scribu.net

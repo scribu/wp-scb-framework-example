@@ -2,8 +2,8 @@
 Contributors: scribu
 Donate link: http://scribu.net/wordpress
 Tags: admin, toolkit, framework, forms, cron, settings, sql
-Requires at least: 3.0
-Tested up to: 3.1
+Requires at least: 3.1
+Tested up to: 3.2
 Stable tag: trunk
 
 A set of useful classes for faster plugin development.
@@ -43,6 +43,13 @@ All plugins and themes will now have access to the scb classes and functions.
 Plugins that come with scbFramework pre-packaged will also use the version in mu-plugins.
 
 == Changelog ==
+
+= 19 Jun 2011 (r36) =
+* revamped radio button handling
+* nested name support
+* use html() and esc_textarea() in scbForms
+* deprecate scbQueryManipulation
+* extended example plugin
 
 = 05 Apr 2011 (r34) =
 * fixed activation hooks when using scb-load.php
