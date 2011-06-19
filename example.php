@@ -17,6 +17,11 @@ class scbExampleAdmin extends scbAdminPage {
 				'name' => 'text_field',
 			),
 			array(
+				'title' => 'Nested Name',
+				'type' => 'text',
+				'name' => array( 'parent', 'child', 'grand-child' ),
+			),
+			array(
 				'title' => 'Pre-filled',
 				'type' => 'text',
 				'name' => 'text_field',
@@ -61,6 +66,12 @@ class scbExampleAdmin extends scbAdminPage {
 				'desc' => 'Yes, do that.'
 			),
 			array(
+				'title' => 'Nested name',
+				'type' => 'checkbox',
+				'name' => array( 'check', 'box' ),
+				'desc' => 'Yes, do that.'
+			),
+			array(
 				'title' => 'Pre-checked',
 				'type' => 'checkbox',
 				'name' => 'check_box',
@@ -96,6 +107,13 @@ class scbExampleAdmin extends scbAdminPage {
 				'desc' => array( 'Apple', 'Banana', 'Orange' ),
 			),
 			array(
+				'title' => 'Nested name',
+				'type' => 'radio',
+				'name' => array( 'produce', 'fruit' ),
+				'value' => array( 'apple', 'banana', 'orange' ),
+				'desc' => array( 'Apple', 'Banana', 'Orange' ),
+			),
+			array(
 				'title' => 'Pre-selected value',
 				'type' => 'radio',
 				'name' => 'fruit2',
@@ -114,6 +132,12 @@ class scbExampleAdmin extends scbAdminPage {
 				'title' => 'Basic',
 				'type' => 'select',
 				'name' => 'color',
+				'value' => array( 'green', 'blue', 'white' ),
+			),
+			array(
+				'title' => 'Nested name',
+				'type' => 'select',
+				'name' => array( 'house', 'color' ),
 				'value' => array( 'green', 'blue', 'white' ),
 			),
 			array(
