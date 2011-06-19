@@ -1,5 +1,5 @@
 === scbFramework ===
-Contributors: scribu
+Contributors: scribu, pento
 Donate link: http://scribu.net/wordpress
 Tags: admin, toolkit, framework, forms, cron, settings, sql
 Requires at least: 3.1
