@@ -141,7 +141,13 @@ function html( $tag ) {
 		$closing = $tag;
 		$attributes = array_shift( $args );
 		foreach ( $attributes as $key => $value ) {
-			$tag .= ' ' . $key . '="' . htmlspecialchars( $value, ENT_QUOTES ) . '"';
+			if ( false === $value )
+				continue;
+
+			if ( true === $value )
+				$value = $key;
+
+			$tag .= ' ' . $key . '="' . esc_attr( $value ) . '"';
 		}
 	} else {
 		list( $closing ) = explode( ' ', $tag, 2 );
