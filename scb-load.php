@@ -3,8 +3,9 @@
 define( 'SCB_LOAD_MU', true );
 
 foreach ( array(
-	'scbOptions', 'scbForms', 'scbAdminPage', 'scbBoxesPage',
-	'scbWidget', 'scbCron', 'scbTable', 'scbUtil', 'scbQueryManipulation'
+	'scbUtil', 'scbOptions', 'scbForms', 'scbTable',
+	'scbWidget', 'scbAdminPage', 'scbBoxesPage',
+	'scbCron', 'scbHooks',
 ) as $className ) {
 	include dirname( __FILE__ ) . '/scb/' . substr( $className, 3 ) . '.php';
 }
