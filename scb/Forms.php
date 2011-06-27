@@ -6,11 +6,10 @@ class scbForms {
 
 	const token = '%input%';
 
-	protected static $formdata = array();
+	protected static $cur_name;
+	protected static $cur_val;
 
 	static function input( $args, $formdata = array() ) {
-		self::$formdata = self::validate_data( $formdata );
-
 		foreach ( array( 'name', 'value' ) as $key ) {
 			$old = $key . 's';
 
@@ -24,7 +23,7 @@ class scbForms {
 			return trigger_error( 'Empty name', E_USER_WARNING );
 
 		$args = wp_parse_args( $args, array(
-			'name' => NULL,
+			'value' => NULL,
 			'desc' => '',
 			'desc_pos' => '',
 		) );
@@ -32,13 +31,22 @@ class scbForms {
 		if ( isset( $args['extra'] ) && !is_array( $args['extra'] ) )
 			$args['extra'] = shortcode_parse_atts( $args['extra'] );
 
+		self::$cur_name = self::get_name( $args['name'] );
+		self::$cur_val = self::get_value( $args['name'], $formdata );
+
 		switch ( $args['type'] ) {
 			case 'select':
 			case 'radio':
+				if ( ! is_array( $args['value'] ) )
+					return trigger_error( "'value' argument is expected to be an array", E_USER_WARNING );
+
 				return self::_single_choice( $args );
 				break;
 			case 'checkbox':
-				return self::_checkbox( $args );
+				if ( is_array( $args['value'] ) )
+					return self::_multiple_choice( $args );
+				else
+					return self::_checkbox( $args );
 				break;
 			default:
 				return self::_input( $args );
@@ -125,30 +133,54 @@ class scbForms {
 // ____________PRIVATE METHODS____________
 
 
-	// Recursivly transform empty arrays to ''
-	private static function validate_data( $data ) {
-		if ( !is_array( $data ) )
-			return $data;
-
-		if ( empty( $data ) )
-			return '';
-
-		foreach ( $data as $key => &$value )
-			$value = self::validate_data( $value );
-
-		return $data;
-	}
-
 	private static function _single_choice( $args ) {
 		$args = wp_parse_args( $args, array(
 			'numeric' => false,		// use numeric array instead of associative
 			'selected' => array( 'foo' ),	// hack to make default blank
 		) );
 
-		$value =& $args['value'];
+		self::_expand_values( $args );
 
-		if ( !is_array( $value ) )
-			return trigger_error( "'value' argument is expected to be an array", E_USER_WARNING );
+		if ( 'select' == $args['type'] )
+			return self::_select( $args );
+		else
+			return self::_radio( $args );
+	}
+
+	private static function _multiple_choice( $args ) {
+		$args = wp_parse_args( $args, array(
+			'numeric' => false,		// use numeric array instead of associative
+			'checked' => null,
+		) );
+
+		self::$cur_name .= '[]';
+
+		self::_expand_values( $args );
+
+		extract( $args );
+
+		if ( !is_array( $checked ) )
+			$checked = self::get_cur_val( array() );
+
+		$opts = '';
+		foreach ( $value as $value => $title ) {
+			if ( empty( $value ) || empty( $title ) )
+				continue;
+
+			$opts .= self::_checkbox( array(
+				'type' => 'checkbox',
+				'value' => $value,
+				'checked' => in_array( $value, $checked ),
+				'desc' => $title,
+				'desc_pos' => $desc_pos
+			) );
+		}
+
+		return $opts;
+	}
+
+	private static function _expand_values( &$args ) {
+		$value =& $args['value'];
 
 		if ( !empty( $value ) && !self::is_associative( $value ) ) {
 			if ( is_array( $args['desc'] ) ) {
@@ -157,11 +189,6 @@ class scbForms {
 				$value = array_combine( $value, $value );
 			}
 		}
-
-		if ( 'select' == $args['type'] )
-			return self::_select( $args );
-		else
-			return self::_radio( $args );
 	}
 
 	private static function _radio( $args ) {
@@ -171,7 +198,7 @@ class scbForms {
 			$selected = key( $value );	// radio buttons should always have one option selected
 		}
 
-		$cur_val = self::get_value( $name, $selected );
+		$cur_val = self::get_cur_val( $selected );
 
 		$opts = '';
 		foreach ( $value as $value => $title ) {
@@ -180,7 +207,6 @@ class scbForms {
 
 			$opts .= self::_checkbox( array(
 				'type' => 'radio',
-				'name' => $name,
 				'value' => $value,
 				'checked' => ( (string) $value == (string) $cur_val ),
 				'desc' => $title,
@@ -197,14 +223,14 @@ class scbForms {
 			'extra' => array()
 		) ) );
 
-		$cur_val = self::get_value( $name, $selected );
+		$cur_val = self::get_cur_val( $selected );
 
 		$options = array();
 
 		if ( false !== $text ) {
 			$options[] = array(
 				'value' => '',
-				'selected' => $cur_val == array( 'foo' ),
+				'selected' => ( $cur_val == array( 'foo' ) ),
 				'title' => $text
 			);
 		}
@@ -227,17 +253,16 @@ class scbForms {
 			$opts .= html( 'option', compact( 'value', 'selected' ), $title );
 		}
 
-		$extra['name'] = self::get_name( $name );
+		$extra['name'] = self::$cur_name;
 
 		$input = html( 'select', $extra, $opts );
 
 		return self::add_label( $input, $desc, $desc_pos );
 	}
 
-	// Handle args for checkboxes and radio inputs
+	// Handle args for a single checkbox or radio input
 	private static function _checkbox( $args ) {
 		$args = wp_parse_args( $args, array(
-			'name' => NULL,
 			'value' => true,
 			'desc' => NULL,
 			'checked' => false,
@@ -248,10 +273,7 @@ class scbForms {
 			$$key = &$val;
 		unset( $val );
 
-		$cur_val = self::get_value( $name );
-
-		if ( $checked || $cur_val == $value )
-			$extra['checked'] = 'checked';
+		$extra['checked'] = ( $checked || self::get_cur_val() == $value );
 
 		if ( is_null( $desc ) && !is_bool( $value ) )
 			$desc = str_replace( '[]', '', $value );
@@ -272,7 +294,7 @@ class scbForms {
 		unset( $val );
 
 		if ( is_null( $value ) )
-			$value = self::get_value( $name, '' );
+			$value = self::get_cur_val( '' );
 
 		if ( !isset( $extra['id'] ) && !is_array( $name ) && false === strpos( $name, '[' ) )
 			$extra['id'] = $name;
@@ -283,13 +305,12 @@ class scbForms {
 	// Generate html with the final args
 	private static function _input_gen( $args ) {
 		extract( wp_parse_args( $args, array(
-			'name' => NULL,
 			'value' => NULL,
 			'desc' => NULL,
 			'extra' => array()
 		) ) );
 
-		$extra['name'] = self::get_name( $name );
+		$extra['name'] = self::$cur_name;
 
 		if ( 'textarea' == $type ) {
 			$input = html( 'textarea', $extra, esc_textarea( $value ) );
@@ -331,27 +352,6 @@ class scbForms {
 
 
 	/**
-	 * Traverses the formdata and retrieves the correct value.
-	 *
-	 * @param array|string $name The name of the value
-	 * @param mixed $default The default value (optional)
-	 *
-	 * @return mixed
-	 */
-	private static function get_value( $name, $default = null ) {
-		$value = self::$formdata;
-
-		foreach ( (array) $name as $key ) {
-			if ( !isset( $value[ $key ] ) )
-				return $default;
-
-			$value = $value[$key];
-		}
-
-		return $value;
-	}
-
-	/**
 	 * Generates the proper string for a name attribute.
 	 *
 	 * @param array|string $name The raw name
@@ -368,6 +368,29 @@ class scbForms {
 		}
 
 		return $name_str;
+	}
+
+	/**
+	 * Traverses the formdata and retrieves the correct value.
+	 *
+	 * @param array|string $name The name of the value
+	 * @param array $value The data that will be traversed
+	 *
+	 * @return mixed
+	 */
+	private static function get_value( $name, $value ) {
+		foreach ( (array) $name as $key ) {
+			if ( !isset( $value[ $key ] ) )
+				return null;
+
+			$value = $value[$key];
+		}
+
+		return $value;
+	}
+
+	private static function get_cur_val( $default = null ) {
+		return is_null( self::$cur_val ) ? $default : self::$cur_val;
 	}
 
 	private static function is_associative( $array ) {
