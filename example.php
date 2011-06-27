@@ -170,6 +170,29 @@ class scbExampleAdmin extends scbAdminPage {
 				'text' => '&ndash; Month &ndash;'
 			),
 		) );
+
+		echo html( 'h3', 'Multiple choice' );
+		echo $this->form_table( array(
+			array(
+				'title' => 'Basic',
+				'type' => 'checkbox',
+				'name' => 'color',
+				'value' => array( 'green', 'blue', 'white' ),
+			),
+			array(
+				'title' => 'Nested name',
+				'type' => 'checkbox',
+				'name' => array( 'bikeshed', 'color' ),
+				'value' => array( 'green', 'blue', 'white' ),
+			),
+			array(
+				'title' => 'Pre-selected values',
+				'type' => 'checkbox',
+				'name' => array( 'bikeshed', 'color' ),
+				'value' => array( 'green', 'blue', 'white' ),
+				'checked' => array( 'green', 'white' ),
+			),
+		) );
 	}
 
 	function page_footer() {
