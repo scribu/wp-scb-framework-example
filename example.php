@@ -1,6 +1,6 @@
 <?php
 
-class scbExampleAdmin extends scbAdminPage {
+class Example_Admin_Page extends scbAdminPage {
 
 	function setup() {
 		$this->args = array(
@@ -209,6 +209,29 @@ class scbExampleAdmin extends scbAdminPage {
 		}());
 		</script>
 <?php
+	}
+}
+
+
+class Example_Boxes_Page extends scbBoxesPage {
+
+	function setup() {
+		$this->args = array(
+			'page_title' => 'scb Example Boxes',
+		);
+
+		$this->boxes = array(
+			array( 'settings', 'Settings Box', 'normal' ),
+			array( 'right', 'Right Box', 'side' ),
+		);
+	}
+
+	function settings_box() {
+		Echo html( 'p', 'This is the settings box.' );
+	}
+
+	function right_box() {
+		Echo html( 'p', 'This is the box on the right.' );
 	}
 }
 

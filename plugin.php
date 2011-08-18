@@ -44,10 +44,11 @@ function _scb_example_init() {
 		'default_option_b' => 'bar',
 	) );
 
-	// Creating a settings page object
+	// Creating settings page objects
 	if ( is_admin() ) {
 		require_once( dirname( __FILE__ ) . '/example.php' );
-		new scbExampleAdmin( __FILE__, $options );
+		new Example_Admin_Page( __FILE__, $options );
+		new Example_Boxes_Page( __FILE__ );
 	}
 }
 scb_init( '_scb_example_init' );
