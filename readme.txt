@@ -37,6 +37,12 @@ Plugins that come with scbFramework pre-packaged will also use the version in mu
 
 == Changelog ==
 
+= 23 Aug 2011 (r40) =
+* introduced scbHooks class
+* introduced scbForm class
+* forms: `'name' => array( 'foo', 'bar', 'baz' )` now means `foo[bar][baz]`
+* added example plugin, using scbTable, scbOptions, scbAdminPage and scbBoxesPage
+
 = 19 Jun 2011 (r36) =
 * revamped radio button handling
 * added support for nested names
