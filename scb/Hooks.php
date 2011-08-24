@@ -29,7 +29,7 @@ class scbHooks {
 		else
 			$class = '$' . get_class( $callback[0] );
 
-		$func = " array( $class, '$callback[1]' )";
+		$func = "array( $class, '$callback[1]' )";
 
 		echo "add_filter( '$tag', $func";
 
@@ -54,10 +54,17 @@ class scbHooks {
 					continue;
 				}
 
-				$hook = preg_match( '/@hook:?\s+(.+)/', $comment, $matches ) ? $matches[1] : $method->name;
-				$priority = preg_match( '/@priority:?\s+([0-9]+)/', $comment, $matches ) ? $matches[1] : 10;
+				preg_match_all( '/@hook:?\s+([^\s]+)/', $comment, $matches ) ? $matches[1] : $method->name;
+				if ( empty( $matches[1] ) )
+					$hooks = array( $method->name );
+				else
+					$hooks = $matches[1];
 
-				call_user_func( $action, $hook, array( $class, $method->name ), $priority, $method->getNumberOfParameters() );
+				$priority = preg_match( '/@priority:?\s+(\d+)/', $comment, $matches ) ? $matches[1] : 10;
+
+				foreach ( $hooks as $hook ) {
+					call_user_func( $action, $hook, array( $class, $method->name ), $priority, $method->getNumberOfParameters() );
+				}
 			}
 		}
 	}
