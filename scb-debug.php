@@ -6,6 +6,12 @@ function dpb() {
 	echo '</pre>';
 }
 
+// Example: add_filter( 'posts_request', '__debug_filter' );
+function __debug_filter( $val ) {
+	debug( func_get_args() );
+	return $val;
+}
+
 // See the list of callbacks attached to a certain filter
 function debug_filters( $tag = false ) {
 	global $wp_filter;
