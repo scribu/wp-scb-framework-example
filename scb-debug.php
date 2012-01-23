@@ -81,10 +81,6 @@ class scbDebug {
 
 		echo defined('DOING_AJAX') ? "\n" : "</pre>";
 	}
-
-	static function info() {
-		self::raw(scbLoad4::get_info());
-	}
 }
 
 
