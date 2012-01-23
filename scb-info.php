@@ -12,8 +12,6 @@
 
 add_action( 'admin_notices', '_scb_info' );
 
-class scbUtil {}
-
 function _scb_info() {
 	echo '<div class="updated"><pre>';
 
