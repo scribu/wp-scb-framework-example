@@ -4,35 +4,30 @@
 
 class scbForms {
 
-	const token = '%input%';
+	const TOKEN = '%input%';
 
 	protected static $cur_name;
 
 	static function input( $args, $formdata = false ) {
-		// setle on singular keys
-		foreach ( array( 'name', 'value' ) as $key ) {
-			$old = $key . 's';
-
-			if ( isset( $args[$old] ) ) {
-				$args[$key] = $args[$old];
-				unset( $args[$old] );
-			}
-		}
-
 		if ( !empty( $formdata ) ) {
 			$form = new scbForm( $formdata );
 			return $form->input( $args );
 		}
 
-		if ( empty( $args['name'] ) )
+		if ( empty( $args['name'] ) ) {
 			return trigger_error( 'Empty name', E_USER_WARNING );
+		}
 
 		$args = wp_parse_args( $args, array(
 			'desc' => '',
-			'desc_pos' => '',
+			'desc_pos' => 'after',
+			'wrap' => self::TOKEN,
 		) );
 
-		$val_is_array = isset( $args['value'] ) && is_array( $args['value'] );
+		if ( isset( $args['value'] ) && is_array( $args['value'] ) ) {
+			$args['values'] = $args['value'];
+			unset( $args['value'] );
+		}
 
 		if ( isset( $args['extra'] ) && !is_array( $args['extra'] ) )
 			$args['extra'] = shortcode_parse_atts( $args['extra'] );
@@ -42,20 +37,19 @@ class scbForms {
 		switch ( $args['type'] ) {
 			case 'select':
 			case 'radio':
-				if ( ! $val_is_array )
-					return trigger_error( "'value' argument is expected to be an array", E_USER_WARNING );
-
-				return self::_single_choice( $args );
+				$input = self::_single_choice( $args );
 				break;
 			case 'checkbox':
-				if ( $val_is_array )
-					return self::_multiple_choice( $args );
+				if ( isset( $args['values'] ) )
+					$input = self::_multiple_choice( $args );
 				else
-					return self::_checkbox( $args );
+					$input = self::_checkbox( $args );
 				break;
 			default:
-				return self::_input( $args );
+				$input = self::_input( $args );
 		}
+
+		return str_replace( self::TOKEN, $input, $args['wrap'] );
 	}
 
 
@@ -168,7 +162,7 @@ class scbForms {
 			$checked = array();
 
 		$opts = '';
-		foreach ( $value as $value => $title ) {
+		foreach ( $values as $value => $title ) {
 			if ( empty( $value ) || empty( $title ) )
 				continue;
 
@@ -177,21 +171,22 @@ class scbForms {
 				'value' => $value,
 				'checked' => in_array( $value, $checked ),
 				'desc' => $title,
-				'desc_pos' => $desc_pos
+				'desc_pos' => 'after'
 			) );
 		}
 
-		return $opts;
+		return self::add_desc( $opts, $desc, $desc_pos );
 	}
 
 	private static function _expand_values( &$args ) {
-		$value =& $args['value'];
+		$values =& $args['values'];
 
-		if ( !empty( $value ) && !self::is_associative( $value ) ) {
+		if ( !empty( $values ) && !self::is_associative( $values ) ) {
 			if ( is_array( $args['desc'] ) ) {
-				$value = array_combine( $value, $args['desc'] );	// back-compat
+				$values = array_combine( $values, $args['desc'] );	// back-compat
+				$args['desc'] = false;
 			} elseif ( !$args['numeric'] ) {
-				$value = array_combine( $value, $value );
+				$values = array_combine( $values, $values );
 			}
 		}
 	}
@@ -200,11 +195,12 @@ class scbForms {
 		extract( $args );
 
 		if ( array( 'foo' ) == $selected ) {
-			$selected = key( $value );	// radio buttons should always have one option selected
+			// radio buttons should always have one option selected
+			$selected = key( $values );
 		}
 
 		$opts = '';
-		foreach ( $value as $value => $title ) {
+		foreach ( $values as $value => $title ) {
 			if ( empty( $value ) || empty( $title ) )
 				continue;
 
@@ -213,11 +209,11 @@ class scbForms {
 				'value' => $value,
 				'checked' => ( (string) $value == (string) $selected ),
 				'desc' => $title,
-				'desc_pos' => $desc_pos
+				'desc_pos' => 'after'
 			) );
 		}
 
-		return $opts;
+		return self::add_desc( $opts, $desc, $desc_pos );
 	}
 
 	private static function _select( $args ) {
@@ -236,7 +232,7 @@ class scbForms {
 			);
 		}
 
-		foreach ( $value as $value => $title ) {
+		foreach ( $values as $value => $title ) {
 			if ( empty( $value ) || empty( $title ) )
 				continue;
 
@@ -322,27 +318,17 @@ class scbForms {
 	}
 
 	private static function add_label( $input, $desc, $desc_pos ) {
-		if ( empty( $desc_pos ) )
-			$desc_pos = 'after';
+		return html( 'label', self::add_desc( $input, $desc, $desc_pos ) ) . "\n";
+	}
 
-		$label = '';
-		if ( false === strpos( $desc, self::token ) ) {
-			switch ( $desc_pos ) {
-				case 'before': $label = $desc . ' ' . self::token; break;
-				case 'after': $label = self::token . ' ' . $desc;
-			}
-		} else {
-			$label = $desc;
-		}
-
-		$label = trim( str_replace( self::token, $input, $label ) );
-
+	private static function add_desc( $input, $desc, $desc_pos ) {
 		if ( empty( $desc ) )
-			$output = $input;
-		else
-			$output = html( 'label', $label );
+			return $input;
 
-		return $output . "\n";
+		if ( 'before' == $desc_pos )
+			return $desc . ' ' . $input;
+		else
+			return $input . ' ' . $desc;
 	}
 
 
@@ -373,18 +359,70 @@ class scbForms {
 	 *
 	 * @param array|string $name The name of the value
 	 * @param array $value The data that will be traversed
+	 * @param mixed $fallback The value returned when the key is not found
 	 *
 	 * @return mixed
 	 */
-	static function get_value( $name, $value ) {
+	static function get_value( $name, $value, $fallback = null ) {
 		foreach ( (array) $name as $key ) {
 			if ( !isset( $value[ $key ] ) )
-				return null;
+				return $fallback;
 
 			$value = $value[$key];
 		}
 
 		return $value;
+	}
+
+	/**
+	 * Given a list of fields, extract the appropriate POST data and return it.
+	 *
+	 * @param array $fields List of args that would be sent to scbForms::input()
+	 * @param array $to_update Existing data to update
+	 *
+	 * @return array
+	 */
+	static function validate_post_data( $fields, $to_update = array() ) {
+		foreach ( $fields as $field ) {
+			$value = scbForms::get_value( $field['name'], $_POST );
+
+			$value = stripslashes_deep( $value );
+
+			switch ( $field['type'] ) {
+			case 'checkbox':
+				if ( isset( $field['values'] ) && is_array( $field['values'] ) )
+					$value = array_intersect( $field['values'], (array) $value );
+				else
+					$value = (bool) $value;
+
+				break;
+			case 'radio':
+			case 'select':
+				if ( !isset( $field['values'][ $value ] ) )
+					continue 2;
+			}
+
+			self::set_value( $to_update, $field['name'], $value );
+		}
+
+		return $to_update;
+	}
+
+	private static function set_value( &$arr, $name, $value ) {
+		$name = (array) $name;
+
+		$final_key = array_pop( $name );
+
+		while ( !empty( $name ) ) {
+			$key = array_shift( $name );
+
+			if ( !isset( $arr[ $key ] ) )
+				$arr[ $key ] = array();
+
+			$arr =& $arr[ $key ];
+		}
+
+		$arr[ $final_key ] = $value;
 	}
 
 	private static function is_associative( $array ) {

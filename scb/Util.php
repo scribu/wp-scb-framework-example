@@ -32,7 +32,7 @@ class scbUtil {
 		echo "</script>";
 	}
 
-	// Enable delayed activation ( to be used with scb_init() )
+	// Enable delayed activation; to be used with scb_init()
 	static function add_activation_hook( $plugin, $callback ) {
 		if ( defined( 'SCB_LOAD_MU' ) )
 			register_activation_hook( $plugin, $callback );
@@ -40,11 +40,20 @@ class scbUtil {
 			add_action( 'scb_activation_' . plugin_basename( $plugin ), $callback );
 	}
 
-	// Have more than one uninstall hooks; also prevents an UPDATE query on each page load
+	static function do_activation( $plugin ) {
+		do_action( 'scb_activation_' . plugin_basename( $plugin ) );
+	}
+
+	// Allows more than one uninstall hooks.
+	// Also prevents an UPDATE query on each page load.
 	static function add_uninstall_hook( $plugin, $callback ) {
 		register_uninstall_hook( $plugin, '__return_false' );	// dummy
 
 		add_action( 'uninstall_' . plugin_basename( $plugin ), $callback );
+	}
+
+	static function do_uninstall( $plugin ) {
+		do_action( 'uninstall_' . plugin_basename( $plugin ) );
 	}
 
 	// Get the current, full URL
@@ -103,6 +112,10 @@ class scbUtil {
 	}
 }
 
+// Return a standard admin notice
+function scb_admin_notice( $msg, $class = 'updated' ) {
+	return "<div class='$class fade'><p>$msg</p></div>\n";
+}
 
 // Transform a list of objects into an associative array
 function scb_list_fold( $list, $key, $value ) {
@@ -122,13 +135,8 @@ function scb_list_fold( $list, $key, $value ) {
 
 //_____Minimalist HTML framework_____
 
-/*
- * Examples:
- *
- * html( 'p', 'Hello world!' );												<p>Hello world!</p>
- * html( 'a', array( 'href' => 'http://example.com' ), 'A link' );			<a href="http://example.com">A link</a>
- * html( 'img', array( 'src' => 'http://example.com/f.jpg' ) );				<img src="http://example.com/f.jpg" />
- * html( 'ul', html( 'li', 'a' ), html( 'li', 'b' ) );						<ul><li>a</li><li>b</li></ul>
+/**
+ * Generate an HTML tag. Atributes are escaped. Content is NOT escaped.
  */
 if ( ! function_exists( 'html' ) ):
 function html( $tag ) {

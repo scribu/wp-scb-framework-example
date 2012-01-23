@@ -37,6 +37,16 @@ Plugins that come with scbFramework pre-packaged will also use the version in mu
 
 == Changelog ==
 
+= 23 Jan 2012 (r47) =
+* introduced scbForms::validate_POST_data()
+* added 'wrap' arg to scbForms::input()
+* introduced scb_register_table(), scb_install_table() and scb_uninstall_table()
+* introduced scb_admin_notice()
+* replaced scbUtil::objects_to_assoc() with scb_list_fold()
+* added 'screen_icon' arg to scbAdminPage
+* made scbOptions::update() accept partial updates
+* WP 3.3 compatibility
+
 = 23 Aug 2011 (r40) =
 * introduced scbHooks class
 * introduced scbForm class

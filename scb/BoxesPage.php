@@ -11,10 +11,9 @@ abstract class scbBoxesPage extends scbAdminPage {
 	*/
 	protected $boxes = array();
 
-	function __construct( $file, $options = null ) {
+	function __construct( $file = false, $options = null ) {
 		parent::__construct( $file, $options );
 
-		// too late
 		scbUtil::add_uninstall_hook( $this->file, array( $this, 'uninstall' ) );
 	}
 
@@ -25,8 +24,6 @@ abstract class scbBoxesPage extends scbAdminPage {
 		parent::page_init();
 
 		add_action( 'load-' . $this->pagehook, array( $this, 'boxes_init' ) );
-
-		add_screen_option( 'layout_columns', array( 'max' => $this->args['columns'], 'default' => $this->args['columns'] ) );
 	}
 
 	function default_css() {
@@ -162,6 +159,11 @@ abstract class scbBoxesPage extends scbAdminPage {
 
 	function boxes_init() {
 		wp_enqueue_script( 'postbox' );
+
+		add_screen_option( 'layout_columns', array(
+			'max' => $this->args['columns'],
+			'default' => $this->args['columns']
+		) );
 
 		$registered = array();
 		foreach( $this->boxes as $box_args ) {
