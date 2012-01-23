@@ -16,7 +16,7 @@ function _scb_info() {
 	echo '<div class="updated"><pre>';
 
 	if ( defined( 'SCB_LOAD_MU' ) ) {
-		echo "scbFramework was loaded as a must-use plugin.\n\n";
+		echo "scbFramework was loaded as a must-use plugin.\n";
 	} elseif ( class_exists( 'scbLoad4' ) ) {
 		list( $classes, $candidates ) = scbLoad4::get_info();
 
