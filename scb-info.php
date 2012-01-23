@@ -17,9 +17,7 @@ function _scb_info() {
 
 	if ( defined( 'SCB_LOAD_MU' ) ) {
 		echo "scbFramework was loaded as a must-use plugin.\n\n";
-	}
-
-	if ( class_exists( 'scbLoad4' ) ) {
+	} elseif ( class_exists( 'scbLoad4' ) ) {
 		list( $classes, $candidates ) = scbLoad4::get_info();
 
 		echo "scbFramework candidates:\n";
