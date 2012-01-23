@@ -37,7 +37,7 @@ Plugins that come with scbFramework pre-packaged will also use the version in mu
 
 == Changelog ==
 
-= 23 Jan 2012 (r47) =
+= 23 Jan 2012 (r48) =
 * introduced scbForms::validate_POST_data()
 * added 'wrap' arg to scbForms::input()
 * introduced scb_register_table(), scb_install_table() and scb_uninstall_table()
