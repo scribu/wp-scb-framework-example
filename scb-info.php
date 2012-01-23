@@ -5,8 +5,8 @@
  *
  * Usage:
  *
- * 1. Go to wp-content and look for a directory called mu-plugins (create it if it doesn't exist)
- * 2. Place this file inside the mu-plugins directory
+ * 1. Go to your wp-content directory and look for a directory called mu-plugins (create it if it doesn't exist).
+ * 2. Place this file inside the mu-plugins directory.
  * 3. Go to wp-admin.
  */
 
