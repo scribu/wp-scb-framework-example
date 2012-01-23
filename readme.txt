@@ -3,7 +3,7 @@ Contributors: scribu, pento
 Donate link: http://scribu.net/wordpress
 Tags: admin, toolkit, framework, forms, cron, settings, sql
 Requires at least: 3.1
-Tested up to: 3.2
+Tested up to: 3.3
 Stable tag: trunk
 
 A set of useful classes for faster plugin development.
