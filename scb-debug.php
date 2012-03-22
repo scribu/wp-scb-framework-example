@@ -131,7 +131,7 @@ function debug_qf( $wp_query = null ) {
 
 	$flags = array();
 	foreach ( get_object_vars( $wp_query ) as $key => $val ) {
-		if ( 0 === strpos( $key, 'is_' ) && $val )
+		if ( 'is_' == substr( $key, 0, 3 ) && $val )
 			$flags[] = substr( $key, 3 );
 	}
 
