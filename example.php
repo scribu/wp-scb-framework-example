@@ -227,11 +227,11 @@ class Example_Boxes_Page extends scbBoxesPage {
 	}
 
 	function settings_box() {
-		Echo html( 'p', 'This is the settings box.' );
+		echo html( 'p', 'This is the settings box.' );
 	}
 
 	function right_box() {
-		Echo html( 'p', 'This is the box on the right.' );
+		echo html( 'p', 'This is the box on the right.' );
 	}
 }
 
