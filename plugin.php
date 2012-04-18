@@ -29,7 +29,7 @@ require dirname(__FILE__) . '/scb/load.php';
 
 function _scb_example_init() {
 	// Creating a custom table
-	$t = new scbTable( 'example_table', __FILE__, "
+	new scbTable( 'example_table', __FILE__, "
 		example_id int(20),
 		example varchar(100),
 		PRIMARY KEY  (example_id)
