@@ -37,6 +37,12 @@ Plugins that come with scbFramework pre-packaged will also use the version in mu
 
 == Changelog ==
 
+= 8 May 2012 (r53) =
+* introduced input_from_meta() and input_with_value() methods to scbForms
+* added 'default' and 'wrap_each' optional parameters to relevant scbForms methods
+* introduced scbAdminPage::page_loaded()
+* added $name parameter to scb_register_table()
+
 = 23 Jan 2012 (r48) =
 * introduced scbForms::validate_POST_data()
 * added 'wrap' arg to scbForms::input()

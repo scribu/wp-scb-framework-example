@@ -1,14 +1,14 @@
 <?php
 /*
 Plugin Name: scbFramework Example
-Version: r48
+Version: r53
 Description: A dummy plugin for scbFramework
 Author: scribu
 Author URI: http://scribu.net
 Plugin URI: http://scribu.net/wordpress/scb-framework
 
 
-Copyright (C) 2010 Cristi Burcă (scribu@gmail.com)
+Copyright (C) 2010-2012 Cristi Burcă (scribu@gmail.com)
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
