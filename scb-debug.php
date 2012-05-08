@@ -53,22 +53,7 @@ class scbDebug {
 	}
 
 	function _delayed() {
-		if ( !current_user_can('administrator') )
-			return;
-
-		$this->raw($this->args);
-	}
-
-	static function raw($args) {
-		echo defined('DOING_AJAX') ? "\n" : "<pre>";
-
-		foreach ( $args as $arg )
-			if ( is_array($arg) || is_object($arg) )
-				print_r($arg);
-			else
-				var_dump($arg);
-
-		echo defined('DOING_AJAX') ? "\n" : "</pre>";
+		debug_a( $this->args );
 	}
 }
 
@@ -93,7 +78,16 @@ function fb_debug() {
 function debug() {
 	$args = func_get_args();
 
-	scbDebug::raw($args);
+	echo defined('DOING_AJAX') ? "\n" : "<pre>";
+
+	foreach ( $args as $arg ) {
+		if ( is_array($arg) || is_object($arg) )
+			print_r($arg);
+		else
+			var_dump($arg);
+	}
+
+	echo defined('DOING_AJAX') ? "\n" : "</pre>";
 }
 
 // Debug, only if current user is an administrator
@@ -101,9 +95,7 @@ function debug_a() {
 	if ( !current_user_can('administrator') )
 		return;
 
-	$args = func_get_args();
-
-	scbDebug::raw($args);
+	call_user_func_array( 'debug', func_get_args() );
 }
 
 // Debug last executed SQL query
