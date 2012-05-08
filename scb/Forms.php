@@ -8,8 +8,32 @@ class scbForms {
 
 	protected static $cur_name;
 
+	function input_with_value( $args, $value ) {
+		if ( is_null( $value ) && isset( $args['default'] ) )
+			$value = $args['default'];
+
+		if ( !is_null( $value ) ) {
+			switch ( $args['type'] ) {
+			case 'select':
+			case 'radio':
+				$args['selected'] = $value;
+				break;
+			case 'checkbox':
+				if ( is_array( $value ) )
+					$args['checked'] = $value;
+				else
+					$args['checked'] = ( $value || ( isset( $args['value'] ) && $value == $args['value'] ) );
+				break;
+			default:
+				$args['value'] = $value;
+			}
+		}
+
+		return self::input( $args );
+	}
+
 	static function input( $args, $formdata = false ) {
-		if ( !empty( $formdata ) ) {
+		if ( false !== $formdata ) {
 			$form = new scbForm( $formdata );
 			return $form->input( $args );
 		}
@@ -22,6 +46,7 @@ class scbForms {
 			'desc' => '',
 			'desc_pos' => 'after',
 			'wrap' => self::TOKEN,
+			'wrap_each' => self::TOKEN,
 		) );
 
 		if ( isset( $args['value'] ) && is_array( $args['value'] ) ) {
@@ -163,16 +188,15 @@ class scbForms {
 
 		$opts = '';
 		foreach ( $values as $value => $title ) {
-			if ( empty( $value ) || empty( $title ) )
-				continue;
-
-			$opts .= self::_checkbox( array(
+			$single_input = self::_checkbox( array(
 				'type' => 'checkbox',
 				'value' => $value,
 				'checked' => in_array( $value, $checked ),
 				'desc' => $title,
 				'desc_pos' => 'after'
 			) );
+
+			$opts .= str_replace( self::TOKEN, $single_input, $args['wrap_each'] );
 		}
 
 		return self::add_desc( $opts, $desc, $desc_pos );
@@ -185,7 +209,7 @@ class scbForms {
 			if ( is_array( $args['desc'] ) ) {
 				$values = array_combine( $values, $args['desc'] );	// back-compat
 				$args['desc'] = false;
-			} elseif ( !$args['numeric'] ) {
+			} elseif ( !isset( $args['numeric'] ) || !$args['numeric'] ) {
 				$values = array_combine( $values, $values );
 			}
 		}
@@ -201,16 +225,15 @@ class scbForms {
 
 		$opts = '';
 		foreach ( $values as $value => $title ) {
-			if ( empty( $value ) || empty( $title ) )
-				continue;
-
-			$opts .= self::_checkbox( array(
+			$single_input = self::_checkbox( array(
 				'type' => 'radio',
 				'value' => $value,
 				'checked' => ( (string) $value == (string) $selected ),
 				'desc' => $title,
 				'desc_pos' => 'after'
 			) );
+
+			$opts .= str_replace( self::TOKEN, $single_input, $args['wrap_each'] );
 		}
 
 		return self::add_desc( $opts, $desc, $desc_pos );
@@ -218,7 +241,7 @@ class scbForms {
 
 	private static function _select( $args ) {
 		extract( wp_parse_args( $args, array(
-			'text' => '',
+			'text' => false,
 			'extra' => array()
 		) ) );
 
@@ -233,9 +256,6 @@ class scbForms {
 		}
 
 		foreach ( $values as $value => $title ) {
-			if ( empty( $value ) || empty( $title ) )
-				continue;
-
 			$options[] = array(
 				'value' => $value,
 				'selected' => ( (string) $value == (string) $selected ),
@@ -398,6 +418,8 @@ class scbForms {
 				break;
 			case 'radio':
 			case 'select':
+				self::_expand_values( $field );
+
 				if ( !isset( $field['values'][ $value ] ) )
 					continue 2;
 			}
@@ -406,6 +428,47 @@ class scbForms {
 		}
 
 		return $to_update;
+	}
+
+	static function input_from_meta( $args, $object_id, $meta_type = 'post' ) {
+		$single = ( 'checkbox' != $args['type'] );
+
+		$key = (array) $args['name'];
+		$key = end( $key );
+
+		$value = get_metadata( $meta_type, $object_id, $key );
+
+		if ( empty( $value ) )
+			$value = null;
+		elseif( $single )
+			$value = reset( $value );
+
+		return self::input_with_value( $args, $value );
+	}
+
+	static function update_meta( $fields, $data, $object_id, $meta_type = 'post' ) {
+		foreach ( $fields as $field_args ) {
+			$key = $field_args['name'];
+
+			if ( 'checkbox' == $field_args['type'] ) {
+				$new_values = isset( $data[$key] ) ? $data[$key] : array();
+
+				$old_values = get_metadata( $meta_type, $object_id, $key );
+
+				foreach ( array_diff( $new_values, $old_values ) as $value )
+					add_metadata( $meta_type, $object_id, $key, $value );
+
+				foreach ( array_diff( $old_values, $new_values ) as $value )
+					delete_metadata( $meta_type, $object_id, $key, $value );
+			} else {
+				$value = $data[$key];
+
+				if ( '' === $value )
+					delete_metadata( $meta_type, $object_id, $key );
+				else
+					update_metadata( $meta_type, $object_id, $key, $value );
+			}
+		}
 	}
 
 	private static function set_value( &$arr, $name, $value ) {
@@ -430,6 +493,7 @@ class scbForms {
 		return array_keys( $keys ) !== $keys;
 	}
 }
+
 
 /**
  * A wrapper for scbForms, containing the formdata
@@ -457,28 +521,11 @@ class scbForm {
 	function input( $args ) {
 		$value = scbForms::get_value( $args['name'], $this->data );
 
-		if ( !is_null( $value ) ) {
-			switch ( $args['type'] ) {
-			case 'select':
-			case 'radio':
-				$args['selected'] = $value;
-				break;
-			case 'checkbox':
-				if ( is_array( $value ) )
-					$args['checked'] = $value;
-				else
-					$args['checked'] = ( $value || ( isset( $args['value'] ) && $value == $args['value'] ) );
-				break;
-			default:
-				$args['value'] = $value;
-			}
-		}
-
 		if ( !empty( $this->prefix ) ) {
 			$args['name'] = array_merge( $this->prefix, (array) $args['name'] );
 		}
 
-		return scbForms::input( $args );
+		return scbForms::input_with_value( $args, $value );
 	}
 }
 

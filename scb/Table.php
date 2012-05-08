@@ -29,18 +29,26 @@ class scbTable {
 	}
 }
 
-
-function scb_register_table( $name ) {
+/**
+ * Register a table with $wpdb
+ *
+ * @param string $key The key to be used on the $wpdb object
+ * @param string $name The actual name of the table, without $wpdb->prefix
+ */
+function scb_register_table( $key, $name = false ) {
 	global $wpdb;
+
+	if ( !$name )
+		$name = $key;
 
 	$wpdb->tables[] = $name;
-	$wpdb->$name = $wpdb->prefix . $name;
+	$wpdb->$key = $wpdb->prefix . $name;
 }
 
-function scb_install_table( $name, $columns, $upgrade_method = 'dbDelta' ) {
+function scb_install_table( $key, $columns, $upgrade_method = 'dbDelta' ) {
 	global $wpdb;
 
-	$full_table_name = $wpdb->$name;
+	$full_table_name = $wpdb->$key;
 
 	$charset_collate = '';
 	if ( $wpdb->has_cap( 'collation' ) ) {
@@ -62,9 +70,9 @@ function scb_install_table( $name, $columns, $upgrade_method = 'dbDelta' ) {
 	$wpdb->query( "CREATE TABLE IF NOT EXISTS $full_table_name ( $columns ) $charset_collate;" );
 }
 
-function scb_uninstall_table( $name ) {
+function scb_uninstall_table( $key ) {
 	global $wpdb;
 
-	$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->$name );
+	$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->$key );
 }
 
