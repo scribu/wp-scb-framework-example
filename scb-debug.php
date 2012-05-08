@@ -42,17 +42,6 @@ function debug_filters( $tag = false ) {
 	echo '</pre>';
 }
 
-// See the arguments that are passed to a certain filter
-function log_filter( $tag ) {
-	add_filter( $tag, '_log_filter_helper', 10, 10 );
-}
-
-function _log_filter_helper( $out ) {
-	$args = func_get_args();
-	debug( $args );
-
-	return $out;
-}
 
 class scbDebug {
 	private $args;
