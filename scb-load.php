@@ -1,13 +1,13 @@
 <?php
 
-define( 'SCB_LOAD_MU', true );
+define( 'SCB_LOAD_MU', dirname( __FILE__ ) . '/scb/' );
 
 foreach ( array(
 	'scbUtil', 'scbOptions', 'scbForms', 'scbTable',
 	'scbWidget', 'scbAdminPage', 'scbBoxesPage',
 	'scbCron', 'scbHooks',
 ) as $className ) {
-	include dirname( __FILE__ ) . '/scb/' . substr( $className, 3 ) . '.php';
+	include SCB_LOAD_MU . substr( $className, 3 ) . '.php';
 }
 
 function scb_init( $callback ) {
