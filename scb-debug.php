@@ -42,39 +42,6 @@ function debug_filters( $tag = false ) {
 	echo '</pre>';
 }
 
-
-class scbDebug {
-	private $args;
-
-	function __construct($args) {
-		$this->args = $args;
-
-		register_shutdown_function(array($this, '_delayed'));
-	}
-
-	function _delayed() {
-		debug_a( $this->args );
-	}
-}
-
-
-// Integrate with FirePHP
-function fb_debug() {
-	$args = func_get_args();
-
-	if ( class_exists('FirePHP') ) {
-		$firephp = FirePHP::getInstance(true);
-		$firephp->group('debug');
-		foreach ( $args as $arg )
-			$firephp->log($arg);
-		$firephp->groupEnd();
-
-		return;
-	}
-
-	new scbDebug($args);
-}
-
 function debug() {
 	$args = func_get_args();
 
