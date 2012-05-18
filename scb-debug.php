@@ -57,6 +57,11 @@ function debug() {
 	echo defined('DOING_AJAX') ? "\n" : "</pre>";
 }
 
+function debug_k() {
+	call_user_func_array( 'debug', func_get_args() );
+	die;
+}
+
 // Debug, only if current user is an administrator
 function debug_a() {
 	if ( !current_user_can('administrator') )
