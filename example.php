@@ -141,11 +141,11 @@ class Example_Admin_Page extends scbAdminPage {
 				'value' => array( 'green', 'blue', 'white' ),
 			),
 			array(
-				'title' => 'Without blank option',
+				'title' => 'With blank option',
 				'type' => 'select',
 				'name' => 'color',
 				'value' => array( 'green', 'blue', 'white' ),
-				'text' => false
+				'text' => ''
 			),
 			array(
 				'title' => 'With text',
