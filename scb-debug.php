@@ -67,7 +67,9 @@ function debug_a() {
 	if ( !current_user_can('administrator') )
 		return;
 
-	call_user_func_array( 'debug', func_get_args() );
+	$args = func_get_args();
+
+	call_user_func_array( 'debug', $args );
 }
 
 // Debug last executed SQL query
