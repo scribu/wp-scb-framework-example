@@ -10,7 +10,8 @@ foreach ( array(
 	include SCB_LOAD_MU . substr( $className, 3 ) . '.php';
 }
 
-function scb_init( $callback ) {
-	call_user_func( $callback );
+function scb_init( $callback = '' ) {
+	if ( $callback )
+		call_user_func( $callback );
 }
 
