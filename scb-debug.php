@@ -81,16 +81,7 @@ function debug_lq() {
 
 // Debug WP_Query is_* flags
 function debug_qf( $wp_query = null ) {
-	if ( !$wp_query )
-		$wp_query = $GLOBALS['wp_query'];
-
-	$flags = array();
-	foreach ( get_object_vars( $wp_query ) as $key => $val ) {
-		if ( 'is_' == substr( $key, 0, 3 ) && $val )
-			$flags[] = substr( $key, 3 );
-	}
-
-	debug( implode( ' ', $flags ) );
+	debug( implode( ' ', scb_get_query_flags( $wp_query ) ) );
 }
 
 // Debug cron entries
