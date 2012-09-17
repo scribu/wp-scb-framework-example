@@ -218,20 +218,31 @@ class Example_Boxes_Page extends scbBoxesPage {
 	function setup() {
 		$this->args = array(
 			'page_title' => 'scb Example Boxes',
+			'columns' => 4
 		);
 
 		$this->boxes = array(
 			array( 'settings', 'Settings Box', 'normal' ),
 			array( 'right', 'Right Box', 'side' ),
+			array( 'third', 'Third Box', 'column3' ),
+			array( 'fourth', 'Fourth Box', 'column4' ),
 		);
 	}
 
 	function settings_box() {
-		echo html( 'p', 'This is the settings box.' );
+		echo html( 'p', 'This is a settings box.' );
 	}
 
 	function right_box() {
-		echo html( 'p', 'This is the box on the right.' );
+		echo html( 'p', 'This is a box on the right.' );
+	}
+
+	function third_box() {
+		echo html( 'p', 'This is a box in the third column.' );
+	}
+
+	function fourth_box() {
+		echo html( 'p', 'This is a box in the fourth column.' );
 	}
 }
 
