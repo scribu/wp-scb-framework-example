@@ -2,8 +2,8 @@
 Contributors: scribu, pento
 Donate link: http://scribu.net/wordpress
 Tags: admin, toolkit, framework, forms, cron, settings, sql
-Requires at least: 3.1
-Tested up to: 3.3
+Requires at least: 3.2
+Tested up to: 3.5
 Stable tag: trunk
 
 A set of useful classes for faster plugin development.
@@ -36,6 +36,11 @@ All plugins and themes will now have access to the scb classes and functions.
 Plugins that come with scbFramework pre-packaged will also use the version in mu-plugins.
 
 == Changelog ==
+
+= 7 Sep 2012 (r57) =
+* refactored scbForms: separate class for each input type
+* introduced scb_get_query_flags() 
+* load classes immediately if 'plugins_loaded' was already called
 
 = 8 May 2012 (r53) =
 * introduced input_from_meta() and input_with_value() methods to scbForms
