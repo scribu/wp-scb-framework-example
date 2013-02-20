@@ -74,19 +74,40 @@ class FormsTest extends PHPUnit_Framework_TestCase {
 		}
 	}
 
-	function testSelected() {
-		$fd = self::domify( scbForms::input( array(
+	function testSelect() {
+		$choices = array(
+			'1/2',
+			'1',
+			'1 1/3',
+		);
+
+		$args = array(
 			'name' => __FUNCTION__,
 			'type' => 'select',
-			'values' => array(
-				'1/2',
-				'1',
-				'1 1/3',
-			),
-			'selected' => '1'
-		) ) );
+			'choices' => $choices,
+		);
 
-		$this->assertEquals( '1', $fd->find('//select/option[@selected]')->text() );
+		$fd = self::domify( scbForms::input( $args ) );
+
+		$this->assertCount( 0, $fd->find('//select/option[@selected]') );
+
+		$options = $fd->find('//select/option');
+
+		$this->assertCount( count( $choices ), $options );
+
+		foreach ( $options as $i => $option ) {
+			$el = FluentDOM( $option );
+
+			$this->assertEquals( $choices[ $i ], $el->attr('value') );
+		}
+
+		$fd = self::domify( scbForms::input( array_merge( $args, array( 'selected' => '1 1/3' ) ) ) );
+
+		$selected = $fd->find('//select/option[@selected]');
+
+		$this->assertCount( 1, $selected );
+
+		$this->assertEquals( '1 1/3', $selected->attr('value') );
 	}
 
 	private static function domify( $str ) {
