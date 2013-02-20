@@ -36,19 +36,23 @@ class FormsTest extends PHPUnit_Framework_TestCase {
 		$fd = self::domify( scbForms::input( array(
 			'name' => __FUNCTION__,
 			'type' => 'radio',
-			'choices' => $choices
+			'choices' => $choices,
 		) ) );
 
-		$radios = $fd->find('//input[@type="radio"]');
+		$labels = $fd->find('//label');
 
-		$this->assertCount( count( $choices ), $radios );
+		$this->assertCount( count( $choices ), $labels );
 
-		foreach ( $radios as $i => $radio ) {
-			$el = FluentDOM( $radio );
+		foreach ( $labels as $i => $label ) {
+			$label = FluentDOM( $label );
+
+			$el = $label->find('.//input[@type="radio"]');
 
 			$this->assertEquals( __FUNCTION__, $el->attr('name') );
 
 			$this->assertEquals( $choices[ $i ], $el->attr('value') );
+
+			$this->assertEquals( ' ' . $choices[ $i ], $label->text() );
 		}
 	}
 
@@ -61,16 +65,20 @@ class FormsTest extends PHPUnit_Framework_TestCase {
 			'choices' => $choices
 		) ) );
 
-		$checkboxes = $fd->find('//input[@type="checkbox"]');
+		$labels = $fd->find('//label');
 
-		$this->assertCount( count( $choices ), $checkboxes );
+		$this->assertCount( count( $choices ), $labels );
 
-		foreach ( $checkboxes as $i => $radio ) {
-			$el = FluentDOM( $radio );
+		foreach ( $labels as $i => $label ) {
+			$label = FluentDOM( $label );
+
+			$el = $label->find('.//input[@type="checkbox"]');
 
 			$this->assertEquals( 'maxi[pads][]', $el->attr('name') );
 
 			$this->assertEquals( $choices[ $i ], $el->attr('value') );
+
+			$this->assertEquals( ' ' . $choices[ $i ], $label->text() );
 		}
 	}
 
@@ -99,6 +107,8 @@ class FormsTest extends PHPUnit_Framework_TestCase {
 			$el = FluentDOM( $option );
 
 			$this->assertEquals( $choices[ $i ], $el->attr('value') );
+
+			$this->assertEquals( $choices[ $i ], $el->text() );
 		}
 
 		$fd = self::domify( scbForms::input( array_merge( $args, array( 'selected' => '1 1/3' ) ) ) );
