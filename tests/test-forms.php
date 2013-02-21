@@ -17,6 +17,26 @@ class FormsTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals( '<em>foobar</em>', $el->attr('value') );
 	}
 
+	function testInputWithValue() {
+		$data = array(
+			'foo' => array(
+				'bar' => 42
+			),
+			'bar' => 'wrong'
+		);
+
+		$output = scbForms::input( array(
+			'name' => array( 'foo', 'bar' ),
+			'type' => 'text',
+			'value' => '<em>foobar</em>'
+		), $data );
+
+		$el = self::domify( $output )->find('//input');
+
+		$this->assertEquals( 'foo[bar]', $el->attr('name') );
+		$this->assertEquals( 42, $el->attr('value') );
+	}
+
 	function testTextarea() {
 		$fd = self::domify( scbForms::input( array(
 			'name' => __FUNCTION__,
