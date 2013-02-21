@@ -182,7 +182,6 @@ class FormsTest extends PHPUnit_Framework_TestCase {
 			'desc' => 'Some extra text'
 		);
 
-		// no pre-selected value
 		$label = self::domify( scbForms::input( $args ) )->find('//label');
 
 		$this->assertStringEndsWith( 'Some extra text', $label->text() );
@@ -200,9 +199,23 @@ class FormsTest extends PHPUnit_Framework_TestCase {
 
 			$this->assertEmpty( $el->attr( 'selected' ) );
 		}
+	}
 
-		// pre-select a value
-		$label = self::domify( scbForms::input( array_merge( $args, array( 'selected' => '1 1/3' ) ) ) )->find('//label');
+	function testSelectWithValue() {
+		$choices = array(
+			'1/2',
+			'1',
+			'1 1/3',
+		);
+
+		$args = array(
+			'name' => __FUNCTION__,
+			'type' => 'select',
+			'choices' => $choices,
+			'selected' => '1 1/3'
+		);
+
+		$label = self::domify( scbForms::input( $args ) )->find('//label');
 
 		$selected = $label->find('.//select/option[@selected]');
 
