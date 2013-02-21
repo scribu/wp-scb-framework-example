@@ -170,9 +170,9 @@ class FormsTest extends PHPUnit_Framework_TestCase {
 
 	function testSelect() {
 		$choices = array(
-			'1/2',
-			'1',
-			'1 1/3',
+			'green' => 'Green',
+			'blue'  => 'Blue',
+			'white' => 'White'
 		);
 
 		$args = array(
@@ -190,12 +190,14 @@ class FormsTest extends PHPUnit_Framework_TestCase {
 
 		$this->assertCount( count( $choices ), $options );
 
-		foreach ( $options as $i => $option ) {
+		foreach ( $options as $option ) {
 			$el = FluentDOM( $option );
 
-			$this->assertEquals( $choices[ $i ], $el->attr('value') );
+			list( $value, $title ) = each( $choices );
 
-			$this->assertEquals( $choices[ $i ], $el->text() );
+			$this->assertEquals( $value, $el->attr('value') );
+
+			$this->assertEquals( $title, $el->text() );
 
 			$this->assertEmpty( $el->attr( 'selected' ) );
 		}
