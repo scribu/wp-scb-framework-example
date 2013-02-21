@@ -138,15 +138,11 @@ class FormsTest extends PHPUnit_Framework_TestCase {
 		$selected = array( 'a', 'c' );
 		$choices = array( 'a', 'b', 'c', 'd' );
 
-		$data = array(
-			__FUNCTION__ => $selected
-		);
-
-		$output = scbForms::input( array(
+		$output = scbForms::input_with_value( array(
 			'name' => __FUNCTION__,
 			'type' => 'checkbox',
 			'choices' => $choices
-		), $data );
+		), $selected );
 
 		$labels = self::domify( $output )->find('//label');
 
@@ -183,12 +179,15 @@ class FormsTest extends PHPUnit_Framework_TestCase {
 			'name' => __FUNCTION__,
 			'type' => 'select',
 			'choices' => $choices,
+			'desc' => 'Some extra text'
 		);
 
 		// no pre-selected value
-		$fd = self::domify( scbForms::input( $args ) );
+		$label = self::domify( scbForms::input( $args ) )->find('//label');
 
-		$options = $fd->find('//select/option');
+		$this->assertStringEndsWith( 'Some extra text', $label->text() );
+
+		$options = $label->find('.//select/option');
 
 		$this->assertCount( count( $choices ), $options );
 
@@ -203,9 +202,9 @@ class FormsTest extends PHPUnit_Framework_TestCase {
 		}
 
 		// pre-select a value
-		$fd = self::domify( scbForms::input( array_merge( $args, array( 'selected' => '1 1/3' ) ) ) );
+		$label = self::domify( scbForms::input( array_merge( $args, array( 'selected' => '1 1/3' ) ) ) )->find('//label');
 
-		$selected = $fd->find('//select/option[@selected]');
+		$selected = $label->find('.//select/option[@selected]');
 
 		$this->assertCount( 1, $selected );
 
