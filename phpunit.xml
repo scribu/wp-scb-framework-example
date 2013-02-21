@@ -13,8 +13,7 @@
 	</testsuites>
 	<filter>
 		<whitelist>
-			<directory suffix=".php">./core</directory>
-			<directory suffix=".php">./admin</directory>
+			<directory suffix=".php">./scb</directory>
 		</whitelist>
 	</filter>
 </phpunit>
