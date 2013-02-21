@@ -104,6 +104,26 @@ class FormsTest extends PHPUnit_Framework_TestCase {
 		$this->assertEmpty( $el->attr( 'checked' ) );
 	}
 
+	function testSingleCheckboxWithValue() {
+		$args = array(
+			'name' => 'fruit',
+			'type' => 'checkbox',
+			'desc' => 'Orange'
+		);
+
+		$output = scbForms::input_with_value( $args, false );
+
+		$el = self::domify( $output )->find('//input[@type="checkbox"]');
+
+		$this->assertEmpty( $el->attr( 'checked' ) );
+
+		$output = scbForms::input_with_value( $args, true );
+
+		$el = self::domify( $output )->find('//input[@type="checkbox"]');
+
+		$this->assertNotEmpty( $el->attr( 'checked' ) );
+	}
+
 	function testCheckbox() {
 		$choices = array( 'foo', 'bar' );
 
