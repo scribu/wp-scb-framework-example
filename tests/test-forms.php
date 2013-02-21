@@ -266,10 +266,11 @@ class FormsTest extends PHPUnit_Framework_TestCase {
 			'name' => __FUNCTION__,
 			'type' => 'select',
 			'choices' => $choices,
-			'selected' => '1 1/3'
 		);
 
-		$label = self::domify( scbForms::input( $args ) )->find('//label');
+		$output = scbForms::input_with_value( $args, '1 1/3' );
+
+		$label = self::domify( $output )->find('//label');
 
 		$selected = $label->find('.//select/option[@selected]');
 
