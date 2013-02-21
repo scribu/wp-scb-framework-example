@@ -204,7 +204,7 @@ class FormsTest extends PHPUnit_Framework_TestCase {
 
 		$label = self::domify( scbForms::input( $args ) )->find('//label');
 
-		$this->assertStringEndsWith( 'Some extra text', $label->text() );
+		$this->assertStringEndsWith( $args['desc'], $label->text() );
 
 		$options = $label->find('.//select/option');
 
@@ -221,6 +221,38 @@ class FormsTest extends PHPUnit_Framework_TestCase {
 
 			$this->assertEmpty( $el->attr( 'selected' ) );
 		}
+	}
+
+	function testSelectWithText() {
+		$choices = array(
+			'green' => 'Green',
+			'blue'  => 'Blue',
+			'white' => 'White'
+		);
+
+		$args = array(
+			'name' => __FUNCTION__,
+			'type' => 'select',
+			'choices' => $choices,
+			'text' => 'Enter a color',
+			'desc' => 'Some extra text',
+		);
+
+		$label = self::domify( scbForms::input( $args ) )->find('//label');
+
+		$this->assertStringEndsWith( $args['desc'], $label->text() );
+
+		$options = $label->find('.//select/option');
+
+		$this->assertCount( count( $choices ) + 1, $options );
+
+		$first_option = FluentDOM( $options->item(0) );
+
+		$this->assertEquals( $args['text'], $first_option->text() );
+
+		$this->assertEmpty( $first_option->attr('value') );
+
+		$this->assertNotEmpty( $first_option->attr('selected') );
 	}
 
 	function testSelectWithValue() {
