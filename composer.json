@@ -1,0 +1,11 @@
+{
+	"license": "GPL2",
+	"require": {
+		"php": ">=5.2"
+	},
+	"require-dev": {
+		"phpunit/phpunit": "3.7.x",
+		"fluentdom/fluentdom": "dev-master"
+	},
+	"minimum-stability": "dev" 
+}
