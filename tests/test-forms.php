@@ -54,16 +54,25 @@ class FormsTest extends PHPUnit_Framework_TestCase {
 
 			$this->assertEquals( ' ' . $choices[ $i ], $label->text() );
 		}
+
+		// should always have the first radio checked
+		$checked = $fd->find('//input[@checked]');
+
+		$this->assertCount( 1, $checked );
+
+		$this->assertEquals( $choices[0], $checked->attr('value') );
 	}
 
 	function testCheckbox() {
 		$choices = array( 'foo', 'bar' );
 
-		$fd = self::domify( scbForms::input( array(
+		$args = array(
 			'name' => array( 'maxi', 'pads' ),
 			'type' => 'checkbox',
 			'choices' => $choices
-		) ) );
+		);
+
+		$fd = self::domify( scbForms::input( $args ) );
 
 		$labels = $fd->find('//label');
 
@@ -77,6 +86,8 @@ class FormsTest extends PHPUnit_Framework_TestCase {
 			$this->assertEquals( 'maxi[pads][]', $el->attr('name') );
 
 			$this->assertEquals( $choices[ $i ], $el->attr('value') );
+
+			$this->assertEmpty( $el->attr( 'checked' ) );
 
 			$this->assertEquals( ' ' . $choices[ $i ], $label->text() );
 		}
@@ -95,9 +106,8 @@ class FormsTest extends PHPUnit_Framework_TestCase {
 			'choices' => $choices,
 		);
 
+		// no pre-selected value
 		$fd = self::domify( scbForms::input( $args ) );
-
-		$this->assertCount( 0, $fd->find('//select/option[@selected]') );
 
 		$options = $fd->find('//select/option');
 
@@ -109,8 +119,11 @@ class FormsTest extends PHPUnit_Framework_TestCase {
 			$this->assertEquals( $choices[ $i ], $el->attr('value') );
 
 			$this->assertEquals( $choices[ $i ], $el->text() );
+
+			$this->assertEmpty( $el->attr( 'selected' ) );
 		}
 
+		// pre-select a value
 		$fd = self::domify( scbForms::input( array_merge( $args, array( 'selected' => '1 1/3' ) ) ) );
 
 		$selected = $fd->find('//select/option[@selected]');
