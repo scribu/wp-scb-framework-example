@@ -113,6 +113,44 @@ class FormsTest extends PHPUnit_Framework_TestCase {
 		}
 	}
 
+	function testCheckboxWithValues() {
+		$selected = array( 'a', 'c' );
+		$choices = array( 'a', 'b', 'c', 'd' );
+
+		$data = array(
+			__FUNCTION__ => $selected
+		);
+
+		$output = scbForms::input( array(
+			'name' => __FUNCTION__,
+			'type' => 'checkbox',
+			'choices' => $choices
+		), $data );
+
+		$labels = self::domify( $output )->find('//label');
+
+		$this->assertCount( count( $choices ), $labels );
+
+		foreach ( $labels as $i => $label ) {
+			$value = $choices[ $i ];
+
+			$label = FluentDOM( $label );
+
+			$el = $label->find('.//input[@type="checkbox"]');
+
+			$this->assertEquals( __FUNCTION__ . '[]', $el->attr('name') );
+
+			$this->assertEquals( $value, $el->attr('value') );
+
+			if ( in_array( $value, $selected ) )
+				$this->assertNotEmpty( $el->attr( 'checked' ) );
+			else
+				$this->assertEmpty( $el->attr( 'checked' ) );
+
+			$this->assertEquals( ' ' . $value, $label->text() );
+		}
+	}
+
 	function testSelect() {
 		$choices = array(
 			'1/2',
