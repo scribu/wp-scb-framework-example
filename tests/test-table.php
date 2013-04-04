@@ -34,7 +34,7 @@ class scb_Constraint_StringContains extends PHPUnit_Framework_Constraint {
     protected $needle;
 
     /**
-     * @param string $className
+     * @param string $needle
      */
     public function __construct( $needle )
     {
@@ -96,6 +96,8 @@ class TableTest extends PHPUnit_Framework_TestCase {
 		global $wpdb;
 
 		$wpdb = new WPDB_Mock( $wpdb );
+
+		scb_register_table( 'foo' );
 	}
 
 	function tearDown() {
@@ -106,18 +108,26 @@ class TableTest extends PHPUnit_Framework_TestCase {
 		$wpdb = $wpdb->wpdb;
 	}
 
-	function test_install_table() {
-		scb_register_table( 'foo' );
-
+	function test_simple_install() {
 		scb_install_table( 'foo', 'ID int(20)' );
-		$this->assertQueryContains( 'ID int(20)' );
 
+		$this->assertQueryContains( 'ID int(20)' );
+	}
+
+	function test_drop_first_install() {
 		scb_install_table( 'foo', 'ID int(20)', 'delete_first' );
-		$this->assertQueryContains( 'ID int(20)' );
 
+		$this->assertQueryContains( 'DROP TABLE' );
+	}
+
+	function test_innodb_install() {
 		$table_opts = 'ENGINE InnoDB';
-		scb_install_table( 'foo', 'ID int(20)', array( 'table_options' => $table_opts ) );
-		$this->assertQueryContains( 'ID int(20)' );
+
+		scb_install_table( 'foo', 'ID int(20)', array(
+			'table_options' => $table_opts
+		) );
+
+		$this->assertQueryDoesntContain( 'DROP TABLE' );
 		$this->assertQueryContains( $table_opts );
 	}
 
@@ -125,6 +135,14 @@ class TableTest extends PHPUnit_Framework_TestCase {
 		global $wpdb;
 
 		$constraint = new scb_Constraint_StringContains( $str );
+		$this->assertThat( $wpdb->_query_log, $constraint );
+	}
+
+	function assertQueryDoesntContain( $str ) {
+		global $wpdb;
+
+		$constraint = $this->logicalNot( new scb_Constraint_StringContains( $str ) );
+
 		$this->assertThat( $wpdb->_query_log, $constraint );
 	}
 }
