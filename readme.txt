@@ -22,6 +22,11 @@ Links: [**Wiki**](http://github.com/scribu/wp-scb-framework/wiki) | [Framework N
 
 == Changelog ==
 
+= 16 Feb 2013 (r58) =
+* improve toplevel admin menu item handling
+* fix notice in `scbForms::update_meta()`. props Josh Ronk
+* reduce usage of `extract()`. props [Rarst](http://profiles.wordpress.org/rarst)
+
 = 7 Sep 2012 (r57) =
 * refactored scbForms: separate class for each input type
 * introduced scb_get_query_flags() 
