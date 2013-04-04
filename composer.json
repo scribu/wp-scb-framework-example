@@ -4,7 +4,8 @@
 		"php": ">=5.2"
 	},
 	"require-dev": {
-		"fluentdom/fluentdom": "dev-master"
+		"fluentdom/fluentdom": "dev-master",
+		"phpunit/phpunit": "3.7.x"
 	},
 	"minimum-stability": "dev" 
 }
