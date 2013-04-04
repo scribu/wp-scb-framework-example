@@ -10,30 +10,15 @@ A set of useful classes for faster plugin development.
 
 == Description ==
 
-This is a plugin toolkit that helps developers write plugins faster. It consists of several classes which handle common tasks, such as generating settings pages, creating database tables and more.
+This plugin is a a usage example for [scbFramework](https://github.com/scribu/wp-scb-framework).
+
+scbFramework is a toolkit that helps developers write plugins faster. It consists of several classes which handle common tasks, such as generating settings pages, creating database tables etc.
 
 See the [documentation](http://github.com/scribu/wp-scb-framework/wiki) for more details.
 
-To take a quick look at the code, go [here](http://plugins.trac.wordpress.org/browser/scb-framework/trunk/).
-
-You can download this plugin to get a quick start on using the framework.
+To take a quick look at the code, see the github page: https://github.com/scribu/wp-scb-framework-example
 
 Links: [**Wiki**](http://github.com/scribu/wp-scb-framework/wiki) | [Framework News](http://scribu.net/wordpress/scb-framework) | [Author's Site](http://scribu.net)
-
-== Installation ==
-
-1. Download and unzip the archive.
-2. Go to wp-content and create the *mu-plugins* folder if you don't have it.
-2. Move *scb-load.php* file and *scb* folder from *scb-framework* to *mu-plugins*, so that it looks like this:
-
-`
-mu-plugins/scb/
-mu-plugins/scb-load.php
-`
-
-All plugins and themes will now have access to the scb classes and functions.
-
-Plugins that come with scbFramework pre-packaged will also use the version in mu-plugins.
 
 == Changelog ==
 
