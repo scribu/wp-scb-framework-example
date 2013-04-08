@@ -1,5 +1,5 @@
 === scbFramework ===
-Contributors: scribu, rarst
+Contributors: scribu, Rarst
 Tags: admin, toolkit, framework, forms, cron, settings, sql
 Requires at least: 3.2
 Tested up to: 3.5
